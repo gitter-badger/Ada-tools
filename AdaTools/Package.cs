@@ -72,7 +72,15 @@ namespace AdaTools {
 			if (Candidate == null) Candidate = Source.Match(new Regex(@"\bpackage\s+body\s(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			// If no name was found, it's not an Ada package
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaPackageException();
-			return Candidate.Split()[1];
+			String[] Split = Candidate.Split();
+			if (Split.Length == 4) {
+				return Split[2];
+			} else if (Split.Length == 3) {
+				return Split[1];
+			} else {
+				// This should never happen because a match wouldn't happen, but still raise an exception
+				throw new Exception("A critical error has occured");
+			}
 		}
 	}
 }
