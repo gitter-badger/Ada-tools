@@ -16,4 +16,13 @@
     <ProjectReference Include="..\AdaTools\AdaTools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Test.adb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Test.ads">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
