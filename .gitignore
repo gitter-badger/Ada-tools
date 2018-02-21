@@ -1,3 +1,5 @@
 .vs/*
+/AdaTools/bin
 /AdaTools/obj
+/AdaToolsTests/bin
 /AdaToolsTests/obj

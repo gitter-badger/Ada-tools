@@ -13,5 +13,10 @@ namespace AdaToolsTests {
 			Package Package = new Package("Test");
 		}
 
+		[TestMethod]
+		public void Name() {
+			Package Package = new Package("Test");
+			Assert.AreEqual("Test", Package.Name);
+		}
 	}
 }
