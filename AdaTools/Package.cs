@@ -23,6 +23,32 @@ namespace AdaTools {
 		/// </summary>
 		public readonly List<Package> Dependencies;
 
+		/// <summary>
+		/// Whether a spec file for this package was found
+		/// </summary>
+		public readonly Boolean HasSpec;
+
+		/// <summary>
+		/// Whether a body file for this package was found
+		/// </summary>
+		public readonly Boolean HasBody;
+
+		/// <summary>
+		/// Get all associated files of this package
+		/// </summary>
+		/// <returns>An array of the file names</returns>
+		public String[] GetFiles() {
+			if (this.HasSpec && this.HasBody) {
+				return new String[] { this.Name + SpecExtension, this.Name + BodyExtension };
+			} else if (this.HasSpec) {
+				return new String[] { this.Name + SpecExtension };
+			} else if (this.HasBody) {
+				return new String[] { this.Name + BodyExtension };
+			} else {
+				return Array.Empty<String>();
+			}
+		}
+
 		public Package(String Name) {
 			this.Name = Name;
 
@@ -32,16 +58,20 @@ namespace AdaTools {
 			try {
 				SpecSource = new Source(Name + SpecExtension);
 				SpecName = TryParseName(SpecSource);
+				this.HasSpec = true;
 			} catch {
 				SpecSource = null;
+				this.HasSpec = false;
 			}
 			Source BodySource;
 			String BodyName = null;
 			try {
 				BodySource = new Source(Name + BodyExtension);
 				BodyName = TryParseName(BodySource);
+				this.HasBody = true;
 			} catch {
 				BodySource = null;
+				this.HasBody = false;
 			}
 
 			// Validate all the names match up
@@ -66,10 +96,10 @@ namespace AdaTools {
 		/// <param name="Source">Source code to use</param>
 		/// <returns>The internal name, if any was found</returns>
 		public static String TryParseName(Source Source) {
-			String Candidate = null;
+			String Candidate = "";
 			// Try getting the name through a variety of means
-			if (Candidate == null) Candidate = Source.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			if (Candidate == null) Candidate = Source.Match(new Regex(@"\bpackage\s+body\s(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = Source.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = Source.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			// If no name was found, it's not an Ada package
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaPackageException();
 			String[] Split = Candidate.Split();
