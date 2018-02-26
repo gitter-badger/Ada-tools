@@ -35,6 +35,42 @@ namespace AdaTools {
 			return Matches.ToArray();
 		}
 
+		/// <summary>
+		/// Try to parse the packages this package dependends on
+		/// </summary>
+		/// <returns>A list of the dependent packages</returns>
+		public List<String> TryParseDependencies() {
+			List<String> Result = new List<String>();
+			foreach (String Match in this.Matches(new Regex(@"\bwith\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+				foreach (String Name in Match.Substring(4).TrimEnd(';').Trim().Split(',')) {
+					Result.Add(Name.Trim());
+				}
+			}
+			return Result;
+		}
+
+		/// <summary>
+		/// Try to parse the internal name of the package
+		/// </summary>
+		/// <returns>The internal name, if any was found</returns>
+		public String TryParseName() {
+			String Candidate = "";
+			// Try getting the name through a variety of means
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			// If no name was found, it's not an Ada package
+			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaPackageException();
+			String[] Split = Candidate.Split();
+			if (Split.Length == 4) {
+				return Split[2];
+			} else if (Split.Length == 3) {
+				return Split[1];
+			} else {
+				// This should never happen because a match wouldn't happen, but still raise an exception
+				throw new Exception("A critical error has occured");
+			}
+		}
+
 		public String this[Int32 Index] {
 			get => this.SourceCode.Split('\n')[Index];
 		}

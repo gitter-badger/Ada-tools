@@ -49,6 +49,13 @@ namespace AdaTools {
 			}
 		}
 
+		/// <summary>
+		/// Initialize a package with the specified <paramref name="Name"/>
+		/// </summary>
+		/// <remarks>
+		/// This attempts to find source files associated with the package. If files with the appropriate name are found, they are then parsed for certain traits and validated against, then additional traits are retrieved. If no source files are found, the package is still initialized, but only with the given name.
+		/// </remarks>
+		/// <param name="Name">The name of the package</param>
 		public Package(String Name) {
 			this.Name = Name;
 
@@ -57,9 +64,9 @@ namespace AdaTools {
 			String SpecName = null;
 			try {
 				SpecSource = new Source(Name + SpecExtension);
-				SpecName = TryParseName(SpecSource);
+				SpecName = SpecSource.TryParseName();
 				this.HasSpec = true;
-				this.Dependencies.AddRange(TryParseDependencies(SpecSource));
+				this.Dependencies.AddRange(SpecSource.TryParseDependencies());
 			} catch {
 				SpecSource = null;
 				this.HasSpec = false;
@@ -68,9 +75,9 @@ namespace AdaTools {
 			String BodyName = null;
 			try {
 				BodySource = new Source(Name + BodyExtension);
-				BodyName = TryParseName(BodySource);
+				BodyName = BodySource.TryParseName();
 				this.HasBody = true;
-				this.Dependencies.AddRange(TryParseDependencies(BodySource));
+				this.Dependencies.AddRange(BodySource.TryParseDependencies());
 			} catch {
 				BodySource = null;
 				this.HasBody = false;
@@ -92,42 +99,5 @@ namespace AdaTools {
 		/// </summary>
 		public static String BodyExtension = ".adb";
 
-		/// <summary>
-		/// Try to parse the packages this package dependends on
-		/// </summary>
-		/// <param name="Source">Source code to use</param>
-		/// <returns>A list of the dependent packages</returns>
-		public static List<String> TryParseDependencies(Source Source) {
-			List<String> Result = new List<String>();
-			foreach (String Match in Source.Matches(new Regex(@"\bwith\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
-				foreach (String Name in Match.Substring(4).TrimEnd(';').Trim().Split(',')) {
-					Result.Add(Name.Trim());
-				}
-			}
-			return Result;
-		}
-
-		/// <summary>
-		/// Try to parse the internal name of the package
-		/// </summary>
-		/// <param name="Source">Source code to use</param>
-		/// <returns>The internal name, if any was found</returns>
-		public static String TryParseName(Source Source) {
-			String Candidate = "";
-			// Try getting the name through a variety of means
-			if (String.IsNullOrEmpty(Candidate)) Candidate = Source.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			if (String.IsNullOrEmpty(Candidate)) Candidate = Source.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			// If no name was found, it's not an Ada package
-			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaPackageException();
-			String[] Split = Candidate.Split();
-			if (Split.Length == 4) {
-				return Split[2];
-			} else if (Split.Length == 3) {
-				return Split[1];
-			} else {
-				// This should never happen because a match wouldn't happen, but still raise an exception
-				throw new Exception("A critical error has occured");
-			}
-		}
 	}
 }
