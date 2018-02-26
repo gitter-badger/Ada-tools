@@ -2,7 +2,7 @@
   "profiles": {
     "Cmdline": {
       "commandName": "Project",
-      "commandLineArgs": "files Spec"
+      "commandLineArgs": "deps Both"
     }
   }
 }

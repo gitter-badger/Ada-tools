@@ -11,7 +11,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// Holds traits about the package for easy analysis
 	/// </remarks>
-	public class Package {
+	public sealed class Package {
 
 		/// <summary>
 		/// The name of the package
@@ -19,9 +19,9 @@ namespace AdaTools {
 		public readonly String Name;
 
 		/// <summary>
-		/// The full list of packages this package depends on
+		/// The full list of package names this package depends on
 		/// </summary>
-		public readonly List<Package> Dependencies;
+		public readonly List<String> Dependencies = new List<String>();
 
 		/// <summary>
 		/// Whether a spec file for this package was found
@@ -59,6 +59,7 @@ namespace AdaTools {
 				SpecSource = new Source(Name + SpecExtension);
 				SpecName = TryParseName(SpecSource);
 				this.HasSpec = true;
+				this.Dependencies.AddRange(TryParseDependencies(SpecSource));
 			} catch {
 				SpecSource = null;
 				this.HasSpec = false;
@@ -69,6 +70,7 @@ namespace AdaTools {
 				BodySource = new Source(Name + BodyExtension);
 				BodyName = TryParseName(BodySource);
 				this.HasBody = true;
+				this.Dependencies.AddRange(TryParseDependencies(BodySource));
 			} catch {
 				BodySource = null;
 				this.HasBody = false;
@@ -89,6 +91,21 @@ namespace AdaTools {
 		/// The file extension to use for package bodies
 		/// </summary>
 		public static String BodyExtension = ".adb";
+
+		/// <summary>
+		/// Try to parse the packages this package dependends on
+		/// </summary>
+		/// <param name="Source">Source code to use</param>
+		/// <returns>A list of the dependent packages</returns>
+		public static List<String> TryParseDependencies(Source Source) {
+			List<String> Result = new List<String>();
+			foreach (String Match in Source.Matches(new Regex(@"\bwith\s+(\w|\.|_)+;", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+				foreach (String Name in Match.Substring(4).TrimEnd(';').Trim().Split(',')) {
+					Result.Add(Name.Trim());
+				}
+			}
+			return Result;
+		}
 
 		/// <summary>
 		/// Try to parse the internal name of the package

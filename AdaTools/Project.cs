@@ -7,7 +7,7 @@ namespace AdaTools {
 	/// <summary>
 	/// Represents an Ada project
 	/// </summary>
-	public class Project {
+	public sealed class Project {
 
 		/// <summary>
 		/// The name of the project
@@ -20,7 +20,7 @@ namespace AdaTools {
 		/// <summary>
 		/// The packages in this project
 		/// </summary>
-		public List<Package> Packages { get; private set; }
+		private List<Package> Packages { get; set; }
 
 
 		/// <summary>

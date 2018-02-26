@@ -11,7 +11,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// 
 	/// </remarks>
-	public class Source {
+	public sealed class Source {
 
 		private readonly String SourceCode = "";
 

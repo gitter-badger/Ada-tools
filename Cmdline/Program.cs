@@ -21,6 +21,23 @@ namespace Cmdline {
 				case "help":
 					Help();
 					break;
+				case "dep":
+				case "deps":
+				case "depend":
+				case "depends":
+				case "dependency":
+				case "dependencies":
+					foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
+						Package = new Package(Name);
+						Console.Write(Package.Name + ": ");
+						foreach (String Dep in Package.Dependencies) {
+							Console.Write(Dep + ' ');
+						}
+						Console.WriteLine();
+					}
+					Console.WriteLine();
+					break;
+				case "file":
 				case "files":
 					foreach (String Name in args.Skip(1).Take(args.Length-1)) {
 						Package = new Package(Name);
@@ -40,7 +57,10 @@ namespace Cmdline {
 		}
 
 		static void Help() {
-			Console.WriteLine("\t" + "adatool files «Packages»+ — Lists the associated files for the specified package");
+			Console.WriteLine("adatool");
+			Console.WriteLine("\t" + "(deps|depends|dependencies) «Packages»+ — Lists the dependent packages for each specified package");
+			Console.WriteLine("\t" + "files «Packages»+ — Lists the associated files for the specified package");
+
 		}
 	}
 }

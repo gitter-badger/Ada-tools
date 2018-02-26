@@ -1,2 +1,4 @@
-﻿package body Both is
+﻿with Body;
+
+package body Both is
 end Both;
