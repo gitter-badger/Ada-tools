@@ -99,7 +99,7 @@ namespace AdaTools {
 		/// <returns>A list of the dependent packages</returns>
 		public static List<String> TryParseDependencies(Source Source) {
 			List<String> Result = new List<String>();
-			foreach (String Match in Source.Matches(new Regex(@"\bwith\s+(\w|\.|_)+;", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+			foreach (String Match in Source.Matches(new Regex(@"\bwith\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
 				foreach (String Name in Match.Substring(4).TrimEnd(';').Trim().Split(',')) {
 					Result.Add(Name.Trim());
 				}

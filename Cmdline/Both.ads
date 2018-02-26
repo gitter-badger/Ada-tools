@@ -1,5 +1,4 @@
-﻿with Ada.Text_IO;
-with Spec;
+﻿with Ada.Text_IO, Spec;
 
 package Both is
 end Both;
