@@ -14,6 +14,8 @@ namespace Cmdline {
 				Error();
 				return;
 			}
+			/// <summary>The current project being analyzed</summary>
+			Project Project;
 			/// <summary>The current package being analyzed</summary>
 			Package Package;
 			// Do whatever the operation is
@@ -42,6 +44,17 @@ namespace Cmdline {
 					foreach (String Name in args.Skip(1).Take(args.Length-1)) {
 						Package = new Package(Name);
 						Console.Write(String.Join(' ', Package.GetFiles()) + ' ');
+					}
+					Console.WriteLine();
+					break;
+				case "list":
+					if (args.Length >= 2) {
+						Project = new Project(args[1]);
+					} else {
+						Project = new Project();
+					}
+					foreach (Package P in Project.Packages) {
+						Console.Write(P.Name + ' ');
 					}
 					Console.WriteLine();
 					break;
