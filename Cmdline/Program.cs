@@ -41,20 +41,33 @@ namespace Cmdline {
 					break;
 				case "file":
 				case "files":
-					foreach (String Name in args.Skip(1).Take(args.Length-1)) {
+					foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
 						Package = new Package(Name);
 						Console.Write(String.Join(' ', Package.GetFiles()) + ' ');
 					}
 					Console.WriteLine();
 					break;
 				case "list":
-					if (args.Length >= 2) {
-						Project = new Project(args[1]);
+					if (args.Length >= 2 && args[1].ToLower() == "table") {
+						if (args.Length >= 3) {
+							Project = new Project(args[2]);
+						} else {
+							Project = new Project();
+						}
+						Console.WriteLine(String.Format("\t{0,40}\t{1,10}\t{2,10}", "Name", "Has Spec", "Has Body"));
+						Console.WriteLine(String.Format("\t{0,40}\t{1,10}\t{2,10}", "----------------------------------------", "----------", "----------"));
+						foreach (Package P in Project.Packages) {
+							Console.WriteLine(String.Format("\t{0,40}\t{1,10}\t{2,10}", P.Name, P.HasSpec, P.HasBody));
+						}
 					} else {
-						Project = new Project();
-					}
-					foreach (Package P in Project.Packages) {
-						Console.Write(P.Name + ' ');
+						if (args.Length >= 2) {
+							Project = new Project(args[1]);
+						} else {
+							Project = new Project();
+						}
+						foreach (Package P in Project.Packages) {
+							Console.Write(P.Name + ' ');
+						}
 					}
 					Console.WriteLine();
 					break;
@@ -73,6 +86,7 @@ namespace Cmdline {
 			Console.WriteLine("adatool");
 			Console.WriteLine("\t" + "(deps|depends|dependencies) «Packages»+ — Lists the dependent packages for each specified package");
 			Console.WriteLine("\t" + "files «Packages»+ — Lists the associated files for the specified package");
+			Console.WriteLine("\t" + "list [table] [«Directory»] — Lists the Ada units within the directory, defaults to the current directory");
 
 		}
 	}
