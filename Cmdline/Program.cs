@@ -29,13 +29,20 @@ namespace Cmdline {
 				case "depends":
 				case "dependency":
 				case "dependencies":
-					foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
-						Package = new Package(Name);
-						Console.Write(Package.Name + ": ");
-						foreach (String Dep in Package.Dependencies) {
+					if (args.Length == 1) {
+						Project = new Project();
+						foreach (String Dep in Project.Dependencies) {
 							Console.Write(Dep + ' ');
 						}
-						Console.WriteLine();
+					} else {
+						foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
+							Package = new Package(Name);
+							Console.Write(Package.Name + ": ");
+							foreach (String Dep in Package.Dependencies) {
+								Console.Write(Dep + ' ');
+							}
+							Console.WriteLine();
+						}
 					}
 					Console.WriteLine();
 					break;
@@ -49,22 +56,14 @@ namespace Cmdline {
 					break;
 				case "list":
 					if (args.Length >= 2 && args[1].ToLower() == "table") {
-						if (args.Length >= 3) {
-							Project = new Project(args[2]);
-						} else {
-							Project = new Project();
-						}
-						Console.WriteLine(String.Format("\t{0,40}\t{1,10}\t{2,10}", "Name", "Has Spec", "Has Body"));
-						Console.WriteLine(String.Format("\t{0,40}\t{1,10}\t{2,10}", "----------------------------------------", "----------", "----------"));
+						Project = new Project();
+						Console.WriteLine(String.Format("{0,8}  {1,8}  {2,4}", "Has Spec", "Has Body", "Name"));
+						Console.WriteLine(String.Format("{0,8}  {1,8}  {2,4}", "--------", "--------", "--------"));
 						foreach (Package P in Project.Packages) {
-							Console.WriteLine(String.Format("\t{0,40}\t{1,10}\t{2,10}", P.Name, P.HasSpec, P.HasBody));
+							Console.WriteLine(String.Format("{0,8}  {1,8}  {2,4}", P.HasSpec, P.HasBody, P.Name));
 						}
 					} else {
-						if (args.Length >= 2) {
-							Project = new Project(args[1]);
-						} else {
-							Project = new Project();
-						}
+						Project = new Project();
 						foreach (Package P in Project.Packages) {
 							Console.Write(P.Name + ' ');
 						}

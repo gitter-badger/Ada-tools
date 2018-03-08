@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace AdaTools {
@@ -16,6 +17,19 @@ namespace AdaTools {
 		/// In most cases, this is the current working directory
 		/// </remarks>
 		public readonly String Name;
+
+		/// <summary>
+		/// Get the dependencies of the project as a whole, instead of individual unit dependencies
+		/// </summary>
+		public List<String> Dependencies {
+			get {
+				List<String> deps = new List<String>();
+				foreach (Package Package in this.Packages) {
+					deps.AddRange(Package.Dependencies);
+				}
+				return deps.Distinct().ToList();
+			}
+		}
 
 		/// <summary>
 		/// The packages in this project
