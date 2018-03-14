@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Prog.adb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Test.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

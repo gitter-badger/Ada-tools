@@ -11,12 +11,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// Holds traits about the package for easy analysis
 	/// </remarks>
-	public sealed class Package {
-
-		/// <summary>
-		/// The name of the package
-		/// </summary>
-		public readonly String Name;
+	public sealed class Package : Unit {
 
 		/// <summary>
 		/// The full list of package names this package depends on
@@ -37,7 +32,7 @@ namespace AdaTools {
 		/// Get all associated files of this package
 		/// </summary>
 		/// <returns>An array of the file names</returns>
-		public String[] GetFiles() {
+		public override String[] GetFiles() {
 			if (this.HasSpec && this.HasBody) {
 				return new String[] { this.Name + SpecExtension, this.Name + BodyExtension };
 			} else if (this.HasSpec) {
@@ -56,8 +51,7 @@ namespace AdaTools {
 		/// This attempts to find source files associated with the package. If files with the appropriate name are found, they are then parsed for certain traits and validated against, then additional traits are retrieved. If no source files are found, the package is still initialized, but only with the given name.
 		/// </remarks>
 		/// <param name="Name">The name of the package</param>
-		public Package(String Name) {
-			this.Name = Name;
+		public Package(String Name) : base(Name) {
 
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;

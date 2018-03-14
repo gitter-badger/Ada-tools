@@ -22,6 +22,12 @@
     <None Update="Both.ads">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Func.adb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Proc.adb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Spec.ads">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -19,6 +19,13 @@ namespace AdaTools {
 		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
+		/// <returns>True if a match was found, false otherwise</returns>
+		public Boolean IsMatch(Regex Pattern) => Pattern.IsMatch(this.SourceCode);
+
+		/// <summary>
+		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// </summary>
+		/// <param name="Pattern">The pattern to try to find</param>
 		/// <returns>If a match was found, returns the matched source code</returns>
 		public String Match(Regex Pattern) => Pattern.Match(this.SourceCode).Value;
 
@@ -56,15 +63,55 @@ namespace AdaTools {
 		public String TryParseName() {
 			String Candidate = "";
 			// Try getting the name through a variety of means
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			// If no name was found, it's not an Ada package
-			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaPackageException();
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bfunction\s+(\w|_)+\s+return\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bprocedure\s+(\w|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			// If no name was found, it's not an Ada source file
+			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			String[] Split = Candidate.Split();
 			if (Split.Length == 4) {
 				return Split[2];
 			} else if (Split.Length == 3) {
 				return Split[1];
+			} else {
+				// This should never happen because a match wouldn't happen, but still raise an exception
+				throw new Exception("A critical error has occured");
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public ProgramType TryParseProgramType() {
+			String Candidate = this.Match(new Regex(@"\b(function|procedure)\s(\w|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaProgramException();
+			if (new Regex(@"\bfunction\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
+				return ProgramType.Function;
+			} else if (new Regex(@"\bprocedure\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
+				return ProgramType.Procedure;
+			} else {
+				// This should never happen because a match wouldn't happen, but still raise an exception
+				throw new Exception("A critical error has occured");
+			}
+		}
+
+		/// <summary>
+		/// Try to parse the type of Ada source
+		/// </summary>
+		/// <remarks>
+		/// This method attempts to distinguish a package spec or body from a function program or procedure program. This is necessary because packages and programs have different representations within this tool, as well as different information that will be gathered about them.
+		/// </remarks>
+		/// <returns>The type of source</returns>
+		public SourceType TryParseSourceType() {
+			String Candidate = this.Match(new Regex(@"\b(package|function|procedure)\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			// If no matche was found, it's not an Ada source file
+			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
+			if (new Regex(@"\bpackage\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
+				return SourceType.Package;
+			} else if (new Regex(@"\b(function|procedure)\b").IsMatch(Candidate)) {
+				return SourceType.Program;
 			} else {
 				// This should never happen because a match wouldn't happen, but still raise an exception
 				throw new Exception("A critical error has occured");
@@ -92,10 +139,6 @@ namespace AdaTools {
 
 		public Source(String FileName) : this(new FileStream(FileName, FileMode.Open)) {
 			// Everything necessary should happen through chaining
-		}
-
-		public Source(params String[] Lines) {
-			this.SourceCode = String.Join('\n', Lines);
 		}
 	}
 }

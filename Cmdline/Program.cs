@@ -57,15 +57,34 @@ namespace Cmdline {
 				case "list":
 					if (args.Length >= 2 && args[1].ToLower() == "table") {
 						Project = new Project();
-						Console.WriteLine(String.Format("{0,8}  {1,8}  {2,4}", "Has Spec", "Has Body", "Name"));
-						Console.WriteLine(String.Format("{0,8}  {1,8}  {2,4}", "--------", "--------", "--------"));
-						foreach (Package P in Project.Packages) {
-							Console.WriteLine(String.Format("{0,8}  {1,8}  {2,4}", P.HasSpec, P.HasBody, P.Name));
+						Console.WriteLine(String.Format("{0,4}  {1,4}", "Kind", "Name"));
+						Console.WriteLine(String.Format("{0,4}  {1,4}", "----", "----"));
+						foreach (Unit U in Project.Units) {
+							String KindFormat = "";
+							if (U is AdaTools.Package) {
+								if ((U as Package).HasBody && (U as Package).HasSpec) {
+									KindFormat = "SpBd";
+								} else if ((U as Package).HasSpec) {
+									KindFormat = "Sp  ";
+								} else if ((U as Package).HasBody) {
+									KindFormat = "  Bd";
+								}
+								Console.WriteLine(String.Format("{0,4}  {1,4}", KindFormat, U.Name));
+							} else if (U is AdaTools.Program) {
+								switch ((U as AdaTools.Program).Type) {
+									case ProgramType.Function:
+										KindFormat = " Fn ";
+										break;
+									case ProgramType.Procedure:
+										KindFormat = " Pr ";
+										break;
+								}
+								Console.WriteLine(String.Format("{0,4}  {1,4}", KindFormat, U.Name));
+							}
 						}
 					} else {
-						Project = new Project();
-						foreach (Package P in Project.Packages) {
-							Console.Write(P.Name + ' ');
+						foreach (Unit U in new Project().Units) {
+							Console.Write(U.Name + ' ');
 						}
 					}
 					Console.WriteLine();
