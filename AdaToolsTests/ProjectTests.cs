@@ -16,14 +16,15 @@ namespace AdaToolsTests {
 		[TestMethod]
 		public void Packages() {
 			Project Project = new Project();
-			List<Package> Packages = Project.Packages;
-			Assert.AreEqual("Test", Packages[0].Name);
+			List<PackageUnit> Packages = Project.Packages;
+			Assert.AreEqual("Pure", Packages[0].Name);
+			Assert.AreEqual("Test", Packages[1].Name);
 		}
 
 		[TestMethod]
 		public void Programs() {
 			Project Project = new Project();
-			List<Program> Programs = Project.Programs;
+			List<ProgramUnit> Programs = Project.Programs;
 			Assert.AreEqual("Prog", Programs[0].Name);
 		}
 

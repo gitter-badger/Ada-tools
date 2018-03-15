@@ -20,6 +20,9 @@
     <None Update="Prog.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Pure.ads">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Test.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

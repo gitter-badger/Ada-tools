@@ -25,6 +25,9 @@
     <None Update="Func.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Intr.ads">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Proc.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

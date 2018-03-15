@@ -43,7 +43,19 @@ namespace AdaTools {
 		}
 
 		/// <summary>
-		/// Try to parse the packages this package dependends on
+		/// Try to parse whether this unit makes remote calls
+		/// </summary>
+		/// <returns></returns>
+		public Boolean TryParseAllCallsRemote() {
+			if (this.IsMatch(new Regex(@"\bwith\s+.*all_calls_remote.*\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Try to parse the packages this unit dependends on
 		/// </summary>
 		/// <returns>A list of the dependent packages</returns>
 		public List<String> TryParseDependencies() {
@@ -57,14 +69,14 @@ namespace AdaTools {
 		}
 
 		/// <summary>
-		/// Try to parse the internal name of the package
+		/// Try to parse the internal name of the unit
 		/// </summary>
 		/// <returns>The internal name, if any was found</returns>
 		public String TryParseName() {
 			String Candidate = "";
 			// Try getting the name through a variety of means
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+(is|with)\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+(is|with)\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bfunction\s+(\w|_)+\s+return\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bprocedure\s+(\w|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			// If no name was found, it's not an Ada source file
@@ -81,9 +93,9 @@ namespace AdaTools {
 		}
 
 		/// <summary>
-		/// 
+		/// Try to parse the type of Ada Program
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>The type of program</returns>
 		public ProgramType TryParseProgramType() {
 			String Candidate = this.Match(new Regex(@"\b(function|procedure)\s(\w|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaProgramException();
@@ -94,6 +106,32 @@ namespace AdaTools {
 			} else {
 				// This should never happen because a match wouldn't happen, but still raise an exception
 				throw new Exception("A critical error has occured");
+			}
+		}
+
+		/// <summary>
+		/// Try to parse the purity of the unit
+		/// </summary>
+		/// <returns>True if pure, false otherwise</returns>
+		public Boolean TryParsePurity() {
+			if (this.IsMatch(new Regex(@"\bpragma\s+pure\s*\(\s*(\w|\.|_)+\s*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+				return true;
+			} else if (this.IsMatch(new Regex(@"\bwith\s+.*pure.*\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Try to parse whether the unit is a remote call interface
+		/// </summary>
+		/// <returns>True if RCI, false otherwise</returns>
+		public Boolean TryParseRemoteCallInterface() {
+			if (this.IsMatch(new Regex(@"\bwith\s+.*remote_call_interface.*\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 

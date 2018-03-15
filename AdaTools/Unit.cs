@@ -13,6 +13,16 @@ namespace AdaTools {
 		/// </summary>
 		public readonly String Name;
 
+		public abstract Boolean HasSpec { get; protected set; }
+
+		public abstract Boolean HasBody { get; protected set; }
+
+		public abstract Boolean IsAllCallsRemote { get; protected set; }
+
+		public abstract Boolean IsPure { get; protected set; }
+
+		public abstract Boolean IsRemoteCallInterface { get; protected set; }
+
 		/// <summary>
 		/// Get all associated files of this unit
 		/// </summary>

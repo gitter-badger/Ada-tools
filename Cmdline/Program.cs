@@ -17,7 +17,7 @@ namespace Cmdline {
 			/// <summary>The current project being analyzed</summary>
 			Project Project;
 			/// <summary>The current package being analyzed</summary>
-			Package Package;
+			PackageUnit Package;
 			// Do whatever the operation is
 			switch (Operation) {
 				case "help":
@@ -36,7 +36,7 @@ namespace Cmdline {
 						}
 					} else {
 						foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
-							Package = new Package(Name);
+							Package = new PackageUnit(Name);
 							Console.Write(Package.Name + ": ");
 							foreach (String Dep in Package.Dependencies) {
 								Console.Write(Dep + ' ');
@@ -49,7 +49,7 @@ namespace Cmdline {
 				case "file":
 				case "files":
 					foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
-						Package = new Package(Name);
+						Package = new PackageUnit(Name);
 						Console.Write(String.Join(' ', Package.GetFiles()) + ' ');
 					}
 					Console.WriteLine();
@@ -57,21 +57,31 @@ namespace Cmdline {
 				case "list":
 					if (args.Length >= 2 && args[1].ToLower() == "table") {
 						Project = new Project();
-						Console.WriteLine(String.Format("{0,4}  {1,4}", "Kind", "Name"));
-						Console.WriteLine(String.Format("{0,4}  {1,4}", "----", "----"));
+						Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "Kind", "Pure", "Remote", "Name"));
+						Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "----", "----", "------", "----"));
 						foreach (Unit U in Project.Units) {
 							String KindFormat = "";
-							if (U is AdaTools.Package) {
-								if ((U as Package).HasBody && (U as Package).HasSpec) {
+							String Purity = "";
+							String Remote = "";
+							if (U is PackageUnit) {
+								if (U.HasBody && U.HasSpec) {
 									KindFormat = "SpBd";
-								} else if ((U as Package).HasSpec) {
+								} else if (U.HasSpec) {
 									KindFormat = "Sp  ";
-								} else if ((U as Package).HasBody) {
+								} else if (U.HasBody) {
 									KindFormat = "  Bd";
 								}
-								Console.WriteLine(String.Format("{0,4}  {1,4}", KindFormat, U.Name));
-							} else if (U is AdaTools.Program) {
-								switch ((U as AdaTools.Program).Type) {
+								if (U.IsPure) {
+									Purity = "Pure";
+								}
+								if (U.IsRemoteCallInterface) {
+									Remote = "Intrfc";
+								} else if (U.IsAllCallsRemote) {
+									Remote = "Calls";
+								}
+								Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", KindFormat, Purity, Remote, U.Name));
+							} else if (U is ProgramUnit) {
+								switch ((U as ProgramUnit).Type) {
 									case ProgramType.Function:
 										KindFormat = " Fn ";
 										break;
@@ -79,7 +89,7 @@ namespace Cmdline {
 										KindFormat = " Pr ";
 										break;
 								}
-								Console.WriteLine(String.Format("{0,4}  {1,4}", KindFormat, U.Name));
+								Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", KindFormat, Purity, Remote, U.Name));
 							}
 						}
 					} else {

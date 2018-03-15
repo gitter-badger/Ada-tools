@@ -11,7 +11,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// Holds traits about the package for easy analysis
 	/// </remarks>
-	public sealed class Package : Unit {
+	public sealed class PackageUnit : Unit {
 
 		/// <summary>
 		/// The full list of package names this package depends on
@@ -21,12 +21,27 @@ namespace AdaTools {
 		/// <summary>
 		/// Whether a spec file for this package was found
 		/// </summary>
-		public readonly Boolean HasSpec;
+		public override Boolean HasSpec { get; protected set; }
 
 		/// <summary>
 		/// Whether a body file for this package was found
 		/// </summary>
-		public readonly Boolean HasBody;
+		public override Boolean HasBody { get; protected set; }
+
+		/// <summary>
+		/// Whether the package uses entirely remote calls
+		/// </summary>
+		public override Boolean IsAllCallsRemote { get; protected set; }
+
+		/// <summary>
+		/// Whether the package is pure
+		/// </summary>
+		public override Boolean IsPure { get; protected set; }
+
+		/// <summary>
+		/// Whether the package is a remote call interface
+		/// </summary>
+		public override Boolean IsRemoteCallInterface { get; protected set; }
 
 		/// <summary>
 		/// Get all associated files of this package
@@ -51,7 +66,7 @@ namespace AdaTools {
 		/// This attempts to find source files associated with the package. If files with the appropriate name are found, they are then parsed for certain traits and validated against, then additional traits are retrieved. If no source files are found, the package is still initialized, but only with the given name.
 		/// </remarks>
 		/// <param name="Name">The name of the package</param>
-		public Package(String Name) : base(Name) {
+		public PackageUnit(String Name) : base(Name) {
 
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;
@@ -60,10 +75,16 @@ namespace AdaTools {
 				SpecSource = new Source(Name + SpecExtension);
 				SpecName = SpecSource.TryParseName();
 				this.HasSpec = true;
+				this.IsAllCallsRemote = SpecSource.TryParseAllCallsRemote();
 				this.Dependencies.AddRange(SpecSource.TryParseDependencies());
+				this.IsPure = SpecSource.TryParsePurity();
+				this.IsRemoteCallInterface = SpecSource.TryParseRemoteCallInterface();
 			} catch {
 				SpecSource = null;
 				this.HasSpec = false;
+				this.IsAllCallsRemote = false;
+				this.IsPure = false;
+				this.IsRemoteCallInterface = false;
 			}
 			Source BodySource;
 			String BodyName = null;

@@ -11,18 +11,18 @@ namespace AdaToolsTests
 
 		[TestMethod]
 		public void Constructor() {
-			Program Program = new Program("Prog");
+			ProgramUnit Program = new ProgramUnit("Prog");
 		}
 
 		[TestMethod]
 		public void Name() {
-			Program Program = new Program("Prog");
+			ProgramUnit Program = new ProgramUnit("Prog");
 			Assert.AreEqual("Prog", Program.Name);
 		}
 
 		[TestMethod]
 		public void Dependencies() {
-			Program Program = new Program("Prog");
+			ProgramUnit Program = new ProgramUnit("Prog");
 			Assert.AreEqual("Ada.Text_IO", String.Join(',', Program.Dependencies));
 		}
 

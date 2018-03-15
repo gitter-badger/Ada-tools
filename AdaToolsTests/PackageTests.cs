@@ -10,30 +10,36 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void Constructor() {
-			Package Package = new Package("Test");
+			PackageUnit Package = new PackageUnit("Test");
 		}
 
 		[TestMethod]
 		public void Name() {
-			Package Package = new Package("Test");
+			PackageUnit Package = new PackageUnit("Test");
 			Assert.AreEqual("Test", Package.Name);
 		}
 
 		[TestMethod]
 		public void HasSpec() {
-			Package Package = new Package("Test");
+			PackageUnit Package = new PackageUnit("Test");
 			Assert.IsTrue(Package.HasSpec);
 		}
 
 		[TestMethod]
 		public void HasBody() {
-			Package Package = new Package("Test");
+			PackageUnit Package = new PackageUnit("Test");
 			Assert.IsTrue(Package.HasBody);
 		}
 
 		[TestMethod]
+		public void IsPure() {
+			Assert.IsFalse(new PackageUnit("Test").IsPure);
+			Assert.IsTrue(new PackageUnit("Pure").IsPure);
+		}
+
+		[TestMethod]
 		public void Dependencies() {
-			Package Package = new Package("Test");
+			PackageUnit Package = new PackageUnit("Test");
 			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(",", Package.Dependencies));
 		}
 	}

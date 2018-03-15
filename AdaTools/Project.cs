@@ -25,7 +25,7 @@ namespace AdaTools {
 		public List<String> Dependencies {
 			get {
 				List<String> deps = new List<String>();
-				foreach (Package Package in this.Packages) {
+				foreach (PackageUnit Package in this.Packages) {
 					deps.AddRange(Package.Dependencies);
 				}
 				return deps.Distinct().ToList();
@@ -40,11 +40,11 @@ namespace AdaTools {
 		/// <summary>
 		/// All the packages in this project
 		/// </summary>
-		public List<Package> Packages {
+		public List<PackageUnit> Packages {
 			get {
-				List<Package> Result = new List<Package>();
+				List<PackageUnit> Result = new List<PackageUnit>();
 				foreach (Unit U in this.Units) {
-					if (U is Package) Result.Add(U as Package);
+					if (U is PackageUnit) Result.Add(U as PackageUnit);
 				}
 				return Result;
 			}
@@ -53,11 +53,11 @@ namespace AdaTools {
 		/// <summary>
 		/// All the programs in this project
 		/// </summary>
-		public List<Program> Programs {
+		public List<ProgramUnit> Programs {
 			get {
-				List<Program> Result = new List<Program>();
+				List<ProgramUnit> Result = new List<ProgramUnit>();
 				foreach (Unit U in this.Units) {
-					if (U is Program) Result.Add(U as Program);
+					if (U is ProgramUnit) Result.Add(U as ProgramUnit);
 				}
 				return Result;
 			}
@@ -82,7 +82,7 @@ namespace AdaTools {
 			// Iterate through the files, adding the names of Ada source files to a list
 			foreach (String FileName in Directory.GetFiles(Location)) {
 				String Extension = Path.GetExtension(FileName).ToLower();
-				if (Extension == Package.SpecExtension || Extension == Package.BodyExtension || Extension == Program.Extension) {
+				if (Extension == PackageUnit.SpecExtension || Extension == PackageUnit.BodyExtension || Extension == ProgramUnit.Extension) {
 					Source Source = new Source(FileName);
 					if (AdaSources.Contains(Path.GetFileNameWithoutExtension(FileName))) continue; // Already exists, so don't add it again
 					String SourceName = Source.TryParseName();
@@ -90,10 +90,10 @@ namespace AdaTools {
 					SourceType SourceType = Source.TryParseSourceType();
 					switch (SourceType) {
 						case SourceType.Package:
-							this.Units.Add(new Package(SourceName));
+							this.Units.Add(new PackageUnit(SourceName));
 							break;
 						case SourceType.Program:
-							this.Units.Add(new Program(SourceName));
+							this.Units.Add(new ProgramUnit(SourceName));
 							break;
 						default:
 							break;

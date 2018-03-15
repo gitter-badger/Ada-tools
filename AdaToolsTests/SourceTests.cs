@@ -39,6 +39,12 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void TryParsePurity() {
+			Assert.IsFalse(new Source("Test.ads").TryParsePurity());
+			Assert.IsTrue(new Source("Pure.ads").TryParsePurity());
+		}
+
+		[TestMethod]
 		public void TryParseSourceType() {
 			Assert.AreEqual(SourceType.Package, new Source("Test.ads").TryParseSourceType());
 			Assert.AreEqual(SourceType.Package, new Source("Test.adb").TryParseSourceType());
