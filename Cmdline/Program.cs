@@ -14,14 +14,19 @@ namespace Cmdline {
 				Error();
 				return;
 			}
-			/// <summary>The current project being analyzed</summary>
-			Project Project;
+			/// <summary>
+			/// The current project being analyzed
+			/// </summary>
+			/// <remarks>
+			/// This is Lazy so that we can "initialize" it once, but only actually initialize it if we actually need it. Quite a few operations don't need it, so it's a waste of resources to initialize an entire project (a quite expensive operation) only to never use it, but it's also incredibly tedious to initialize it ever time it is needed. This introduces slightly awkward syntax but overcomes both issues.
+			/// </remarks>
+			Lazy<Project> Project = new Lazy<Project>(new Project());
 			/// <summary>The current package being analyzed</summary>
 			PackageUnit Package;
 			// Do whatever the operation is
 			switch (Operation) {
 				case "help":
-					Help();
+					Program.Help();
 					break;
 				case "dep":
 				case "deps":
@@ -30,8 +35,7 @@ namespace Cmdline {
 				case "dependency":
 				case "dependencies":
 					if (args.Length == 1) {
-						Project = new Project();
-						foreach (Unit U in Project.Units) {
+						foreach (Unit U in Project.Value.Units) {
 							Console.Write(U.Name + ": ");
 							foreach (String Dep in U.Dependencies) {
 								Console.Write(Dep + ' ');
@@ -40,8 +44,7 @@ namespace Cmdline {
 						}
 					} else {
 						if (args.Length == 2 && (args[1].ToLower() == "all" || args[1].ToLower() == "project")) {
-							Project = new Project();
-							foreach (String Dep in Project.Dependencies) {
+							foreach (String Dep in Project.Value.Dependencies) {
 								Console.Write(Dep + ' ');
 							}
 						} else {
@@ -67,10 +70,9 @@ namespace Cmdline {
 					break;
 				case "list":
 					if (args.Length >= 2 && args[1].ToLower() == "table") {
-						Project = new Project();
 						Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "Kind", "Pure", "Remote", "Name"));
 						Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "----", "----", "------", "----"));
-						foreach (Unit U in Project.Units) {
+						foreach (Unit U in Project.Value.Units) {
 							String KindFormat = "";
 							String Purity = "";
 							String Remote = "";
@@ -104,7 +106,7 @@ namespace Cmdline {
 							}
 						}
 					} else {
-						foreach (Unit U in new Project().Units) {
+						foreach (Unit U in Project.Value.Units) {
 							Console.Write(U.Name + ' ');
 						}
 					}

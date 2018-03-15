@@ -3,12 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>AdaTools</RootNamespace>
+    <RootNamespace>Cmdline</RootNamespace>
     <Authors>Patrick Kelly (Entomy)</Authors>
     <Company>Patrick Kelly</Company>
     <Product>Ada-Tools Command Line Interface</Product>
     <AssemblyName>AdaTool</AssemblyName>
     <StartupObject>Cmdline.Program</StartupObject>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
