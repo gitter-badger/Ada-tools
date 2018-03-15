@@ -13,6 +13,11 @@ namespace AdaTools {
 		/// </summary>
 		public readonly String Name;
 
+		/// <summary>
+		/// The full list of package names this unit depends on
+		/// </summary>
+		public readonly List<String> Dependencies = new List<String>();
+
 		public abstract Boolean HasSpec { get; protected set; }
 
 		public abstract Boolean HasBody { get; protected set; }

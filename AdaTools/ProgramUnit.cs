@@ -18,10 +18,6 @@ namespace AdaTools {
 		public readonly ProgramType Type;
 
 		/// <summary>
-		/// The full list of package names this package depends on
-		/// </summary>
-		public readonly List<String> Dependencies = new List<String>();
-		/// <summary>
 		/// Whether a spec file for this program was found
 		/// </summary>
 		/// <remarks>

@@ -14,11 +14,6 @@ namespace AdaTools {
 	public sealed class PackageUnit : Unit {
 
 		/// <summary>
-		/// The full list of package names this package depends on
-		/// </summary>
-		public readonly List<String> Dependencies = new List<String>();
-
-		/// <summary>
 		/// Whether a spec file for this package was found
 		/// </summary>
 		public override Boolean HasSpec { get; protected set; }

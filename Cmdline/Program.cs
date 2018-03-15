@@ -31,17 +31,28 @@ namespace Cmdline {
 				case "dependencies":
 					if (args.Length == 1) {
 						Project = new Project();
-						foreach (String Dep in Project.Dependencies) {
-							Console.Write(Dep + ' ');
-						}
-					} else {
-						foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
-							Package = new PackageUnit(Name);
-							Console.Write(Package.Name + ": ");
-							foreach (String Dep in Package.Dependencies) {
+						foreach (Unit U in Project.Units) {
+							Console.Write(U.Name + ": ");
+							foreach (String Dep in U.Dependencies) {
 								Console.Write(Dep + ' ');
 							}
 							Console.WriteLine();
+						}
+					} else {
+						if (args.Length == 2 && (args[1].ToLower() == "all" || args[1].ToLower() == "project")) {
+							Project = new Project();
+							foreach (String Dep in Project.Dependencies) {
+								Console.Write(Dep + ' ');
+							}
+						} else {
+							foreach (String Name in args.Skip(1).Take(args.Length - 1)) {
+								Package = new PackageUnit(Name);
+								Console.Write(Package.Name + ": ");
+								foreach (String Dep in Package.Dependencies) {
+									Console.Write(Dep + ' ');
+								}
+								Console.WriteLine();
+							}
 						}
 					}
 					Console.WriteLine();
