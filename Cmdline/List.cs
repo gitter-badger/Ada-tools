@@ -13,9 +13,8 @@ namespace Cmdline {
 						List.FullHelp();
 						break;
 					case "table":
-						Console.WriteLine(String.Format("┌─{0,4}─┬─{1,4}─┬─{2,6}─┬─{3,4}─┐", "────", "────", "──────", "────"));
-						Console.WriteLine(String.Format("│ {0,4} │ {1,4} │ {2,6} │ {3,4} │", "Kind", "Pure", "Remote", "Name"));
-						Console.WriteLine(String.Format("├─{0,4}─┼─{1,4}─┼─{2,6}─┼─{3,4}─┤", "────", "────", "──────", "────"));
+						Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "Kind", "Pure", "Remote", "Name"));
+						Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "----", "----", "------", "----"));
 						foreach (Unit Unit in new Project().Units) {
 							String Kind = "";
 							String Pure = "";
@@ -37,7 +36,7 @@ namespace Cmdline {
 									} else if (Package.IsAllCallsRemote) {
 										Remote = "Calls";
 									}
-									Console.WriteLine(String.Format("│ {0,4} │ {1,4} │ {2,6} │ {3,4} │", Kind, Pure, Remote, Package.Name));
+									Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", Kind, Pure, Remote, Package.Name));
 									break;
 								case ProgramUnit Program:
 									switch (Program.Type) {
@@ -48,11 +47,10 @@ namespace Cmdline {
 											Kind = " Pr ";
 											break;
 									}
-									Console.WriteLine(String.Format("│ {0,4} │ {1,4} │ {2,6} │ {3,4} │", Kind, Pure, Remote, Program.Name));
+									Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", Kind, Pure, Remote, Program.Name));
 									break;
 							}
 						}
-						Console.WriteLine(String.Format("└─{0,4}─┴─{1,4}─┴─{2,6}─┴─{3,4}─┘", "────", "────", "──────", "────"));
 						break;
 					default:
 						// The argument wasn't a modifier, but there are arguments
