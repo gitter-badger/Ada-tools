@@ -43,6 +43,18 @@ namespace AdaTools {
 		}
 
 		/// <summary>
+		/// Try to parse what Ada Version this unit is
+		/// </summary>
+		/// <returns>The Ada Version if one was found, null otherwise</returns>
+		public AdaVersion? TryParseAdaVersion() {
+			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_83", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada1983;
+			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_95", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada1995;
+			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_(20)?05", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada2005;
+			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_(20)?12", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada2012;
+			return null;
+		}
+
+		/// <summary>
 		/// Try to parse whether this unit makes remote calls
 		/// </summary>
 		/// <returns></returns>
@@ -52,6 +64,33 @@ namespace AdaTools {
 			} else {
 				return false;
 			}
+		}
+
+		/// <summary>
+		/// Try to parse the assertion policy configuration
+		/// </summary>
+		/// <returns></returns>
+		public AssertionPolicy? TryParseAssertionPolicy() {
+			String Policy = this.Match(new Regex(@"\bpragma\s+Assertion_Policy\s*\(.*\)", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (new Regex(@"\bcheck\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Check;
+			if (new Regex(@"\bdisable\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Disable;
+			if (new Regex(@"\bignore\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Ignore;
+			return null;
+		}
+
+		/// <summary>
+		/// Try to parse the Assume_No_Invalid_Values configuration
+		/// </summary>
+		/// <returns></returns>
+		public Boolean? TryParseAssumeNoInvalidValues() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Assume_No_Invalid_Values.*;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Config == null) return null;
+			if (new Regex(@"\bfalse\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return false;
+			} else {
+				return true;
+			}
+
 		}
 
 		/// <summary>
@@ -73,6 +112,68 @@ namespace AdaTools {
 				}
 			}
 			return Result;
+		}
+
+		/// <summary>
+		/// Try to parse the elaboration checks configuration
+		/// </summary>
+		/// <returns></returns>
+		public ElaborationChecks? TryParseElaborationChecks() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Elaboration_Checks\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Config == null) return null;
+			if (new Regex(@"\bdynamic\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return ElaborationChecks.Dynamic;
+			} else if (new Regex(@"\bstatic\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return ElaborationChecks.Static;
+			} else {
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Try to parse the extensions allowed configuration
+		/// </summary>
+		/// <returns></returns>
+		public Boolean? TryParseExtensionsAllowed() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Extensions_Allowed;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Config == null) {
+				return null;
+			} else {
+				return true;
+			}
+
+		}
+
+		/// <summary>
+		/// Try to parse the fast math configuration
+		/// </summary>
+		/// <returns></returns>
+		public Boolean? TryParseFastMath() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Fast_Math;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Config == null) {
+				return null;
+			} else {
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// Try to parse the license configuration
+		/// </summary>
+		public License? TryParseLicense() {
+			String Config = this.Match(new Regex(@"\bpragma\s+License\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Config == null) return null;
+			if (new Regex(@"\bgpl\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return License.GPL;
+			} else if (new Regex(@"\bmodified_gpl\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return License.Modified_GPL;
+			} else if (new Regex(@"\brestricted\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return License.Restricted;
+			} else if (new Regex(@"\bunrestricted\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return License.Unrestricted;
+			} else {
+				return null;
+			}
 		}
 
 		/// <summary>

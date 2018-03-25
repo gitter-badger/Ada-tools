@@ -7,6 +7,50 @@ namespace AdaTools {
 	/// Represents a project configuration unit
 	/// </summary>
 	public sealed class ConfigurationUnit : Unit {
+		
+		// While this may appear exhaustive, it should not be assumed as such. Some things were skipped with the intent on coming back to them later.
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-ada-83" />
+		public AdaVersion? AdaVersion { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-assertion-policy" />
+		public AssertionPolicy? AssertionPolicy { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-assume-no-invalid-values" />
+		public Boolean? AssumeNoInvalidValues { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-elaboration-checks"/>
+		public ElaborationChecks? ElaborationChecks { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-extensions-allowed"/>
+		public Boolean? ExtensionsAllowed { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-fast-math"/>
+		public Boolean? FastMath { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-license"/>
+		public License? License { get; set; }
 
 		public override Boolean HasBody {
 			get => false;
@@ -37,6 +81,13 @@ namespace AdaTools {
 
 		public ConfigurationUnit() : base("Gnat") {
 			Source ConfigSource = new Source("Gnat" + Extension);
+			this.AdaVersion = ConfigSource.TryParseAdaVersion();
+			this.AssertionPolicy = ConfigSource.TryParseAssertionPolicy();
+			this.AssumeNoInvalidValues = ConfigSource.TryParseAssumeNoInvalidValues();
+			this.ElaborationChecks = ConfigSource.TryParseElaborationChecks();
+			this.ExtensionsAllowed = ConfigSource.TryParseExtensionsAllowed();
+			this.FastMath = ConfigSource.TryParseFastMath();
+			this.License = ConfigSource.TryParseLicense();
 		}
 
 		/// <summary>

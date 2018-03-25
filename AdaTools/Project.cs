@@ -18,6 +18,11 @@ namespace AdaTools {
 		/// In most cases, this is the current working directory
 		/// </remarks>
 		public readonly String Name;
+		
+		/// <summary>
+		/// The projects configuration unit if one was found, null if no configuration exists
+		/// </summary>
+		public ConfigurationUnit Configuration { get; private set; }
 
 		/// <summary>
 		/// Get the dependencies of the project as a whole, instead of individual unit dependencies
@@ -62,7 +67,19 @@ namespace AdaTools {
 				return Result;
 			}
 		}
-		
+
+		/// <summary>
+		/// Attempt to lookup the unit by its <paramref name="Name"/>
+		/// </summary>
+		/// <param name="Name">The name of the unit to lookup</param>
+		/// <returns>The unit with the specified <paramref name="Name"/> if found, otherwise null</returns>
+		public Unit LookupUnit(String Name) {
+			foreach (Unit U in this.Units) {
+				if (U.Name == Name) return U;
+			}
+			return null;
+		}
+
 		/// <summary>
 		/// Initialize a project in the current directory
 		/// </summary>
@@ -98,6 +115,8 @@ namespace AdaTools {
 						default:
 							break;
 					}
+				} else if (Extension == ConfigurationUnit.Extension) {
+					this.Configuration = new ConfigurationUnit();
 				}
 			}
 		}

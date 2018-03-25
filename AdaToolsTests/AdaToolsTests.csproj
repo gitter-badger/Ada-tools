@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Gnat.adc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Prog.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
