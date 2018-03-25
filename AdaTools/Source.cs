@@ -13,6 +13,9 @@ namespace AdaTools {
 	/// </remarks>
 	public sealed class Source {
 
+		/// <summary>
+		/// Holds the actual source code
+		/// </summary>
 		private readonly String SourceCode = "";
 
 		/// <summary>

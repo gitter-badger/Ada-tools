@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AdaTools {
+﻿namespace AdaTools {
+	/// <summary>
+	/// Represents the configured Policy Identifier
+	/// </summary>
 	public enum PolicyIdentifier {
 		On,
 		Off,

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdaTools
-{
+namespace AdaTools {
+	/// <summary>
+	/// Represents the configured Ada Version
+	/// </summary>
 	public enum AdaVersion {
 		Ada1983,
 		Ada1995,

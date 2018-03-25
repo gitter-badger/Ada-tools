@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdaTools
-{
+namespace AdaTools {
+	/// <summary>
+	/// Represents the configured Assertion Policy
+	/// </summary>
 	public enum AssertionPolicy {
 		/// <summary>
 		/// Assertions are enabled

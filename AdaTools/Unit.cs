@@ -18,10 +18,16 @@ namespace AdaTools {
 		/// </summary>
 		public readonly List<String> Dependencies = new List<String>();
 
+		/// <summary>
+		/// Whether the unit has a specification
+		/// </summary>
 		public abstract Boolean HasSpec { get; protected set; }
 
+		/// <summary>
+		/// Whether the unit has a body
+		/// </summary>
 		public abstract Boolean HasBody { get; protected set; }
-
+		
 		public abstract Boolean IsAllCallsRemote { get; protected set; }
 
 		public abstract Boolean IsPure { get; protected set; }
