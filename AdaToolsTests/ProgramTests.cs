@@ -16,8 +16,17 @@ namespace AdaToolsTests
 
 		[TestMethod]
 		public void Name() {
-			ProgramUnit Program = new ProgramUnit("Prog");
-			Assert.AreEqual("Prog", Program.Name);
+			Assert.AreEqual("Prog", new ProgramUnit("Prog").Name);
+		}
+
+		[TestMethod]
+		public void Type() {
+			Assert.AreEqual(ProgramType.Procedure, new ProgramUnit("Prog").Type);
+		}
+
+		[TestMethod]
+		public void GetFiles() {
+			Assert.AreEqual("Prog.adb", String.Join(',', new ProgramUnit("Prog").GetFiles()));
 		}
 
 		[TestMethod]

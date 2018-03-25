@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using AdaTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -15,20 +13,22 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void Name() {
-			PackageUnit Package = new PackageUnit("Test");
-			Assert.AreEqual("Test", Package.Name);
+			Assert.AreEqual("Test", new PackageUnit("Test").Name);
 		}
 
 		[TestMethod]
 		public void HasSpec() {
-			PackageUnit Package = new PackageUnit("Test");
-			Assert.IsTrue(Package.HasSpec);
+			Assert.IsTrue(new PackageUnit("Test").HasSpec);
 		}
 
 		[TestMethod]
 		public void HasBody() {
-			PackageUnit Package = new PackageUnit("Test");
-			Assert.IsTrue(Package.HasBody);
+			Assert.IsTrue(new PackageUnit("Test").HasBody);
+		}
+
+		[TestMethod]
+		public void IsAllCallsRemote() {
+			Assert.IsFalse(new PackageUnit("Test").IsAllCallsRemote);
 		}
 
 		[TestMethod]
@@ -38,9 +38,18 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void IsRemoteCallInterface() {
+			Assert.IsFalse(new PackageUnit("Test").IsRemoteCallInterface);
+		}
+
+		[TestMethod]
+		public void GetFiles() {
+			Assert.AreEqual("Test.ads,Test.adb", String.Join(',', new PackageUnit("Test").GetFiles()));
+		}
+
+		[TestMethod]
 		public void Dependencies() {
-			PackageUnit Package = new PackageUnit("Test");
-			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(",", Package.Dependencies));
+			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(",", new PackageUnit("Test").Dependencies));
 		}
 	}
 }
