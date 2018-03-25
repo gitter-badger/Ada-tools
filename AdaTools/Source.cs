@@ -49,7 +49,7 @@ namespace AdaTools {
 		/// Try to parse what Ada Version this unit is
 		/// </summary>
 		/// <returns>The Ada Version if one was found, null otherwise</returns>
-		public AdaVersion? TryParseAdaVersion() {
+		public AdaVersion? ParseAdaVersion() {
 			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_83", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada1983;
 			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_95", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada1995;
 			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_(20)?05", RegexOptions.IgnoreCase | RegexOptions.Multiline))) return AdaVersion.Ada2005;
@@ -61,7 +61,7 @@ namespace AdaTools {
 		/// Try to parse whether this unit makes remote calls
 		/// </summary>
 		/// <returns></returns>
-		public Boolean TryParseAllCallsRemote() {
+		public Boolean ParseAllCallsRemote() {
 			if (this.IsMatch(new Regex(@"\bwith\s+.*all_calls_remote.*\s+is", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
 				return true;
 			} else {
@@ -73,7 +73,7 @@ namespace AdaTools {
 		/// Try to parse the assertion policy configuration
 		/// </summary>
 		/// <returns></returns>
-		public AssertionPolicy? TryParseAssertionPolicy() {
+		public AssertionPolicy? ParseAssertionPolicy() {
 			String Policy = this.Match(new Regex(@"\bpragma\s+Assertion_Policy\s*\(.*\)", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (new Regex(@"\bcheck\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Check;
 			if (new Regex(@"\bdisable\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Disable;
@@ -85,7 +85,7 @@ namespace AdaTools {
 		/// Try to parse the Assume_No_Invalid_Values configuration
 		/// </summary>
 		/// <returns></returns>
-		public Boolean? TryParseAssumeNoInvalidValues() {
+		public Boolean? ParseAssumeNoInvalidValues() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Assume_No_Invalid_Values.*;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) return null;
 			if (new Regex(@"\bfalse\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
@@ -100,7 +100,7 @@ namespace AdaTools {
 		/// Try to parse the packages this unit dependends on
 		/// </summary>
 		/// <returns>A list of the dependent packages</returns>
-		public List<String> TryParseDependencies() {
+		public List<String> ParseDependencies() {
 			List<String> Result = new List<String>();
 			// This seemingly obtuse approach is done to filter out aspects, which share the same syntax. A full blown semantic parser would be able to recognize when a dependency is appropriate versus an aspect, but a simple regex parser can't. So we do this instead.
 			foreach (String Match in this.Matches(new Regex(@"\b((function|procedure).*\s+)?with\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
@@ -121,7 +121,7 @@ namespace AdaTools {
 		/// Try to parse the elaboration checks configuration
 		/// </summary>
 		/// <returns></returns>
-		public ElaborationChecks? TryParseElaborationChecks() {
+		public ElaborationChecks? ParseElaborationChecks() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Elaboration_Checks\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) return null;
 			if (new Regex(@"\bdynamic\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
@@ -137,7 +137,7 @@ namespace AdaTools {
 		/// Try to parse the extensions allowed configuration
 		/// </summary>
 		/// <returns></returns>
-		public Boolean? TryParseExtensionsAllowed() {
+		public Boolean? ParseExtensionsAllowed() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Extensions_Allowed;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) {
 				return null;
@@ -151,7 +151,7 @@ namespace AdaTools {
 		/// Try to parse the fast math configuration
 		/// </summary>
 		/// <returns></returns>
-		public Boolean? TryParseFastMath() {
+		public Boolean? ParseFastMath() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Fast_Math;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) {
 				return null;
@@ -163,7 +163,7 @@ namespace AdaTools {
 		/// <summary>
 		/// Try to parse the license configuration
 		/// </summary>
-		public License? TryParseLicense() {
+		public License? ParseLicense() {
 			String Config = this.Match(new Regex(@"\bpragma\s+License\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) return null;
 			if (new Regex(@"\bgpl\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
@@ -183,7 +183,7 @@ namespace AdaTools {
 		/// Try to parse the internal name of the unit
 		/// </summary>
 		/// <returns>The internal name, if any was found</returns>
-		public String TryParseName() {
+		public String ParseName() {
 			String Candidate = "";
 			// Try getting the name through a variety of means
 			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+(is|with)\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
@@ -207,7 +207,7 @@ namespace AdaTools {
 		/// Try to parse the type of Ada Program
 		/// </summary>
 		/// <returns>The type of program</returns>
-		public ProgramType TryParseProgramType() {
+		public ProgramType ParseProgramType() {
 			String Candidate = this.Match(new Regex(@"\b(function|procedure)\s(\w|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaProgramException();
 			if (new Regex(@"\bfunction\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
@@ -224,7 +224,7 @@ namespace AdaTools {
 		/// Try to parse the purity of the unit
 		/// </summary>
 		/// <returns>True if pure, false otherwise</returns>
-		public Boolean TryParsePurity() {
+		public Boolean ParsePurity() {
 			if (this.IsMatch(new Regex(@"\bpragma\s+pure\s*\(\s*(\w|\.|_)+\s*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
 				return true;
 			} else if (this.IsMatch(new Regex(@"\bwith\s+.*pure.*\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
@@ -238,7 +238,7 @@ namespace AdaTools {
 		/// Try to parse whether the unit is a remote call interface
 		/// </summary>
 		/// <returns>True if RCI, false otherwise</returns>
-		public Boolean TryParseRemoteCallInterface() {
+		public Boolean ParseRemoteCallInterface() {
 			if (this.IsMatch(new Regex(@"\bwith\s+.*remote_call_interface.*\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Multiline))) {
 				return true;
 			} else {
@@ -253,7 +253,7 @@ namespace AdaTools {
 		/// This method attempts to distinguish a package spec or body from a function program or procedure program. This is necessary because packages and programs have different representations within this tool, as well as different information that will be gathered about them.
 		/// </remarks>
 		/// <returns>The type of source</returns>
-		public SourceType TryParseSourceType() {
+		public SourceType ParseSourceType() {
 			String Candidate = this.Match(new Regex(@"\b(package|function|procedure)\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			// If no matche was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();

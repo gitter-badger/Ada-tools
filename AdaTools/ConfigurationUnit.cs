@@ -81,13 +81,13 @@ namespace AdaTools {
 
 		public ConfigurationUnit() : base("Gnat") {
 			Source ConfigSource = new Source("Gnat" + Extension);
-			this.AdaVersion = ConfigSource.TryParseAdaVersion();
-			this.AssertionPolicy = ConfigSource.TryParseAssertionPolicy();
-			this.AssumeNoInvalidValues = ConfigSource.TryParseAssumeNoInvalidValues();
-			this.ElaborationChecks = ConfigSource.TryParseElaborationChecks();
-			this.ExtensionsAllowed = ConfigSource.TryParseExtensionsAllowed();
-			this.FastMath = ConfigSource.TryParseFastMath();
-			this.License = ConfigSource.TryParseLicense();
+			this.AdaVersion = ConfigSource.ParseAdaVersion();
+			this.AssertionPolicy = ConfigSource.ParseAssertionPolicy();
+			this.AssumeNoInvalidValues = ConfigSource.ParseAssumeNoInvalidValues();
+			this.ElaborationChecks = ConfigSource.ParseElaborationChecks();
+			this.ExtensionsAllowed = ConfigSource.ParseExtensionsAllowed();
+			this.FastMath = ConfigSource.ParseFastMath();
+			this.License = ConfigSource.ParseLicense();
 		}
 
 		/// <summary>

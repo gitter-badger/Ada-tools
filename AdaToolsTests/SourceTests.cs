@@ -24,31 +24,31 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
-		public void TryParseDependencies() {
-			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(',', new Source("Test.ads").TryParseDependencies()));
-			Assert.AreEqual("", String.Join(',', new Source("Test.adb").TryParseDependencies()));
-			Assert.AreEqual("Ada.Text_IO", String.Join(',', new Source("Prog.adb").TryParseDependencies()));
+		public void ParseDependencies() {
+			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(',', new Source("Test.ads").ParseDependencies()));
+			Assert.AreEqual("", String.Join(',', new Source("Test.adb").ParseDependencies()));
+			Assert.AreEqual("Ada.Text_IO", String.Join(',', new Source("Prog.adb").ParseDependencies()));
 		}
 
 		[TestMethod]
-		public void TryParseName() {
-			Assert.AreEqual("Test", new Source("Test.ads").TryParseName());
-			Assert.AreEqual("Test", new Source("Test.adb").TryParseName());
-			Assert.AreEqual("Prog", new Source("Prog.adb").TryParseName());
+		public void ParseName() {
+			Assert.AreEqual("Test", new Source("Test.ads").ParseName());
+			Assert.AreEqual("Test", new Source("Test.adb").ParseName());
+			Assert.AreEqual("Prog", new Source("Prog.adb").ParseName());
 
 		}
 
 		[TestMethod]
-		public void TryParsePurity() {
-			Assert.IsFalse(new Source("Test.ads").TryParsePurity());
-			Assert.IsTrue(new Source("Pure.ads").TryParsePurity());
+		public void ParsePurity() {
+			Assert.IsFalse(new Source("Test.ads").ParsePurity());
+			Assert.IsTrue(new Source("Pure.ads").ParsePurity());
 		}
 
 		[TestMethod]
-		public void TryParseSourceType() {
-			Assert.AreEqual(SourceType.Package, new Source("Test.ads").TryParseSourceType());
-			Assert.AreEqual(SourceType.Package, new Source("Test.adb").TryParseSourceType());
-			Assert.AreEqual(SourceType.Program, new Source("Prog.adb").TryParseSourceType());
+		public void ParseSourceType() {
+			Assert.AreEqual(SourceType.Package, new Source("Test.ads").ParseSourceType());
+			Assert.AreEqual(SourceType.Package, new Source("Test.adb").ParseSourceType());
+			Assert.AreEqual(SourceType.Program, new Source("Prog.adb").ParseSourceType());
 		}
 
 	}

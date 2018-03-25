@@ -100,9 +100,9 @@ namespace AdaTools {
 				if (Extension == PackageUnit.SpecExtension || Extension == PackageUnit.BodyExtension || Extension == ProgramUnit.Extension) {
 					Source Source = new Source(FileName);
 					if (AdaSources.Contains(Path.GetFileNameWithoutExtension(FileName))) continue; // Already exists, so don't add it again
-					String SourceName = Source.TryParseName();
+					String SourceName = Source.ParseName();
 					AdaSources.Add(Path.GetFileNameWithoutExtension(FileName));
-					SourceType SourceType = Source.TryParseSourceType();
+					SourceType SourceType = Source.ParseSourceType();
 					switch (SourceType) {
 						case SourceType.Package:
 							this.Units.Add(new PackageUnit(SourceName));

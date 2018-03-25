@@ -64,12 +64,12 @@ namespace AdaTools {
 			String SpecName = null;
 			try {
 				SpecSource = new Source(Name + SpecExtension);
-				SpecName = SpecSource.TryParseName();
+				SpecName = SpecSource.ParseName();
 				this.HasSpec = true;
-				this.IsAllCallsRemote = SpecSource.TryParseAllCallsRemote();
-				this.Dependencies.AddRange(SpecSource.TryParseDependencies());
-				this.IsPure = SpecSource.TryParsePurity();
-				this.IsRemoteCallInterface = SpecSource.TryParseRemoteCallInterface();
+				this.IsAllCallsRemote = SpecSource.ParseAllCallsRemote();
+				this.Dependencies.AddRange(SpecSource.ParseDependencies());
+				this.IsPure = SpecSource.ParsePurity();
+				this.IsRemoteCallInterface = SpecSource.ParseRemoteCallInterface();
 			} catch {
 				SpecSource = null;
 				this.HasSpec = false;
@@ -81,9 +81,9 @@ namespace AdaTools {
 			String BodyName = null;
 			try {
 				BodySource = new Source(Name + BodyExtension);
-				BodyName = BodySource.TryParseName();
+				BodyName = BodySource.ParseName();
 				this.HasBody = true;
-				this.Dependencies.AddRange(BodySource.TryParseDependencies());
+				this.Dependencies.AddRange(BodySource.ParseDependencies());
 			} catch {
 				BodySource = null;
 				this.HasBody = false;

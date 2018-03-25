@@ -68,10 +68,10 @@ namespace AdaTools {
 		/// <param name="Name">The name of the program</param>
 		public ProgramUnit(String Name) : base(Name) {
 			Source ProgSource = new Source(Name + Extension);
-			String ProgName = ProgSource.TryParseName();
+			String ProgName = ProgSource.ParseName();
 			if (this.Name != ProgName) throw new ProgramNameDoesNotMatchException();
-			this.Type = ProgSource.TryParseProgramType();
-			this.Dependencies.AddRange(ProgSource.TryParseDependencies());
+			this.Type = ProgSource.ParseProgramType();
+			this.Dependencies.AddRange(ProgSource.ParseDependencies());
 		}
 
 		/// <summary>
