@@ -15,8 +15,10 @@ namespace Cmdline {
 			/// <para>The args array has to be reversed before being converted, because otherwise it would be the "wrong" way</para>
 			/// </remarks>
 			Stack<String> Arguments = new Stack<String>(args.Reverse());
+			String Operation;
+			String Mode;
 			// Attempt to read the operation
-			if (!Arguments.TryPop(out String Operation)) {
+			if (!Arguments.TryPop(out Operation)) {
 				throw new MissingOperationException();
 			}
 			// Do whatever the operation is
@@ -30,14 +32,57 @@ namespace Cmdline {
 				case "depends":
 				case "dependency":
 				case "dependencies":
-					Dependencies.Parse(Arguments);
+					if (!Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							case "all":
+							case "project":
+								Dependencies.Project();
+								break;
+							case "help":
+								Dependencies.FullHelp();
+								break;
+							default:
+								Arguments.Push(Mode);
+								Dependencies.Each(Arguments);
+								break;
+						}
+					} else {
+						Dependencies.Each();
+					}
 					break;
 				case "file":
 				case "files":
-					Files.Parse(Arguments);
+					if (!Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							case "help":
+								Files.FullHelp();
+								break;
+							default:
+								Arguments.Push(Mode);
+								Files.Each(Arguments);
+								break;
+						}
+					} else {
+						Files.Each();
+					}
 					break;
 				case "list":
-					List.Parse(Arguments);
+					if (!Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							case "help":
+								List.FullHelp();
+								break;
+							case "table":
+								List.Table();
+								break;
+							default:
+								Arguments.Push(Mode);
+								// TODO: Write a list method for specified packages
+								break;
+						}
+					} else {
+						List.Each();
+					}
 					break;
 				default:
 					throw new UnknownOperationException("Found: " + Operation);
