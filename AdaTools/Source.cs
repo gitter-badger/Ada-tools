@@ -85,13 +85,15 @@ namespace AdaTools {
 		/// Try to parse the Assume_No_Invalid_Values configuration
 		/// </summary>
 		/// <returns></returns>
-		public Boolean? ParseAssumeNoInvalidValues() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Assume_No_Invalid_Values.*;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+		public AssumeNoInvalidValues? ParseAssumeNoInvalidValues() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Assume_No_Invalid_Values\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) return null;
-			if (new Regex(@"\bfalse\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
-				return false;
+			if (new Regex(@"\bon\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return AssumeNoInvalidValues.On;
+			} else if (new Regex(@"\boff\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return AssumeNoInvalidValues.Off;
 			} else {
-				return true;
+				return null;
 			}
 
 		}
@@ -137,24 +139,26 @@ namespace AdaTools {
 		/// Try to parse the extensions allowed configuration
 		/// </summary>
 		/// <returns></returns>
-		public Boolean? ParseExtensionsAllowed() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Extensions_Allowed;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			if (Config == null) {
-				return null;
+		public ExtensionsAllowed? ParseExtensionsAllowed() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Extensions_Allowed\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Config == null) return null;
+			if (new Regex(@"\bon\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return ExtensionsAllowed.On;
+			} else if (new Regex(@"\boff\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Config)) {
+				return ExtensionsAllowed.Off;
 			} else {
-				return true;
+				return null;
 			}
-
 		}
 
 		/// <summary>
 		/// Try to parse the fast math configuration
 		/// </summary>
 		/// <returns></returns>
-		public Boolean? ParseFastMath() {
+		public Boolean ParseFastMath() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Fast_Math;", RegexOptions.IgnoreCase | RegexOptions.Multiline));
 			if (Config == null) {
-				return null;
+				return false;
 			} else {
 				return true;
 			}

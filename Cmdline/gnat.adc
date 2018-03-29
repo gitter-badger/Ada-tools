@@ -1,0 +1,5 @@
+pragma Ada_83;
+pragma Assertion_Policy(Check);
+pragma Elaboration_Checks(Static);
+pragma Extensions_Allowed(On);
+pragma Fast_Math;

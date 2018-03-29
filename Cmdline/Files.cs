@@ -28,14 +28,14 @@ namespace Cmdline {
 			}
 		}
 
-		internal static void Help() {
-			Console.WriteLine("\t" + "files [«Packages»+] — Lists the associated files");
-		}
-
 		internal static void FullHelp() {
 			Console.WriteLine("\t" + "files");
 			Console.WriteLine("\t\t" + "— Lists the associated files for the specified package");
 			Console.WriteLine("\t\t" + "«Packages»+ — Lists the associated files for the specified package");
+		}
+
+		internal static void Help() {
+			Console.WriteLine("\t" + "files [«Packages»+] — Lists the associated files");
 		}
 
 	}

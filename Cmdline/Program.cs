@@ -26,13 +26,26 @@ namespace Cmdline {
 				case "help":
 					Program.Help();
 					break;
+				case "config":
+				case "configure":
+				case "configuration":
+					if (Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							default:
+								Arguments.Push(Mode);
+								break;
+						}
+					} else {
+						Config.Interactive();
+					}
+					break;
 				case "dep":
 				case "deps":
 				case "depend":
 				case "depends":
 				case "dependency":
 				case "dependencies":
-					if (!Arguments.TryPop(out Mode)) {
+					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
 							case "all":
 							case "project":
@@ -52,7 +65,7 @@ namespace Cmdline {
 					break;
 				case "file":
 				case "files":
-					if (!Arguments.TryPop(out Mode)) {
+					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
 							case "help":
 								Files.FullHelp();
@@ -67,7 +80,7 @@ namespace Cmdline {
 					}
 					break;
 				case "list":
-					if (!Arguments.TryPop(out Mode)) {
+					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
 							case "help":
 								List.FullHelp();
@@ -91,6 +104,7 @@ namespace Cmdline {
 
 		static void Help() {
 			Console.WriteLine("adatool");
+			Config.Help();
 			Dependencies.Help();
 			Files.Help();
 			List.Help();
