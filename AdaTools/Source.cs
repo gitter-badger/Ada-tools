@@ -73,12 +73,47 @@ namespace AdaTools {
 		/// Try to parse the assertion policy configuration
 		/// </summary>
 		/// <returns></returns>
-		public AssertionPolicy? ParseAssertionPolicy() {
+		public AssertionPolicy ParseAssertionPolicy() {
 			String Policy = this.Match(new Regex(@"\bpragma\s+Assertion_Policy\s*\(.*\)", RegexOptions.IgnoreCase | RegexOptions.Multiline));
-			if (new Regex(@"\bcheck\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Check;
-			if (new Regex(@"\bdisable\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Disable;
-			if (new Regex(@"\bignore\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) return AssertionPolicy.Ignore;
-			return null;
+			if (new Regex(@"\bcheck\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) {
+				return new AssertionPolicy(PolicyIdentifier.Check);
+			} else if (new Regex(@"\bdisable\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) {
+				return new AssertionPolicy(PolicyIdentifier.Disable);
+			} else if (new Regex(@"\bignore\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) {
+				return new AssertionPolicy(PolicyIdentifier.Ignore);
+			} else if (new Regex(@"\bsuppressible\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).IsMatch(Policy)) {
+				// This isn't correct, but is done to be recognized non-the-less
+				return new AssertionPolicy(PolicyIdentifier.Suppressible);
+			} else {
+				// The policy isn't global, it's a list, so parse the list
+				Dictionary<String, PolicyIdentifier> Policies = new Dictionary<String, PolicyIdentifier>();
+				foreach (String P in new Regex(@"\(.*\)", RegexOptions.IgnoreCase | RegexOptions.Multiline)
+					.Match(Policy).ToString()
+					.TrimStart('(').TrimEnd(')').Trim()
+					.Split(',')) {
+					String AspectMark = new Regex(@"\b(\w|_)+\s*=>", RegexOptions.IgnoreCase | RegexOptions.Multiline).Match(P).ToString().Replace("=>", "").Trim();
+					String Identifier = new Regex(@"=>\s*(\w|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Multiline).Match(P).ToString().Replace("=>", "").Trim().ToUpper();
+					PolicyIdentifier PolID;
+					switch (Identifier) {
+						case "CHECK":
+							PolID = PolicyIdentifier.Check;
+							break;
+						case "DISABLE":
+							PolID = PolicyIdentifier.Disable;
+							break;
+						case "IGNORE":
+							PolID = PolicyIdentifier.Ignore;
+							break;
+						case "SUPPRESSIBLE":
+							PolID = PolicyIdentifier.Suppressible;
+							break;
+						default:
+							continue;
+					}
+					Policies.Add(AspectMark, PolID);
+				}
+				return new AssertionPolicy(Policies);
+			}
 		}
 
 		/// <summary>

@@ -21,7 +21,7 @@ namespace AdaTools {
 		/// 
 		/// </summary>
 		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-assertion-policy" />
-		public AssertionPolicy? AssertionPolicy { get; set; }
+		public AssertionPolicy AssertionPolicy { get; set; }
 
 		/// <summary>
 		/// 
@@ -109,18 +109,40 @@ namespace AdaTools {
 					default:
 						break;
 				}
-				switch (this.AssertionPolicy) {
-					case AdaTools.AssertionPolicy.Check:
-						Config.WriteLine("pragma Assertion_Policy(Check);");
-						break;
-					case AdaTools.AssertionPolicy.Disable:
-						Config.WriteLine("pragma Assertion_Policy(Disable);");
-						break;
-					case AdaTools.AssertionPolicy.Ignore:
-						Config.WriteLine("pragma Assertion_Policy(Ignore);");
-						break;
-					default:
-						break;
+				if (this.AssertionPolicy.GlobalPolicy != null) {
+					switch (this.AssertionPolicy.GlobalPolicy) {
+						case PolicyIdentifier.Check:
+							Config.WriteLine("pragma Assertion_Policy(Check);");
+							break;
+						case PolicyIdentifier.Disable:
+							Config.WriteLine("pragma Assertion_Policy(Disable);");
+							break;
+						case PolicyIdentifier.Ignore:
+							Config.WriteLine("pragma Assertion_Policy(Ignore);");
+							break;
+						default:
+							break;
+					}
+				} else {
+					Config.WriteLine("pragma Assertion_Policy(");
+					foreach (KeyValuePair<String, PolicyIdentifier> policy in this.AssertionPolicy.Policies) {
+						Config.Write("\t" + policy.Key + " => ");
+						switch (policy.Value) {
+							case PolicyIdentifier.Check:
+								Config.WriteLine("Check,");
+								break;
+							case PolicyIdentifier.Disable:
+								Config.WriteLine("Disable,");
+								break;
+							case PolicyIdentifier.Ignore:
+								Config.WriteLine("Ignore,");
+								break;
+							case PolicyIdentifier.Suppressible:
+								Config.WriteLine("Suppressible,");
+								break;
+						}
+					}
+					Config.WriteLine(");");
 				}
 				switch (this.AssumeNoInvalidValues) {
 					case AdaTools.AssumeNoInvalidValues.On:

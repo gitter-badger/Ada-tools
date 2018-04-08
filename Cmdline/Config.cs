@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdaTools;
 
 namespace Cmdline {
@@ -84,9 +85,10 @@ namespace Cmdline {
 					goto ListConfig;
 				case "2": // Assertion Policy
 					Config.WriteChoices(
-						new Choice("1", "Check"),
-						new Choice("2", "Disable"),
-						new Choice("3", "Ignore"),
+						new Choice("1", "Check Globally"),
+						new Choice("2", "Disable Globally"),
+						new Choice("3", "Ignore Globally"),
+						new Choice("4", "Specific Policies"),
 						new Choice("C", "Cancel"));
 					EnterAssertionPolicyChoice:
 					Console.Write(" Enter Choice: ");
@@ -95,14 +97,95 @@ namespace Cmdline {
 						case "C":
 							goto ListConfig;
 						case "1":
-							Configuration.AssertionPolicy = AssertionPolicy.Check;
+							Configuration.AssertionPolicy = new AssertionPolicy(PolicyIdentifier.Check);
 							break;
 						case "2":
-							Configuration.AssertionPolicy = AssertionPolicy.Disable;
+							Configuration.AssertionPolicy = new AssertionPolicy(PolicyIdentifier.Disable);
 							break;
 						case "3":
-							Configuration.AssertionPolicy = AssertionPolicy.Ignore;
+							Configuration.AssertionPolicy = new AssertionPolicy(PolicyIdentifier.Ignore);
 							break;
+						case "4":
+							Dictionary<String, PolicyIdentifier> Policies = new Dictionary<String, PolicyIdentifier>(Configuration.AssertionPolicy.Policies);
+							ListAssertionMarks:
+							foreach (KeyValuePair<String, PolicyIdentifier> policy in Policies) {
+								Console.Write(" " + policy.Key + " => ");
+								switch (policy.Value) {
+									case PolicyIdentifier.Check:
+										Console.WriteLine("Check");
+										break;
+									case PolicyIdentifier.Disable:
+										Console.WriteLine("Disable");
+										break;
+									case PolicyIdentifier.Ignore:
+										Console.WriteLine("Ignore");
+										break;
+									case PolicyIdentifier.Suppressible:
+										Console.WriteLine("Suppressible");
+										break;
+								}
+							}
+							EnterAssertionMarkChoice:
+							Config.WriteChoices(
+								new Choice("V", "View"),
+								new Choice("D", "Done"));
+							Console.Write(" Enter Choice or Policy Name: ");
+							Choice = Console.ReadLine().ToUpper();
+							switch (Choice) {
+								case "V":
+									goto ListAssertionMarks;
+								case "D":
+									Configuration.AssertionPolicy = new AssertionPolicy(Policies);
+									goto ListConfig;
+								default:
+									// The choice is actually a Policy Mark, so create a new entry
+									String PolicyMark = Choice;
+									Config.WriteChoices(
+										new Choice("1", "Check"),
+										new Choice("2", "Disable"),
+										new Choice("3", "Ignore"),
+										new Choice("4", "Suppressible"),
+										new Choice("R", "Remove"),
+										new Choice("C", "Cancel"));
+									Console.Write(" Enter Choice: ");
+									Choice = Console.ReadLine().ToUpper();
+									switch (Choice) {
+										case "C":
+											goto ListAssertionMarks;
+										case "R":
+											Policies.Remove(PolicyMark);
+											goto EnterAssertionMarkChoice;
+										case "1":
+											if (Policies.ContainsKey(PolicyMark)) {
+												Policies[PolicyMark] = PolicyIdentifier.Check;
+											} else {
+												Policies.Add(PolicyMark, PolicyIdentifier.Check);
+											}
+											goto EnterAssertionMarkChoice;
+										case "2":
+											if (Policies.ContainsKey(PolicyMark)) {
+												Policies[PolicyMark] = PolicyIdentifier.Disable;
+											} else {
+												Policies.Add(PolicyMark, PolicyIdentifier.Disable);
+											}
+											goto EnterAssertionMarkChoice;
+										case "3":
+											if (Policies.ContainsKey(PolicyMark)) {
+												Policies[PolicyMark] = PolicyIdentifier.Ignore;
+											} else {
+												Policies.Add(PolicyMark, PolicyIdentifier.Ignore);
+											}
+											goto EnterAssertionMarkChoice;
+										case "4":
+											if (Policies.ContainsKey(PolicyMark)) {
+												Policies[PolicyMark] = PolicyIdentifier.Suppressible;
+											} else {
+												Policies.Add(PolicyMark, PolicyIdentifier.Suppressible);
+											}
+											goto EnterAssertionMarkChoice;
+									}
+									goto EnterAssertionMarkChoice;
+							}
 						default:
 							goto EnterAssertionPolicyChoice;
 					}

@@ -1,5 +1,8 @@
-pragma Ada_83;
-pragma Assertion_Policy(Check);
+pragma Ada_2012;
+pragma Assertion_Policy(
+	TEST_POLICY => Check,
+	FOOBAR => Suppressible,
+);
 pragma Elaboration_Checks(Static);
 pragma Extensions_Allowed(On);
 pragma Fast_Math;

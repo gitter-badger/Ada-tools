@@ -6,25 +6,35 @@ namespace AdaTools {
 	/// <summary>
 	/// Represents the configured Assertion Policy
 	/// </summary>
-	public enum AssertionPolicy {
+	public sealed class AssertionPolicy {
 		/// <summary>
-		/// Assertions are enabled
-		/// </summary>
-		Check,
-		/// <summary>
-		/// Assertions are disabled, like ignore, but not even checked
-		/// </summary>
-		Disable,
-		/// <summary>
-		/// Assertions are ignored, like disable, but still checked for correctness
-		/// </summary>
-		Ignore,
-		/// <summary>
-		/// Assertion enabled by default but supressible with -gnatp
+		/// Whether the assertion policy applies globally and how it is set
 		/// </summary>
 		/// <remarks>
-		/// Suppressible is only applicable for specific assertion kinds, and not as an overall policy
+		/// If this is null, it is understood that the assertion policy is not globally applied.
 		/// </remarks>
-		Suppressible,
+		public readonly PolicyIdentifier? GlobalPolicy;
+
+		/// <summary>
+		/// The full list of policies to apply
+		/// </summary>
+		public readonly Dictionary<String, PolicyIdentifier> Policies;
+
+		public static implicit operator PolicyIdentifier?(AssertionPolicy Policy) => Policy.GlobalPolicy;
+
+		public static implicit operator AssertionPolicy(PolicyIdentifier Identifier) => new AssertionPolicy(Identifier);
+
+		public static implicit operator Dictionary<String, PolicyIdentifier>(AssertionPolicy Policy) => Policy.Policies;
+
+		public AssertionPolicy(PolicyIdentifier GlobalPolicy) {
+			this.GlobalPolicy = GlobalPolicy;
+			this.Policies = null;
+		}
+
+		public AssertionPolicy(Dictionary<String, PolicyIdentifier> Policies) {
+			this.GlobalPolicy = null;
+			this.Policies = Policies;
+		}
+
 	}
 }

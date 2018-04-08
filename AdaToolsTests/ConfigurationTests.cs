@@ -20,7 +20,7 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void CheckAssertionPolicy() {
-			Assert.AreEqual(AssertionPolicy.Check, new ConfigurationUnit().AssertionPolicy);
+			Assert.AreEqual(PolicyIdentifier.Check, new ConfigurationUnit().AssertionPolicy.GlobalPolicy);
 		}
 
 	}
