@@ -1,7 +1,7 @@
 pragma Ada_2012;
 pragma Assertion_Policy(
-	TEST_POLICY => Check,
-	FOOBAR => Suppressible,
+	TEST_POLICY => Suppressible,
+	FOOBAR => Ignore
 );
 pragma Elaboration_Checks(Static);
 pragma Extensions_Allowed(On);

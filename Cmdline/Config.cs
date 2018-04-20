@@ -106,7 +106,12 @@ namespace Cmdline {
 							Configuration.AssertionPolicy = new AssertionPolicy(PolicyIdentifier.Ignore);
 							break;
 						case "4":
-							Dictionary<String, PolicyIdentifier> Policies = new Dictionary<String, PolicyIdentifier>(Configuration.AssertionPolicy.Policies);
+							Dictionary<String, PolicyIdentifier> Policies;
+							if (Configuration.AssertionPolicy.Policies != null) {
+								Policies = new Dictionary<String, PolicyIdentifier>(Configuration.AssertionPolicy.Policies);
+							} else {
+								Policies = new Dictionary<String, PolicyIdentifier>();
+							}
 							ListAssertionMarks:
 							foreach (KeyValuePair<String, PolicyIdentifier> policy in Policies) {
 								Console.Write(" " + policy.Key + " => ");

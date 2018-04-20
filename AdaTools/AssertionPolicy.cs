@@ -26,6 +26,18 @@ namespace AdaTools {
 
 		public static implicit operator Dictionary<String, PolicyIdentifier>(AssertionPolicy Policy) => Policy.Policies;
 
+		public override String ToString() {
+			if (this.GlobalPolicy != null) {
+				return this.GlobalPolicy.ToString();
+			} else {
+				String Result = "";
+				foreach (KeyValuePair<String, PolicyIdentifier> Policy in this.Policies) {
+					Result += Policy.Key + " => " + Policy.Value + ", ";
+				}
+				return Result;
+			}
+		}
+
 		public AssertionPolicy(PolicyIdentifier GlobalPolicy) {
 			this.GlobalPolicy = GlobalPolicy;
 			this.Policies = null;

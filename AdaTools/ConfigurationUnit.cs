@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace AdaTools {
@@ -93,6 +94,7 @@ namespace AdaTools {
 		/// </summary>
 		public void Save() {
 			using (StreamWriter Config = new StreamWriter("gnat.adc")) {
+				#region AdaVersion
 				switch (this.AdaVersion) {
 					case AdaTools.AdaVersion.Ada1983:
 						Config.WriteLine("pragma Ada_83;");
@@ -109,6 +111,8 @@ namespace AdaTools {
 					default:
 						break;
 				}
+				#endregion
+				#region AssertionPolicy
 				if (this.AssertionPolicy.GlobalPolicy != null) {
 					switch (this.AssertionPolicy.GlobalPolicy) {
 						case PolicyIdentifier.Check:
@@ -124,26 +128,46 @@ namespace AdaTools {
 							break;
 					}
 				} else {
+					// This code isn't likely very well optimized. C# makes this more difficult than it should be for rather stupid reasons, so instead this easy to comprehend but inefficient code exists.
 					Config.WriteLine("pragma Assertion_Policy(");
+					KeyValuePair<String, PolicyIdentifier> lastPolicy = this.AssertionPolicy.Policies.Last();
 					foreach (KeyValuePair<String, PolicyIdentifier> policy in this.AssertionPolicy.Policies) {
 						Config.Write("\t" + policy.Key + " => ");
 						switch (policy.Value) {
 							case PolicyIdentifier.Check:
-								Config.WriteLine("Check,");
+								if (!policy.Equals(lastPolicy)) {
+									Config.WriteLine("Check,");
+								} else {
+									Config.WriteLine("Check");
+								}
 								break;
 							case PolicyIdentifier.Disable:
-								Config.WriteLine("Disable,");
+								if (!policy.Equals(lastPolicy)) {
+									Config.WriteLine("Disable,");
+								} else {
+									Config.WriteLine("Disable");
+								}
 								break;
 							case PolicyIdentifier.Ignore:
-								Config.WriteLine("Ignore,");
+								if (!policy.Equals(lastPolicy)) {
+									Config.WriteLine("Ignore,");
+								} else {
+									Config.WriteLine("Ignore");
+								}
 								break;
 							case PolicyIdentifier.Suppressible:
-								Config.WriteLine("Suppressible,");
+								if (!policy.Equals(lastPolicy)) {
+									Config.WriteLine("Suppressible,");
+								} else {
+									Config.WriteLine("Suppressible");
+								}
 								break;
 						}
 					}
 					Config.WriteLine(");");
 				}
+				#endregion
+				#region AssumeNoInvalidValues
 				switch (this.AssumeNoInvalidValues) {
 					case AdaTools.AssumeNoInvalidValues.On:
 						Config.WriteLine("pragma Assume_No_Invalid_Values(On);");
@@ -154,6 +178,8 @@ namespace AdaTools {
 					default:
 						break;
 				}
+				#endregion
+				#region ElaborationChecks
 				switch (this.ElaborationChecks) {
 					case AdaTools.ElaborationChecks.Dynamic:
 						Config.WriteLine("pragma Elaboration_Checks(Dynamic);");
@@ -164,6 +190,8 @@ namespace AdaTools {
 					default:
 						break;
 				}
+				#endregion
+				#region ExtensionsAllowed
 				switch (this.ExtensionsAllowed) {
 					case AdaTools.ExtensionsAllowed.On:
 						Config.WriteLine("pragma Extensions_Allowed(On);");
@@ -174,6 +202,8 @@ namespace AdaTools {
 					default:
 						break;
 				}
+				#endregion
+				#region FastMath
 				switch (this.FastMath) {
 					case true:
 						Config.WriteLine("pragma Fast_Math;");
@@ -181,6 +211,8 @@ namespace AdaTools {
 					case false:
 						break;
 				}
+				#endregion
+				#region License
 				switch (this.License) {
 					case AdaTools.License.GPL:
 						Config.WriteLine("pragma License(GPL);");
@@ -195,6 +227,7 @@ namespace AdaTools {
 						Config.WriteLine("pragma License(Unrestricted);");
 						break;
 				}
+				#endregion
 			}
 		}
 
