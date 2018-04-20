@@ -54,6 +54,12 @@ namespace AdaTools {
 		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-license"/>
 		public License? License { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-wide-character-encoding"/>
+		public WideCharacterEncoding? WideCharacterEncoding { get; set; }
+
 		public override Boolean HasBody { get; protected set; }
 
 		public override Boolean HasSpec { get; protected set; }
@@ -225,6 +231,28 @@ namespace AdaTools {
 						break;
 					case AdaTools.License.Unrestricted:
 						Config.WriteLine("pragma License(Unrestricted);");
+						break;
+				}
+				#endregion
+				#region WideCharacterEncoding
+				switch (this.WideCharacterEncoding) {
+					case AdaTools.WideCharacterEncoding.Brackets:
+						Config.WriteLine("pragma Wide_Character_Encoding(Brackets);");
+						break;
+					case AdaTools.WideCharacterEncoding.EUC:
+						Config.WriteLine("pragma Wide_Character_Encoding(EUC);");
+						break;
+					case AdaTools.WideCharacterEncoding.Hex:
+						Config.WriteLine("pragma Wide_Character_Encoding(Hex);");
+						break;
+					case AdaTools.WideCharacterEncoding.Shift_JIS:
+						Config.WriteLine("pragma Wide_Character_Encoding(Shift_JIS);");
+						break;
+					case AdaTools.WideCharacterEncoding.Upper:
+						Config.WriteLine("pragma Wide_Character_Encoding(Upper);");
+						break;
+					case AdaTools.WideCharacterEncoding.UTF8:
+						Config.WriteLine("pragma Wide_Character_Encoding(UTF8);");
 						break;
 				}
 				#endregion

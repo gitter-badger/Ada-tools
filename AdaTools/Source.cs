@@ -306,6 +306,34 @@ namespace AdaTools {
 			}
 		}
 
+		/// <summary>
+		/// Try to parse the wide character encoding configuration
+		/// </summary>
+		/// <returns>Returns the encoding type if found, or null if not specified</returns>
+		public WideCharacterEncoding? ParseWideCharacterEncoding() {
+			String Config = this.Match(new Regex(@"\bpragma\s+Wide_Character_Encoding\s*\((\\.|[^)])*\)", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+
+			if (new Regex(@"\bbrackets\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Brackets;
+			if (new Regex(@"'b'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Brackets;
+
+			if (new Regex(@"\beuc\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.EUC;
+			if (new Regex(@"'e'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.EUC;
+
+			if (new Regex(@"\bhex\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Hex;
+			if (new Regex(@"'h'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Hex;
+
+			if (new Regex(@"\bshift_jis\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Shift_JIS;
+			if (new Regex(@"'s'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Shift_JIS;
+
+			if (new Regex(@"\bupper\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Upper;
+			if (new Regex(@"'u'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Upper;
+
+			if (new Regex(@"\butf8\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.UTF8;
+			if (new Regex(@"'8'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.UTF8;
+
+			return null;
+		}
+
 		public String this[Int32 Index] {
 			get => this.SourceCode.Split('\n')[Index];
 		}
