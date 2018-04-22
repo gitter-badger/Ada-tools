@@ -59,7 +59,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-wide-character-encoding"/>
 		public WideCharacterEncoding? WideCharacterEncoding { get; set; }
-
+		
 		public override Boolean HasBody { get; protected set; }
 
 		public override Boolean HasSpec { get; protected set; }
@@ -271,9 +271,13 @@ namespace AdaTools {
 				this.ExtensionsAllowed = ConfigSource.ParseExtensionsAllowed();
 				this.FastMath = ConfigSource.ParseFastMath();
 				this.License = ConfigSource.ParseLicense();
+				this.WideCharacterEncoding = ConfigSource.ParseWideCharacterEncoding();
 			} catch {
-				// Don't bother doing anything. We can still create the object without any source existing
+				// We can still create the object without any source existing
 				this.HasConf = false;
+				// Apply some "reasonable" defaults.
+				this.AdaVersion = AdaTools.AdaVersion.Ada2012;
+				this.WideCharacterEncoding = AdaTools.WideCharacterEncoding.UTF8;
 			}
 		}
 

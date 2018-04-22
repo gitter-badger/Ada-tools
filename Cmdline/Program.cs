@@ -19,26 +19,44 @@ namespace Cmdline {
 			String Mode;
 			// Attempt to read the operation
 			if (!Arguments.TryPop(out Operation)) {
-				throw new MissingOperationException();
+				// If they didn't specify something, they likely didn't know the operations, so print out the help.
+				Program.Help();
+				return;
 			}
 			// Do whatever the operation is
 			switch (Operation.ToLower()) {
 				case "help":
 					Program.Help();
 					break;
+				case "build":
+				case "compile":
+				case "make":
+					if (Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							case "help":
+								Build.FullHelp();
+								return;
+							default:
+								throw new NotImplementedException("The operation '" + Operation + "' has not been implemented yet");
+						}
+					} else {
+						throw new NotImplementedException("The operation '" + Operation + "' has not been implemented yet");
+					}
 				case "config":
 				case "configure":
 				case "configuration":
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
+							case "help":
+								Config.FullHelp();
+								return;
 							default:
-								Arguments.Push(Mode);
-								break;
+								throw new NotImplementedException("The mode '" + Mode + "' for operation '" + Operation + "' has not been implemented yet");
 						}
 					} else {
 						Config.Interactive();
+						return;
 					}
-					break;
 				case "dep":
 				case "deps":
 				case "depend":
@@ -50,60 +68,60 @@ namespace Cmdline {
 							case "all":
 							case "project":
 								Dependencies.Project();
-								break;
+								return;
 							case "help":
 								Dependencies.FullHelp();
-								break;
+								return;
 							default:
 								Arguments.Push(Mode);
 								Dependencies.Each(Arguments);
-								break;
+								return;
 						}
 					} else {
 						Dependencies.Each();
+						return;
 					}
-					break;
 				case "file":
 				case "files":
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
 							case "help":
 								Files.FullHelp();
-								break;
+								return;
 							default:
 								Arguments.Push(Mode);
 								Files.Each(Arguments);
-								break;
+								return;
 						}
 					} else {
 						Files.Each();
+						return;
 					}
-					break;
 				case "list":
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
 							case "help":
 								List.FullHelp();
-								break;
+								return;
 							case "table":
 								List.Table();
-								break;
+								return;
 							default:
-								Arguments.Push(Mode);
-								// TODO: Write a list method for specified packages
-								break;
+								throw new NotImplementedException("The mode '" + Mode + "' for operation '" + Operation + "' has not been implemented yet");
 						}
 					} else {
 						List.Each();
+						return;
 					}
-					break;
 				default:
-					throw new UnknownOperationException("Found: " + Operation);
+					Console.Error.WriteLine("Found: " + Operation);
+					return;
 			}
 		}
 
 		static void Help() {
 			Console.WriteLine("adatool");
+			Build.Help();
 			Config.Help();
 			Dependencies.Help();
 			Files.Help();

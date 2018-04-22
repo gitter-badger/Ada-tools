@@ -6,11 +6,11 @@ namespace Cmdline {
 	internal static class Config {
 		
 		internal static void FullHelp() {
-			Console.WriteLine("\t" + "config,configure,configuration — Interactively modify the configuration pragmas");
+			Console.WriteLine("\t" + "(config|configure|configuration) — Interactively modify the configuration pragmas");
 		}
 
 		internal static void Help() {
-			Console.WriteLine("\t" + "config,configure,configuration — Manage the configuration pragmas");
+			Console.WriteLine("\t" + "(config|configure|configuration) — Manage the configuration pragmas");
 		}
 
 		private static void WriteChoices(params Choice[] Choices) {

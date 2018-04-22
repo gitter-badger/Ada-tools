@@ -30,9 +30,14 @@ namespace AdaToolsTests
 		}
 
 		[TestMethod]
+		public void LinkerArguments() {
+			Assert.AreEqual("-lTest", new ProgramUnit("Prog").LinkerArguments);
+		}
+
+		[TestMethod]
 		public void Dependencies() {
 			ProgramUnit Program = new ProgramUnit("Prog");
-			Assert.AreEqual("Ada.Text_IO", String.Join(',', Program.Dependencies));
+			Assert.AreEqual("Ada.Text_IO,Test", String.Join(',', Program.Dependencies));
 		}
 
 	}

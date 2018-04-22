@@ -15,7 +15,7 @@ namespace AdaToolsTests {
 		public void Name() {
 			Assert.AreEqual("Test", new PackageUnit("Test").Name);
 		}
-
+		
 		[TestMethod]
 		public void HasSpec() {
 			Assert.IsTrue(new PackageUnit("Test").HasSpec);
@@ -40,6 +40,11 @@ namespace AdaToolsTests {
 		[TestMethod]
 		public void IsRemoteCallInterface() {
 			Assert.IsFalse(new PackageUnit("Test").IsRemoteCallInterface);
+		}
+
+		[TestMethod]
+		public void LinkerArguments() {
+			Assert.AreEqual("", new PackageUnit("Test").LinkerArguments);
 		}
 
 		[TestMethod]

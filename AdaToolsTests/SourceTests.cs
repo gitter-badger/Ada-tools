@@ -27,7 +27,7 @@ namespace AdaToolsTests {
 		public void ParseDependencies() {
 			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(',', new Source("Test.ads").ParseDependencies()));
 			Assert.AreEqual("", String.Join(',', new Source("Test.adb").ParseDependencies()));
-			Assert.AreEqual("Ada.Text_IO", String.Join(',', new Source("Prog.adb").ParseDependencies()));
+			Assert.AreEqual("Ada.Text_IO,Test", String.Join(',', new Source("Prog.adb").ParseDependencies()));
 		}
 
 		[TestMethod]

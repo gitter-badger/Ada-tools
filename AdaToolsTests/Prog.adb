@@ -1,5 +1,5 @@
-﻿with Ada.Text_IO;
-use Ada.Text_IO;
+﻿with Ada.Text_IO, Test;
+use Ada.Text_IO, Test;
 
 procedure Prog is
 begin
