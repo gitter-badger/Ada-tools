@@ -286,6 +286,50 @@ namespace AdaTools {
 		}
 
 		/// <summary>
+		/// Try to parse the source file name configurations
+		/// </summary>
+		/// <returns></returns>
+		public SourceFileNames ParseSourceFileNames() {
+			SourceFileNames SourceFileNames = new SourceFileNames();
+			String[] Configs;
+			Configs = this.Matches(new Regex(@"\bpragma\s+Source_File_Name\s*\((\\.|[^\)])*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String FileName;
+			Casing Casing;
+			String DotReplacement;
+			foreach (String Config in Configs) {
+				switch (new Regex(@"\bcasing => \w+\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(Config).ToString().Split()[2].Trim('"')) {
+					case "uppercase":
+						Casing = Casing.Uppercase;
+						break;
+					case "lowercase":
+						Casing = Casing.Lowercase;
+						break;
+					case "mixedcase":
+					default: // This shuts up the compiler, and is a reasonably default
+						Casing = Casing.Mixedcase;
+						break;
+				}
+				if (new Regex(@"\bdot_replacement\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+					// I think this regex has to be a normal escaped string because of the quotes inside of it. Unfortunantly this makes it really awkward to read.
+					DotReplacement = new Regex("\\bdot_replacement => \"(\\\\.|[^\"])*\"", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(Config).ToString().Split()[2].Trim('"');
+				} else {
+					DotReplacement = ".";
+				}
+				if (new Regex(@"\bspec_file_name\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+					FileName = new Regex("\\bspec_file_name => \"(\\\\.|[^\"])*\"", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(Config).ToString().Split()[2].Trim('"');
+					SourceFileNames.SpecFileName = new SpecFileName(FileName, Casing, DotReplacement);
+				} else if (new Regex(@"\bbody_file_name\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+					FileName = new Regex("\\bbody_file_name => \"(\\\\.|[^\"])*\"", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(Config).ToString().Split()[2].Trim('"');
+					SourceFileNames.BodyFileName = new BodyFileName(FileName, Casing, DotReplacement);
+				} else if (new Regex(@"\bsubunit_file_name\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+					FileName = new Regex("\\bsource_file_name => \"(\\\\.|[^\"])*\"", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(Config).ToString().Split()[2].Trim('"');
+					SourceFileNames.SubunitFileName = new SubunitFileName(FileName, Casing, DotReplacement);
+				}
+			}
+			return SourceFileNames;
+		}
+
+		/// <summary>
 		/// Try to parse the type of Ada source
 		/// </summary>
 		/// <remarks>

@@ -57,9 +57,15 @@ namespace AdaTools {
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-source-file-name"/>
+		public SourceFileNames SourceFileNames { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <see cref="https://docs.adacore.com/gnat_rm-docs/html/gnat_rm/gnat_rm/implementation_defined_pragmas.html#pragma-wide-character-encoding"/>
 		public WideCharacterEncoding? WideCharacterEncoding { get; set; }
-		
+
 		public override Boolean HasBody { get; protected set; }
 
 		public override Boolean HasSpec { get; protected set; }
@@ -234,6 +240,29 @@ namespace AdaTools {
 						break;
 				}
 				#endregion
+				#region SourceFileName
+				if (SourceFileNames.SpecFileName != null) {
+					Config.WriteLine(
+						"pragma Source_File_Name(\n" +
+						"\t" + "Spec_File_Name => \"" + this.SourceFileNames.SpecFileName.UnitFileName + "\",\n" + 
+						"\t" + "Casing => " + this.SourceFileNames.SpecFileName.Casing + ",\n" + 
+						"\t" + "Dot_Replacement => \"" + this.SourceFileNames.SpecFileName.DotReplacement + "\");");
+				}
+				if (SourceFileNames.BodyFileName != null) {
+					Config.WriteLine(
+						"pragma Source_File_Name(\n" +
+						"\t" + "Body_File_Name => \"" + this.SourceFileNames.BodyFileName.UnitFileName + "\",\n" +
+						"\t" + "Casing => " + this.SourceFileNames.BodyFileName.Casing + ",\n" +
+						"\t" + "Dot_Replacement => \"" + this.SourceFileNames.BodyFileName.DotReplacement + "\");");
+				}
+				if (SourceFileNames.SubunitFileName != null) {
+					Config.WriteLine(
+						"pragma Source_File_Name(\n" +
+						"\t" + "Subunit_File_Name => \"" + this.SourceFileNames.SubunitFileName.UnitFileName + "\",\n" +
+						"\t" + "Casing => " + this.SourceFileNames.SubunitFileName.Casing + ",\n" +
+						"\t" + "Dot_Replacement => \"" + this.SourceFileNames.SubunitFileName.DotReplacement + "\");");
+				}
+				#endregion
 				#region WideCharacterEncoding
 				switch (this.WideCharacterEncoding) {
 					case AdaTools.WideCharacterEncoding.Brackets:
@@ -271,12 +300,14 @@ namespace AdaTools {
 				this.ExtensionsAllowed = ConfigSource.ParseExtensionsAllowed();
 				this.FastMath = ConfigSource.ParseFastMath();
 				this.License = ConfigSource.ParseLicense();
+				this.SourceFileNames = ConfigSource.ParseSourceFileNames();
 				this.WideCharacterEncoding = ConfigSource.ParseWideCharacterEncoding();
 			} catch {
 				// We can still create the object without any source existing
 				this.HasConf = false;
 				// Apply some "reasonable" defaults.
 				this.AdaVersion = AdaTools.AdaVersion.Ada2012;
+				this.SourceFileNames = new SourceFileNames();
 				this.WideCharacterEncoding = AdaTools.WideCharacterEncoding.UTF8;
 			}
 		}

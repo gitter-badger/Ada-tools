@@ -39,11 +39,14 @@ namespace Cmdline {
 				new PragmaChoice("3", "Assume No Invalid Values", Configuration.AssumeNoInvalidValues),
 				new PragmaChoice("4", "Elaboration Checks", Configuration.ElaborationChecks),
 				new PragmaChoice("5", "Extensions Allowed", Configuration.ExtensionsAllowed),
-				new PragmaChoice("6", "Fast Math", Configuration.FastMath));
+				new PragmaChoice("6", "Fast Math", Configuration.FastMath),
+				new PragmaChoice("7", "Source File Name", Configuration.SourceFileNames),
+				new PragmaChoice("8", "Wide Character Encoding", Configuration.WideCharacterEncoding));
 			// No, License was not forgotten. Rather, it is modified through another command.
 			Config.WriteChoices(
 				new Choice("Q", "Quit"),
-				new Choice("S", "Save"));
+				new Choice("S", "Save"),
+				new Choice("SQ", "Save & Quit"));
 			EnterChoice:
 			Console.Write(" Enter Choice: ");
 			Choice = Console.ReadLine().ToUpper();
@@ -51,8 +54,10 @@ namespace Cmdline {
 				case "Q":
 					return;
 				case "S":
+				case "SQ":
 					Configuration.Save();
 					Console.WriteLine(" Configuration Saved ");
+					if (Choice == "SQ") goto case "Q";
 					goto EnterChoice;
 				case "1": // Ada Version
 					Config.WriteChoices(
@@ -277,6 +282,209 @@ namespace Cmdline {
 							break;
 						default:
 							goto EnterFastMathChoice;
+					}
+					goto ListConfig;
+				case "7": //Source File Name
+					ListSourceFileConfig:
+					Config.WriteChoices(
+						new Choice("1", "Spec File Name"),
+						new Choice("2", "Body File Name"),
+						new Choice("3", "Subunit File Name"),
+						new Choice("D", "Done"));
+					EnterSourceFileNameChoice:
+					Console.Write(" Enter Choice: ");
+					Choice = Console.ReadLine().ToUpper();
+					switch (Choice) {
+						case "D":
+							goto ListConfig;
+						case "1":
+							if (Configuration.SourceFileNames.SpecFileName == null) Configuration.SourceFileNames.SpecFileName = new SpecFileName();
+							ListSpecFileChoice:
+							Config.WriteChoices(
+								new Choice("1", "Spec File Name"),
+								new Choice("2", "Casing"),
+								new Choice("3", "Dot Replacement"),
+								new Choice("D", "Done"));
+							EnterSpecFileChoice:
+							Console.Write(" Enter Choice: ");
+							Choice = Console.ReadLine().ToUpper();
+							switch (Choice) {
+								case "D":
+									goto ListSourceFileConfig;
+								case "1":
+									Console.Write(" Spec File Name: ");
+									Configuration.SourceFileNames.SpecFileName.UnitFileName = Console.ReadLine();
+									goto ListSpecFileChoice;
+								case "2":
+									Config.WriteChoices(
+										new Choice("1", "Lowercase"),
+										new Choice("2", "Uppercase"),
+										new Choice("3", "Mixedcase"),
+										new Choice("C", "Cancel"));
+									EnterSpecFileCasing:
+									Console.Write(" Enter Choice: ");
+									Choice = Console.ReadLine().ToUpper();
+									switch (Choice) {
+										case "C":
+											goto ListSpecFileChoice;
+										case "1":
+											Configuration.SourceFileNames.SpecFileName.Casing = Casing.Lowercase;
+											break;
+										case "2":
+											Configuration.SourceFileNames.SpecFileName.Casing = Casing.Uppercase;
+											break;
+										case "3":
+											Configuration.SourceFileNames.SpecFileName.Casing = Casing.Mixedcase;
+											break;
+										default:
+											goto EnterSpecFileCasing;
+									}
+									goto ListSpecFileChoice;
+								case "3":
+									Console.Write(" Dot Replacement: ");
+									Configuration.SourceFileNames.SpecFileName.DotReplacement = Console.ReadLine();
+									goto ListSpecFileChoice;
+								default:
+									goto EnterSpecFileChoice;
+							}
+						case "2":
+							if (Configuration.SourceFileNames.BodyFileName == null) Configuration.SourceFileNames.BodyFileName = new BodyFileName();
+							ListBodyFileChoice:
+							Config.WriteChoices(
+								new Choice("1", "Body File Name"),
+								new Choice("2", "Casing"),
+								new Choice("3", "Dot Replacement"),
+								new Choice("D", "Done"));
+							EnterBodyFileChoice:
+							Console.Write(" Enter Choice: ");
+							Choice = Console.ReadLine().ToUpper();
+							switch (Choice) {
+								case "D":
+									goto ListSourceFileConfig;
+								case "1":
+									Console.Write(" Body File Name: ");
+									Configuration.SourceFileNames.BodyFileName.UnitFileName = Console.ReadLine();
+									goto ListBodyFileChoice;
+								case "2":
+									Config.WriteChoices(
+										new Choice("1", "Lowercase"),
+										new Choice("2", "Uppercase"),
+										new Choice("3", "Mixedcase"),
+										new Choice("C", "Cancel"));
+									EnterBodyFileCasing:
+									Console.Write(" Enter Choice: ");
+									Choice = Console.ReadLine().ToUpper();
+									switch (Choice) {
+										case "C":
+											goto ListBodyFileChoice;
+										case "1":
+											Configuration.SourceFileNames.BodyFileName.Casing = Casing.Lowercase;
+											break;
+										case "2":
+											Configuration.SourceFileNames.BodyFileName.Casing = Casing.Uppercase;
+											break;
+										case "3":
+											Configuration.SourceFileNames.BodyFileName.Casing = Casing.Mixedcase;
+											break;
+										default:
+											goto EnterBodyFileCasing;
+									}
+									goto ListBodyFileChoice;
+								case "3":
+									Console.Write(" Dot Replacement: ");
+									Configuration.SourceFileNames.BodyFileName.DotReplacement = Console.ReadLine();
+									goto ListBodyFileChoice;
+								default:
+									goto EnterBodyFileChoice;
+							}
+						case "3":
+							if (Configuration.SourceFileNames.SubunitFileName == null) Configuration.SourceFileNames.SubunitFileName = new SubunitFileName();
+							ListSubunitFileChoice:
+							Config.WriteChoices(
+								new Choice("1", "Subunit File Name"),
+								new Choice("2", "Casing"),
+								new Choice("3", "Dot Replacement"),
+								new Choice("D", "Done"));
+							EnterSubunitFileChoice:
+							Console.Write(" Enter Choice: ");
+							Choice = Console.ReadLine().ToUpper();
+							switch (Choice) {
+								case "D":
+									goto ListSourceFileConfig;
+								case "1":
+									Console.Write(" Subunit File Name: ");
+									Configuration.SourceFileNames.SubunitFileName.UnitFileName = Console.ReadLine();
+									goto ListSubunitFileChoice;
+								case "2":
+									Config.WriteChoices(
+										new Choice("1", "Lowercase"),
+										new Choice("2", "Uppercase"),
+										new Choice("3", "Mixedcase"),
+										new Choice("C", "Cancel"));
+									EnterSubunitFileCasing:
+									Console.Write(" Enter Choice: ");
+									Choice = Console.ReadLine().ToUpper();
+									switch (Choice) {
+										case "C":
+											goto ListSubunitFileChoice;
+										case "1":
+											Configuration.SourceFileNames.SubunitFileName.Casing = Casing.Lowercase;
+											break;
+										case "2":
+											Configuration.SourceFileNames.SubunitFileName.Casing = Casing.Uppercase;
+											break;
+										case "3":
+											Configuration.SourceFileNames.SubunitFileName.Casing = Casing.Mixedcase;
+											break;
+										default:
+											goto EnterSubunitFileCasing;
+									}
+									goto ListSubunitFileChoice;
+								case "3":
+									Console.Write(" Dot Replacement: ");
+									Configuration.SourceFileNames.SubunitFileName.DotReplacement = Console.ReadLine();
+									goto ListSubunitFileChoice;
+								default:
+									goto EnterSubunitFileChoice;
+							}
+						default:
+							goto EnterSourceFileNameChoice;
+					}
+				case "8": //Wide Character Encoding
+					Config.WriteChoices(
+						new Choice("1", "Hex"),
+						new Choice("2", "Upper"),
+						new Choice("3", "Shift_JIS"),
+						new Choice("4", "EUC"),
+						new Choice("5", "UTF-8"),
+						new Choice("6", "Brackets"),
+						new Choice("C", "Cancel"));
+					EnterWideCharacterEncodingChoice:
+					Console.Write(" Enter Choice: ");
+					Choice = Console.ReadLine().ToUpper();
+					switch (Choice) {
+						case "C":
+							goto ListConfig;
+						case "1":
+							Configuration.WideCharacterEncoding = WideCharacterEncoding.Hex;
+							break;
+						case "2":
+							Configuration.WideCharacterEncoding = WideCharacterEncoding.Upper;
+							break;
+						case "3":
+							Configuration.WideCharacterEncoding = WideCharacterEncoding.Shift_JIS;
+							break;
+						case "4":
+							Configuration.WideCharacterEncoding = WideCharacterEncoding.EUC;
+							break;
+						case "5":
+							Configuration.WideCharacterEncoding = WideCharacterEncoding.UTF8;
+							break;
+						case "6":
+							Configuration.WideCharacterEncoding = WideCharacterEncoding.Brackets;
+							break;
+						default:
+							goto EnterWideCharacterEncodingChoice;
 					}
 					goto ListConfig;
 				default:
