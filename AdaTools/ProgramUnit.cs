@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AdaTools {
 
@@ -52,6 +53,22 @@ namespace AdaTools {
 		public override Boolean IsRemoteCallInterface {
 			get => false;
 			protected set { }
+		}
+
+		/// <summary>
+		/// Return the linker argument section for this program
+		/// </summary>
+		public override String LinkerArguments {
+			get {
+				String Result = "";
+				foreach (String Dependency in this.Dependencies) {
+					// Ada standard libraries are included anyways, so don't even bother
+					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
+					// Add the linker dependency argument
+					Result += "-l" + Dependency + " ";
+				}
+				return Result.Trim() + " -o " + this.Name;
+			}
 		}
 
 		/// <summary>

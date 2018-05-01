@@ -122,7 +122,7 @@ namespace AdaTools {
 		/// <returns></returns>
 		public AssumeNoInvalidValues? ParseAssumeNoInvalidValues() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Assume_No_Invalid_Values\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (Config == null) return null;
+			if (Config is null) return null;
 			if (new Regex(@"\bon\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 				return AssumeNoInvalidValues.On;
 			} else if (new Regex(@"\boff\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
@@ -160,7 +160,7 @@ namespace AdaTools {
 		/// <returns></returns>
 		public ElaborationChecks? ParseElaborationChecks() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Elaboration_Checks\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (Config == null) return null;
+			if (Config is null) return null;
 			if (new Regex(@"\bdynamic\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 				return ElaborationChecks.Dynamic;
 			} else if (new Regex(@"\bstatic\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
@@ -176,7 +176,7 @@ namespace AdaTools {
 		/// <returns></returns>
 		public ExtensionsAllowed? ParseExtensionsAllowed() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Extensions_Allowed\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (Config == null) return null;
+			if (Config is null) return null;
 			if (new Regex(@"\bon\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 				return ExtensionsAllowed.On;
 			} else if (new Regex(@"\boff\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
@@ -192,7 +192,7 @@ namespace AdaTools {
 		/// <returns></returns>
 		public Boolean ParseFastMath() {
 			String Config = this.Match(new Regex(@"\bpragma\s+Fast_Math;", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (Config == null) {
+			if (Config is null) {
 				return false;
 			} else {
 				return true;
@@ -204,7 +204,7 @@ namespace AdaTools {
 		/// </summary>
 		public License? ParseLicense() {
 			String Config = this.Match(new Regex(@"\bpragma\s+License\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (Config == null) return null;
+			if (Config is null) return null;
 			if (new Regex(@"\bgpl\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 				return License.GPL;
 			} else if (new Regex(@"\bmodified_gpl\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {

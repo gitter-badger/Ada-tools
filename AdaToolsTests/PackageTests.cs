@@ -8,53 +8,53 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void Constructor() {
-			PackageUnit Package = new PackageUnit("Test");
+			PackageUnit Package = new PackageUnit("Both");
 		}
 
 		[TestMethod]
 		public void Name() {
-			Assert.AreEqual("Test", new PackageUnit("Test").Name);
+			Assert.AreEqual("Both", new PackageUnit("Both").Name);
 		}
 		
 		[TestMethod]
 		public void HasSpec() {
-			Assert.IsTrue(new PackageUnit("Test").HasSpec);
+			Assert.IsTrue(new PackageUnit("Both").HasSpec);
 		}
 
 		[TestMethod]
 		public void HasBody() {
-			Assert.IsTrue(new PackageUnit("Test").HasBody);
+			Assert.IsTrue(new PackageUnit("Both").HasBody);
 		}
 
 		[TestMethod]
 		public void IsAllCallsRemote() {
-			Assert.IsFalse(new PackageUnit("Test").IsAllCallsRemote);
+			Assert.IsFalse(new PackageUnit("Both").IsAllCallsRemote);
 		}
 
 		[TestMethod]
 		public void IsPure() {
-			Assert.IsFalse(new PackageUnit("Test").IsPure);
+			Assert.IsFalse(new PackageUnit("Both").IsPure);
 			Assert.IsTrue(new PackageUnit("Pure").IsPure);
 		}
 
 		[TestMethod]
 		public void IsRemoteCallInterface() {
-			Assert.IsFalse(new PackageUnit("Test").IsRemoteCallInterface);
+			Assert.IsFalse(new PackageUnit("Both").IsRemoteCallInterface);
 		}
 
 		[TestMethod]
 		public void LinkerArguments() {
-			Assert.AreEqual("", new PackageUnit("Test").LinkerArguments);
+			Assert.AreEqual("-lSpec -lBody -soname Both -o libBoth.so", new PackageUnit("Both").LinkerArguments);
 		}
 
 		[TestMethod]
 		public void GetFiles() {
-			Assert.AreEqual("Test.ads,Test.adb", String.Join(',', new PackageUnit("Test").GetFiles()));
+			Assert.AreEqual("Both.ads,Both.adb", String.Join(',', new PackageUnit("Both").GetFiles()));
 		}
 
 		[TestMethod]
 		public void Dependencies() {
-			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(",", new PackageUnit("Test").Dependencies));
+			Assert.AreEqual("", String.Join(",", new PackageUnit("Test").Dependencies));
 		}
 	}
 }

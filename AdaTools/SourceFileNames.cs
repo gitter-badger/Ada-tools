@@ -11,7 +11,7 @@ namespace AdaTools {
 		public override String ToString() => this;
 
 		public static implicit operator String(SourceFileNames SourceFileNames) {
-			if (SourceFileNames.SpecFileName == null && SourceFileNames.BodyFileName == null && SourceFileNames.SubunitFileName == null) {
+			if (SourceFileNames.SpecFileName is null && SourceFileNames.BodyFileName is null && SourceFileNames.SubunitFileName is null) {
 				return "Default";
 			} else {
 				String Result = "";

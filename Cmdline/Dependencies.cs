@@ -7,19 +7,9 @@ namespace Cmdline {
 	internal static class Dependencies {
 
 		internal static void Each() {
-			foreach (Unit U in new Project().Units) {
-				foreach (String Dep in U.Dependencies) {
-					Console.Write(Dep + "  ");
-				}
-				Console.WriteLine();
-			}
-		}
-
-		internal static void Each(Stack<String> Arguments) {
-			foreach (String Name in Arguments) {
-				PackageUnit Package = new PackageUnit(Name);
-				Console.Write(Package.Name + ": ");
-				foreach (String Dep in Package.Dependencies) {
+			foreach (Unit Unit in new Project().Units) {
+				Console.Write(Unit.Name + ": ");
+				foreach (String Dep in Unit.Dependencies) {
 					Console.Write(Dep + "  ");
 				}
 				Console.WriteLine();

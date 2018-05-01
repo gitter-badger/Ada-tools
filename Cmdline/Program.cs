@@ -33,14 +33,21 @@ namespace Cmdline {
 				case "make":
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
+							case "flags":
+								Build.Flags();
+								return;
 							case "help":
 								Build.FullHelp();
 								return;
+							case "plan":
+								Build.Plan();
+								return;
 							default:
-								throw new NotImplementedException("The operation '" + Operation + "' has not been implemented yet");
+								throw new NotImplementedException();
 						}
 					} else {
-						throw new NotImplementedException("The operation '" + Operation + "' has not been implemented yet");
+						Build.Simple();
+						return;
 					}
 				case "config":
 				case "configure":
@@ -51,7 +58,7 @@ namespace Cmdline {
 								Config.FullHelp();
 								return;
 							default:
-								throw new NotImplementedException("The mode '" + Mode + "' for operation '" + Operation + "' has not been implemented yet");
+								throw new NotImplementedException();
 						}
 					} else {
 						Config.Interactive();
@@ -74,8 +81,7 @@ namespace Cmdline {
 								return;
 							default:
 								Arguments.Push(Mode);
-								Dependencies.Each(Arguments);
-								return;
+								throw new NotImplementedException();
 						}
 					} else {
 						Dependencies.Each();
@@ -107,14 +113,15 @@ namespace Cmdline {
 								List.Table();
 								return;
 							default:
-								throw new NotImplementedException("The mode '" + Mode + "' for operation '" + Operation + "' has not been implemented yet");
+								throw new NotImplementedException();
 						}
 					} else {
 						List.Each();
 						return;
 					}
 				default:
-					Console.Error.WriteLine("Found: " + Operation);
+					Console.Error.WriteLine("The operation '" + Operation + "' isn't a known operation");
+					Program.Help();
 					return;
 			}
 		}

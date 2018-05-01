@@ -11,44 +11,43 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void Constructor() {
-			Source Spec = new Source("Test.ads");
-			Source Body = new Source("Test.adb");
-			Source Prog = new Source("Prog.adb");
+			Source Spec = new Source("Both.ads");
+			Source Body = new Source("Both.adb");
+			Source Prog = new Source("Proc.adb");
 		}
 
 		[TestMethod]
 		public void Match() {
-			Source Spec = new Source("Test.ads");
-			Assert.AreEqual("with Ada.Text_IO, Ada.Characters.Latin_1;", Spec.Match(new Regex(@"with.*;", RegexOptions.IgnoreCase)));
-			Assert.AreEqual("package Test is", Spec.Match(new Regex(@"package\s+(\w|\.|_)+\s+is", RegexOptions.IgnoreCase)));
+			Source Spec = new Source("Both.ads");
+			Assert.AreEqual("with Ada.Text_IO, Spec;", Spec.Match(new Regex(@"with.*;", RegexOptions.IgnoreCase)));
+			Assert.AreEqual("package Both", Spec.Match(new Regex(@"package\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase)));
 		}
 
 		[TestMethod]
 		public void ParseDependencies() {
-			Assert.AreEqual("Ada.Text_IO,Ada.Characters.Latin_1,Ada.Characters.Handling", String.Join(',', new Source("Test.ads").ParseDependencies()));
-			Assert.AreEqual("", String.Join(',', new Source("Test.adb").ParseDependencies()));
-			Assert.AreEqual("Ada.Text_IO,Test", String.Join(',', new Source("Prog.adb").ParseDependencies()));
+			Assert.AreEqual("Ada.Text_IO,Spec", String.Join(',', new Source("Both.ads").ParseDependencies()));
+			Assert.AreEqual("Intr", String.Join(',', new Source("Proc.adb").ParseDependencies()));
 		}
 
 		[TestMethod]
 		public void ParseName() {
-			Assert.AreEqual("Test", new Source("Test.ads").ParseName());
-			Assert.AreEqual("Test", new Source("Test.adb").ParseName());
-			Assert.AreEqual("Prog", new Source("Prog.adb").ParseName());
+			Assert.AreEqual("Both", new Source("Both.ads").ParseName());
+			Assert.AreEqual("Both", new Source("Both.adb").ParseName());
+			Assert.AreEqual("Proc", new Source("Proc.adb").ParseName());
 
 		}
 
 		[TestMethod]
 		public void ParsePurity() {
-			Assert.IsFalse(new Source("Test.ads").ParsePurity());
+			Assert.IsFalse(new Source("Both.ads").ParsePurity());
 			Assert.IsTrue(new Source("Pure.ads").ParsePurity());
 		}
 
 		[TestMethod]
 		public void ParseSourceType() {
-			Assert.AreEqual(SourceType.Package, new Source("Test.ads").ParseSourceType());
-			Assert.AreEqual(SourceType.Package, new Source("Test.adb").ParseSourceType());
-			Assert.AreEqual(SourceType.Program, new Source("Prog.adb").ParseSourceType());
+			Assert.AreEqual(SourceType.Package, new Source("Both.ads").ParseSourceType());
+			Assert.AreEqual(SourceType.Package, new Source("Both.adb").ParseSourceType());
+			Assert.AreEqual(SourceType.Program, new Source("Proc.adb").ParseSourceType());
 		}
 
 	}

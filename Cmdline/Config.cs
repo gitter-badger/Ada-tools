@@ -298,7 +298,7 @@ namespace Cmdline {
 						case "D":
 							goto ListConfig;
 						case "1":
-							if (Configuration.SourceFileNames.SpecFileName == null) Configuration.SourceFileNames.SpecFileName = new SpecFileName();
+							if (Configuration.SourceFileNames.SpecFileName is null) Configuration.SourceFileNames.SpecFileName = new SpecFileName();
 							ListSpecFileChoice:
 							Config.WriteChoices(
 								new Choice("1", "Spec File Name"),
@@ -348,7 +348,7 @@ namespace Cmdline {
 									goto EnterSpecFileChoice;
 							}
 						case "2":
-							if (Configuration.SourceFileNames.BodyFileName == null) Configuration.SourceFileNames.BodyFileName = new BodyFileName();
+							if (Configuration.SourceFileNames.BodyFileName is null) Configuration.SourceFileNames.BodyFileName = new BodyFileName();
 							ListBodyFileChoice:
 							Config.WriteChoices(
 								new Choice("1", "Body File Name"),
@@ -398,7 +398,7 @@ namespace Cmdline {
 									goto EnterBodyFileChoice;
 							}
 						case "3":
-							if (Configuration.SourceFileNames.SubunitFileName == null) Configuration.SourceFileNames.SubunitFileName = new SubunitFileName();
+							if (Configuration.SourceFileNames.SubunitFileName is null) Configuration.SourceFileNames.SubunitFileName = new SubunitFileName();
 							ListSubunitFileChoice:
 							Config.WriteChoices(
 								new Choice("1", "Subunit File Name"),

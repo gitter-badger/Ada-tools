@@ -36,6 +36,23 @@ namespace AdaTools {
 		public override Boolean IsRemoteCallInterface { get; protected set; }
 
 		/// <summary>
+		/// Return the linker argument section for this unit
+		/// </summary>
+		public override String LinkerArguments {
+			get {
+				String Result = "";
+				foreach (String Dependency in this.Dependencies) {
+					// Ada standard libraries are included anyways, so don't even bother
+					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
+					// Add the linker dependency argument
+					Result += "-l" + Dependency + " ";
+				}
+				Result += "-soname " + this.Name + " -o lib" + this.Name + ".so";
+				return Result;
+			}
+		}
+
+		/// <summary>
 		/// Get all associated files of this package
 		/// </summary>
 		/// <returns>An array of the file names</returns>

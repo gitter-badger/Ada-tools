@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AdaTools;
 
 namespace Cmdline {
 	public static class Build {
@@ -15,12 +16,30 @@ namespace Cmdline {
 
 		}
 
+		/// <summary>
+		/// Print the build flags for the units, instead of actually building them
+		/// </summary>
+		internal static void Flags() {
+			foreach (Unit Unit in new Project().Units) {
+				Console.WriteLine(Unit.Name + ": " + Unit.LinkerArguments);
+			}
+		}
+
 		internal static void FullHelp() {
 			Console.WriteLine("\t" + "(build|compile|make) — Build all sources within this directory");
 		}
 
 		internal static void Help() {
 			Console.WriteLine("\t" + "(build|compile|make) — Build all sources within this directory");
+		}
+
+		/// <summary>
+		/// Print the build plan for the units, instead of actually building them
+		/// </summary>
+		internal static void Plan() {
+			foreach (Unit Unit in new BuildPlan(new Project())) {
+				Console.WriteLine(Unit.Name);
+			}
 		}
 
 	}
