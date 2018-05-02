@@ -43,13 +43,23 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void DependencyArguments() {
+			Assert.AreEqual(" -lSpec -lBody ", new PackageUnit("Both").DependencyArguments);
+		}
+
+		[TestMethod]
 		public void LinkerArguments() {
-			Assert.AreEqual("-lSpec -lBody -soname Both -o libBoth.so", new PackageUnit("Both").LinkerArguments);
+			Assert.AreEqual(" -lSpec -lBody ", new PackageUnit("Both").LinkerArguments);
+		}
+
+		[TestMethod]
+		public void OutputArguments() {
+			Assert.AreEqual(" -o Both.dll ", new PackageUnit("Both").OutputArguments);
 		}
 
 		[TestMethod]
 		public void GetFiles() {
-			Assert.AreEqual("Both.ads,Both.adb", String.Join(',', new PackageUnit("Both").GetFiles()));
+			Assert.AreEqual("Both.adb,Both.ads", String.Join(',', new PackageUnit("Both").GetFiles()));
 		}
 
 		[TestMethod]

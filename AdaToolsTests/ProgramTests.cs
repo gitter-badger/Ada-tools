@@ -31,7 +31,7 @@ namespace AdaToolsTests
 
 		[TestMethod]
 		public void LinkerArguments() {
-			Assert.AreEqual("-lIntr -o Proc", new ProgramUnit("Proc").LinkerArguments);
+			Assert.AreEqual(" -lIntr ", new ProgramUnit("Proc").LinkerArguments);
 		}
 
 		[TestMethod]

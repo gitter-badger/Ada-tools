@@ -36,19 +36,17 @@ namespace AdaTools {
 		public override Boolean IsRemoteCallInterface { get; protected set; }
 
 		/// <summary>
-		/// Return the linker argument section for this unit
+		/// Return the output argument section for this unit
 		/// </summary>
-		public override String LinkerArguments {
+		public override String OutputArguments {
 			get {
-				String Result = "";
-				foreach (String Dependency in this.Dependencies) {
-					// Ada standard libraries are included anyways, so don't even bother
-					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
-					// Add the linker dependency argument
-					Result += "-l" + Dependency + " ";
+				if (Environment.OSVersion.Platform <= (PlatformID)3) {
+					return base.OutputArguments.TrimEnd() + ".dll ";
+				} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+					return base.OutputArguments.TrimEnd() + ".so ";
+				} else {
+					throw new PlatformNotSupportedException();
 				}
-				Result += "-soname " + this.Name + " -o lib" + this.Name + ".so";
-				return Result;
 			}
 		}
 
@@ -58,7 +56,7 @@ namespace AdaTools {
 		/// <returns>An array of the file names</returns>
 		public override String[] GetFiles() {
 			if (this.HasSpec && this.HasBody) {
-				return new String[] { this.Name + SpecExtension, this.Name + BodyExtension };
+				return new String[] { this.Name + BodyExtension, this.Name + SpecExtension };
 			} else if (this.HasSpec) {
 				return new String[] { this.Name + SpecExtension };
 			} else if (this.HasBody) {

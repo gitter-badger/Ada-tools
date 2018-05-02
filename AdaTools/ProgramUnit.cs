@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace AdaTools {
 
@@ -55,27 +56,23 @@ namespace AdaTools {
 			protected set { }
 		}
 
-		/// <summary>
-		/// Return the linker argument section for this program
-		/// </summary>
-		public override String LinkerArguments {
+		public override String OutputArguments {
 			get {
-				String Result = "";
-				foreach (String Dependency in this.Dependencies) {
-					// Ada standard libraries are included anyways, so don't even bother
-					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
-					// Add the linker dependency argument
-					Result += "-l" + Dependency + " ";
+				if (Environment.OSVersion.Platform <= (PlatformID)3) {
+					return base.OutputArguments.TrimEnd() + ".exe ";
+				} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+					return base.OutputArguments;
+				} else {
+					throw new PlatformNotSupportedException();
 				}
-				return Result.Trim() + " -o " + this.Name;
 			}
 		}
 
-		/// <summary>
-		/// Get all associated files of this program
-		/// </summary>
-		/// <returns>An array of the file names</returns>
-		public override String[] GetFiles() => new String[] { this.Name + Extension };
+	/// <summary>
+	/// Get all associated files of this program
+	/// </summary>
+	/// <returns>An array of the file names</returns>
+	public override String[] GetFiles() => new String[] { this.Name + Extension };
 
 		/// <summary>
 		/// Initialize a program with the specified <paramref name="Name"/>

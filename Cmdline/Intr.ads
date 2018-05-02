@@ -1,2 +1,2 @@
-﻿package Intr with All_Calls_Remote is
+﻿package Intr is
 end Intr;

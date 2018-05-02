@@ -13,7 +13,9 @@ namespace Cmdline {
 		/// <para>This is a simple build in which there are no target specific folders to also consider, rather, everything must be flatly organized.</para>
 		/// </remarks>
 		internal static void Simple() {
-
+			foreach (Unit Unit in new BuildPlan(new Project())) {
+				Compiler.Compile(Unit);
+			}
 		}
 
 		/// <summary>

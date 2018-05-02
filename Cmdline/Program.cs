@@ -49,6 +49,9 @@ namespace Cmdline {
 						Build.Simple();
 						return;
 					}
+				case "clean":
+					Cleaner.Clean();
+					return;
 				case "config":
 				case "configure":
 				case "configuration":

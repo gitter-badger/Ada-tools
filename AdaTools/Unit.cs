@@ -20,19 +20,35 @@ namespace AdaTools {
 		public readonly List<String> Dependencies = new List<String>();
 
 		/// <summary>
-		/// Return the linker argument section for this unit
+		/// Return the library dependency argument section for this unit
 		/// </summary>
-		public virtual String LinkerArguments {
+		public virtual String DependencyArguments {
 			get {
-				String Result = "";
+				String Result = " ";
 				foreach (String Dependency in this.Dependencies) {
 					// Ada standard libraries are included anyways, so don't even bother
 					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
 					// Add the linker dependency argument
 					Result += "-l" + Dependency + " ";
 				}
-				return Result.Trim();
+				return Result;
 			}
+		}
+
+		/// <summary>
+		/// Return the linker argument section for this unit
+		/// </summary>
+		public virtual String LinkerArguments {
+			get {
+				return this.DependencyArguments;
+			}
+		}
+
+		/// <summary>
+		/// Return the output argument section for this unit
+		/// </summary>
+		public virtual String OutputArguments {
+			get => " -o " + this.Name + ' ';
 		}
 
 		/// <summary>

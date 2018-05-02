@@ -34,12 +34,10 @@ namespace AdaTools {
 		public Unit this[Int32 Index] {
 			get => this.Plan[Index];
 		}
-
-		#region IEnumerable
+		
 		IEnumerator IEnumerable.GetEnumerator() => new BuildPlanEnumerator(this.Plan);
 
 		IEnumerator<Unit> IEnumerable<Unit>.GetEnumerator() => new BuildPlanEnumerator(this.Plan);
-		#endregion IEnumerable
 
 		public BuildPlan() {
 			this.Plan = new List<Unit>();
@@ -52,8 +50,7 @@ namespace AdaTools {
 		public BuildPlan(Project Project) : this(Project.Units) {
 		}
 
-		public BuildPlan(params Unit[] Units) {
-			this.Plan = new List<Unit>(Units);
+		public BuildPlan(params Unit[] Units) : this((IEnumerable<Unit>)Units) {
 		}
 
 		public BuildPlan(IEnumerable<Unit> Units) {
