@@ -8,7 +8,13 @@ namespace AdaTools {
 	/// </summary>
 	public sealed class ModularType : IntegerType {
 
-		public readonly UInt64 Modulus;
+		public UInt64? Modulus { get; private set; }
+
+		public Boolean? Contains(UInt16 Value) => (this.Modulus is null) ? null : (Boolean?)(Value >= 0 && Value <= this.Modulus - 1);
+
+		public Boolean? Contains(UInt32 Value) => (this.Modulus is null) ? null : (Boolean?)(Value >= 0 && Value <= this.Modulus - 1);
+
+		public Boolean? Contains(UInt64 Value) => (this.Modulus is null) ? null : (Boolean?)(Value >= 0 && Value <= this.Modulus - 1);
 
 		public ModularType(String Name, UInt16 Modulus): base(Name) {
 			this.Modulus = Modulus;

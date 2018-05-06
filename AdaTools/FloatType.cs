@@ -8,9 +8,20 @@ namespace AdaTools {
 	/// </summary>
 	public sealed class FloatType : RealType {
 
-		private readonly UInt16 Digits;
+		public UInt16? Digits { get; private set; }
 
-		private readonly Range<Double> Range;
+		public Range<Double>? Range { get; private set; }
+
+		public Boolean? Contains(Single Value) => this.Range?.Contains(Value);
+
+		public Boolean? Contains(Double Value) => this.Range?.Contains(Value);
+
+		public override void Join(Type Type) {
+			if (!(Type is FloatType)) throw new TypeMismatchException();
+			base.Join(Type);
+			if (this.Digits is null) this.Digits = (Type as FloatType).Digits;
+			if (this.Range is null) this.Range = (Type as FloatType).Range;
+		}
 
 		public FloatType(String Name, UInt16 Digits) : base(Name) {
 			this.Digits = Digits;

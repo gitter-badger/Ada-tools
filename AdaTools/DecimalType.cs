@@ -8,14 +8,29 @@ namespace AdaTools {
 	/// </summary>
 	public sealed class DecimalType : FixedType {
 
-		private readonly UInt16 Digits;
+		public Decimal? Delta { get; private set; }
 
-		public DecimalType(String Name, Double Delta, UInt16 Digits) : base(Name, Delta) {
+		public UInt16? Digits { get; private set; }
+
+		public Range<Decimal>? Range { get; private set; }
+
+		public Boolean? Contains(Decimal Value) => this.Range?.Contains(Value);
+
+		public override void Join(Type Type) {
+			if (!(Type is DecimalType)) throw new TypeMismatchException();
+			base.Join(Type);
+			if (this.Delta is null) this.Delta = (Type as DecimalType).Delta;
+			if (this.Digits is null) this.Digits = (Type as DecimalType).Digits;
+			if (this.Range is null) this.Range = (Type as DecimalType).Range;
+		}
+
+		public DecimalType(String Name, Decimal Delta, UInt16 Digits) : base(Name) {
+			this.Delta = Delta;
 			this.Digits = Digits;
 		}
 
-		public DecimalType(String Name, Double Delta, UInt16 Digits, Range<Double> Range) : base(Name, Delta, Range) {
-			this.Digits = Digits;
+		public DecimalType(String Name, Decimal Delta, UInt16 Digits, Range<Decimal> Range) : this(Name, Delta, Digits) {
+			this.Range = Range;
 		}
 	}
 }
