@@ -7,7 +7,11 @@ namespace AdaTools {
 	/// Represents a base-2 fixed-point numeric type
 	/// </summary>
 	public sealed class OrdinaryType : FixedType {
-		public OrdinaryType(String Name) : base(Name) {
+		public OrdinaryType(String Name, Double Delta) : base(Name, Delta) {
+
+		}
+
+		public OrdinaryType(String Name, Double Delta, Range<Double> Range) : base(Name, Delta, Range) {
 
 		}
 	}

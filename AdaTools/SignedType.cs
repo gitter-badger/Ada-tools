@@ -7,8 +7,19 @@ namespace AdaTools {
 	/// Represents a signed integer type
 	/// </summary>
 	public sealed class SignedType : IntegerType {
-		public SignedType(String Name) : base(Name) {
 
+		private readonly Range<Int64> Range;
+
+		public SignedType(String Name, Range<Int16> Range): base(Name) {
+			this.Range = new Range<Int64>(Range.Lower, Range.Upper);
+		}
+
+		public SignedType(String Name, Range<Int32> Range): base(Name) {
+			this.Range = new Range<Int64>(Range.Lower, Range.Upper);
+		}
+
+		public SignedType(String Name, Range<Int64> Range) : base(Name) {
+			this.Range = Range;
 		}
 	}
 }

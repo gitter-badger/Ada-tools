@@ -7,8 +7,11 @@ namespace AdaTools {
 	/// Represents an enumeration type
 	/// </summary>
 	public sealed class EnumerationType : DiscreteType {
-		public EnumerationType(String Name) : base(Name) {
 
+		public readonly String[] Values;
+
+		public EnumerationType(String Name, params String[] Values) : base(Name) {
+			this.Values = Values;
 		}
 	}
 }
