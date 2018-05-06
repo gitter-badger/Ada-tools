@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AdaTools {
 	/// <summary>
-	/// Represents an Ada type
+	/// Represents an abstract type
 	/// </summary>
 	public abstract class Type {
 
