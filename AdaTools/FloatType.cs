@@ -16,6 +16,10 @@ namespace AdaTools {
 
 		public Boolean? Contains(Double Value) => this.Range?.Contains(Value);
 
+		public Boolean? Contains(Range<Single> Range) => this.Range?.Contains(new Range<Double>(Range.Lower, Range.Upper));
+
+		public Boolean? Contains(Range<Double> Range) => this.Range?.Contains(Range);
+
 		public override void Join(Type Type) {
 			if (!(Type is FloatType)) throw new TypeMismatchException();
 			base.Join(Type);

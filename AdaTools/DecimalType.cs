@@ -16,6 +16,8 @@ namespace AdaTools {
 
 		public Boolean? Contains(Decimal Value) => this.Range?.Contains(Value);
 
+		public Boolean? Contains(Range<Decimal> Range) => this.Range?.Contains(Range);
+
 		public override void Join(Type Type) {
 			if (!(Type is DecimalType)) throw new TypeMismatchException();
 			base.Join(Type);
