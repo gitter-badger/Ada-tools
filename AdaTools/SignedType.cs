@@ -28,11 +28,15 @@ namespace AdaTools {
 			if (this.Range is null) this.Range = (Type as SignedType).Range;
 		}
 
-		public SignedType(String Name, Range<Int16>? Range): base(Name) {
+		public SignedType(String Name) : base(Name) {
+
+		}
+
+		public SignedType(String Name, Range<Int16>? Range) : base(Name) {
 			this.Range = new Range<Int64>(Range.Value.Lower, Range.Value.Upper);
 		}
 
-		public SignedType(String Name, Range<Int32>? Range): base(Name) {
+		public SignedType(String Name, Range<Int32>? Range) : base(Name) {
 			this.Range = new Range<Int64>(Range.Value.Lower, Range.Value.Upper);
 		}
 

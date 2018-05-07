@@ -31,10 +31,18 @@ namespace AdaTools {
 		/// </remarks>
 		/// <param name="Type">The type to join</param>
 		public virtual void Join(Type Type) {
-			if (this.Name != Type.Name) throw new TypeMismatchException();
+			if (this != Type) throw new TypeMismatchException();
 			if (this.PubliclyVisible is null) this.PubliclyVisible = Type.PubliclyVisible;
 			if (this.PrivateDefinition is null) this.PrivateDefinition = Type.PrivateDefinition;
 		}
+
+		public override Boolean Equals(Object obj) => (obj is Type) && this == (Type)obj;
+
+		public override Int32 GetHashCode() => base.GetHashCode();
+
+		public static Boolean operator ==(Type Left, Type Right) => Left.Name.ToUpper() == Right.Name.ToUpper();
+
+		public static Boolean operator !=(Type Left, Type Right) => Left.Name.ToUpper() != Right.Name.ToUpper();
 
 		protected Type(String Name) {
 			this.Name = Name;

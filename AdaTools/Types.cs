@@ -13,11 +13,47 @@ namespace AdaTools {
 
 		private List<Type> Collection;
 
+		/// <summary>
+		/// Add the <paramref name="Type"/> definition to the collection, joining the definitions if one already exists
+		/// </summary>
+		/// <param name="Type">Type definition to add.</param>
+		public void Add(Type Type) {
+			foreach (Type T in this.Collection) {
+				if (T == Type) {
+					T.Join(Type);
+					return;
+				}
+			}
+			this.Collection.Add(Type);
+		}
+
+		public Boolean Contains(Type Type) => this.Collection.Contains(Type);
+
+		public Int32 Count { get => this.Collection.Count; }
+
+		/// <summary>
+		/// Look up the type by <paramref name="Name"/>
+		/// </summary>
+		/// <param name="Name">Name of the type to look up</param>
+		/// <returns>The type if found, null otherwise</returns>
+		public Type this[String Name] {
+			get {
+				foreach (Type T in this.Collection) {
+					if (T.Name == Name) return T;
+				}
+				return null;
+			}
+		}
+
 		public Types() {
 
 		}
 
 		public Types(params Type[] Types) {
+			this.Collection = new List<Type>(Types);
+		}
+
+		public Types(IEnumerable<Type> Types) {
 			this.Collection = new List<Type>(Types);
 		}
 

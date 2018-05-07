@@ -39,5 +39,12 @@ namespace AdaToolsTests {
 			Assert.IsFalse(new Range<Int32>(1, 10).Contains(new Range<Int32>(0, 5)));
 		}
 
+		[TestMethod]
+		public void Equals() {
+			Assert.IsTrue(new Range<Int32>(1, 5) == new Range<Int32>(1, 5));
+			Assert.IsFalse(new Range<Int32>(1, 5) == new Range<Int32>(2, 10));
+			Assert.IsTrue(new Range<Int64>(1, 5).Equals(new Range<Int64>(1, 5)));
+		}
+
 	}
 }
