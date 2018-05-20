@@ -10,6 +10,15 @@
                 "${workspaceFolder}/Cmdline/Cmdline.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

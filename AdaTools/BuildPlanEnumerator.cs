@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AdaTools {
-	public class BuildPlanEnumerator : IEnumerator<Unit> {
+	public class BuildPlanEnumerator : IEnumerator, IEnumerator<Unit> {
 
 		private readonly Unit[] Plan;
 
@@ -13,6 +13,8 @@ namespace AdaTools {
 		public Unit Current { get => this.Plan[this.Index]; }
 
 		Object IEnumerator.Current { get => this.Plan[this.Index]; }
+
+		Unit IEnumerator<Unit>.Current { get => this.Plan[this.Index]; }
 
 		/// <summary>
 		/// There's nothing to actually dispose of, everything is managed

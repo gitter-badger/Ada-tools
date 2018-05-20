@@ -23,6 +23,10 @@ namespace AdaTools {
 				Process CreateLibrary = Process.Start("gnatdll", "-d " + Unit.Name + ".dll " + Unit.Name + ".ali");
 				CreateLibrary.WaitForExit();
 				CreateLibrary.Dispose();
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				Process CreateLibrary = Process.Start("ld", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".so");
+				CreateLibrary.WaitForExit();
+				CreateLibrary.Dispose();
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using AdaTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -54,7 +55,11 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void OutputArguments() {
-			Assert.AreEqual(" -o Both.dll ", new PackageUnit("Both").OutputArguments);
+			if (Environment.OSVersion.Platform <= (PlatformID)3) {
+				Assert.AreEqual(" -o Both.dll ", new PackageUnit("Both").OutputArguments);
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				Assert.AreEqual(" -o Both.so ", new PackageUnit("Both").OutputArguments);
+			}
 		}
 
 		[TestMethod]

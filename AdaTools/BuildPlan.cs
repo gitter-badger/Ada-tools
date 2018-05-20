@@ -12,6 +12,9 @@ namespace AdaTools {
 	/// </remarks>
 	public sealed class BuildPlan : IEnumerable<Unit> {
 
+		/// <summary>
+		/// The actual plan itself
+		/// </summary>
 		private List<Unit> Plan;
 
 		/// <summary>
@@ -29,8 +32,16 @@ namespace AdaTools {
 			this.Plan.Add(Unit);
 		}
 
+		/// <summary>
+		/// Get the length of the build plan; the amount of steps to be made
+		/// </summary>
 		public Int32 Length { get => this.Plan.Count; }
 
+		/// <summary>
+		/// Try to look up a unit in the plan by its <paramref name="Index"/>
+		/// </summary>
+		/// <param name="Index">Position of the unit</param>
+		/// <returns>The unit at the specified <paramref name="Index"/></returns>
 		public Unit this[Int32 Index] {
 			get => this.Plan[Index];
 		}

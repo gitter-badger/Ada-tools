@@ -1,4 +1,7 @@
 ﻿with Ada.Text_IO, Spec;
 
-package Both with is
+package Both is
+
+	type TestInt is range 0 .. 1;
+
 end Both;

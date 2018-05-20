@@ -107,6 +107,7 @@ namespace Cmdline {
 						return;
 					}
 				case "list":
+				case "units":
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToLower()) {
 							case "help":
@@ -120,6 +121,28 @@ namespace Cmdline {
 						}
 					} else {
 						List.Each();
+						return;
+					}
+				case "setting":
+				case "settings":
+					if (Arguments.TryPop(out Mode)) {
+						throw new NotImplementedException();
+						//TODO: This should allow retreiving and setting specific settings
+					} else {
+						Settings.Print();
+						return;
+					}
+				case "types":
+					if (Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							case "help":
+								Types.FullHelp();
+								return;
+							default:
+								throw new NotImplementedException();
+						}
+					} else {
+						Types.Each();
 						return;
 					}
 				default:
@@ -136,7 +159,7 @@ namespace Cmdline {
 			Dependencies.Help();
 			Files.Help();
 			List.Help();
-
+			Types.Help();
 		}
 	}
 }

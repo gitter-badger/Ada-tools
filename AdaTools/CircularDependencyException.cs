@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AdaTools {
-
 	[Serializable]
 	public class CircularDependencyException : Exception {
 		public CircularDependencyException() { }

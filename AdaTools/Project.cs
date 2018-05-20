@@ -67,6 +67,30 @@ namespace AdaTools {
 		}
 
 		/// <summary>
+		/// All the types in this project
+		/// </summary>
+		public Types Types {
+			get {
+				Console.WriteLine("get Types");
+				Types Types = new Types();
+				foreach (Unit U in this.Units) {
+					Console.WriteLine("Unit: " + U.Name);
+					Console.WriteLine("Unit.Types.Count: " + U.Types.Count);
+					Types.Add(U.Types);
+				}
+				Console.WriteLine("Types.Count: " + Types.Count);
+				return Types;
+			}
+		}
+
+		/// <summary>
+		/// Attempt to lookup the type by its <paramref name="Name"/>
+		/// </summary>
+		/// <param name="Name">The name of the type to lookup</param>
+		/// <returns>The type with the specified <paramref name="Name"/> if found, otherwise null</returns>
+		public Type LookupType(String Name) => this.Types[Name];
+
+		/// <summary>
 		/// Attempt to lookup the unit by its <paramref name="Name"/>
 		/// </summary>
 		/// <param name="Name">The name of the unit to lookup</param>

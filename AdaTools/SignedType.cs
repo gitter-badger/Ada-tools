@@ -32,15 +32,15 @@ namespace AdaTools {
 
 		}
 
-		public SignedType(String Name, Range<Int16>? Range) : base(Name) {
-			this.Range = new Range<Int64>(Range.Value.Lower, Range.Value.Upper);
+		public SignedType(String Name, Range<Int16> Range) : base(Name) {
+			this.Range = new Range<Int64>(Range.Lower, Range.Upper);
 		}
 
-		public SignedType(String Name, Range<Int32>? Range) : base(Name) {
-			this.Range = new Range<Int64>(Range.Value.Lower, Range.Value.Upper);
+		public SignedType(String Name, Range<Int32> Range) : base(Name) {
+			this.Range = new Range<Int64>(Range.Lower, Range.Upper);
 		}
 
-		public SignedType(String Name, Range<Int64>? Range) : base(Name) {
+		public SignedType(String Name, Range<Int64> Range) : base(Name) {
 			this.Range = Range;
 		}
 	}

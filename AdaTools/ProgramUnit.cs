@@ -86,6 +86,7 @@ namespace AdaTools {
 			if (this.Name != ProgName) throw new ProgramNameDoesNotMatchException();
 			this.Type = ProgSource.ParseProgramType();
 			this.Dependencies.AddRange(ProgSource.ParseDependencies());
+			this.Types = ProgSource.ParseTypes();
 		}
 
 		/// <summary>

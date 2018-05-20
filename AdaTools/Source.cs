@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -8,9 +9,6 @@ namespace AdaTools {
 	/// <summary>
 	/// Represents Ada source code
 	/// </summary>
-	/// <remarks>
-	/// 
-	/// </remarks>
 	public sealed class Source {
 
 		/// <summary>
@@ -348,6 +346,51 @@ namespace AdaTools {
 				// This should never happen because a match wouldn't happen, but still raise an exception
 				throw new Exception("A critical error has occured");
 			}
+		}
+
+		/// <summary>
+		/// Try to parse the types within the source
+		/// </summary>
+		/// <returns>The types found</returns>
+		public Types ParseTypes() {
+			Console.WriteLine("ParseTypes()");
+			Types Types = new Types();
+			String[] Candidates = this.Matches(new Regex(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			Stack<String> Split;
+			String TypeName;
+			String TypeRange;
+			foreach (String Candidate in Candidates) {
+				Console.WriteLine("Candidate: " + Candidate);
+				if (new Regex(@"\btype\s+(\w|_)+\s+is\s+range\s+\d+\s*\.\.\s*\d+\s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+					Console.WriteLine("Signed Integer");
+					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
+					Split.Pop(); // "type"
+					TypeName = Split.Pop();
+					Console.WriteLine("TypeName: " + TypeName);
+					Split.Pop(); // "is"
+					Split.Pop(); // "range"
+					TypeRange = String.Join(null, Split); //Join the remaining candidate back together, because it's going to be split differently
+					Int64 Lower = Int64.Parse(TypeRange.Split("..")[0]);
+					Int64 Upper = Int64.Parse(TypeRange.Split("..")[1]);
+					Console.WriteLine("Range: " + Lower + " to " + Upper);
+					Types.Add(new SignedType(TypeName, new Range<Int64>(Lower, Upper)));
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+mod\s+\d+s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+					Console.WriteLine("Modular Integer");
+					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
+					Split.Pop(); // "type"
+					TypeName = Split.Pop();
+					Console.WriteLine("TypeName: " + TypeName);
+					Split.Pop(); // "is"
+					Split.Pop(); // "mod"
+					TypeRange = Split.Pop();
+					UInt32 Mod = UInt32.Parse(TypeRange);
+					Console.WriteLine("Mod: " + Mod);
+					Types.Add(new ModularType(TypeName, Mod));
+				} else {
+					continue;
+				}
+			}
+			return Types;
 		}
 
 		/// <summary>

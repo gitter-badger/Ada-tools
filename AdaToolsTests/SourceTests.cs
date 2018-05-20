@@ -50,5 +50,11 @@ namespace AdaToolsTests {
 			Assert.AreEqual(SourceType.Program, new Source("Proc.adb").ParseSourceType());
 		}
 
+		[TestMethod]
+		public void ParseTypes() {
+			Types Types = new Source("Both.ads").ParseTypes();
+			Assert.AreEqual(1, Types.Count);
+		}
+
 	}
 }

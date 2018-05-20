@@ -2,3 +2,6 @@
 This project contains many Ada files that don't seem like they belong. They are for testing the command line program, since they are automatically copied to the output directory.
 As much as possible, testing should be done in the unit tests, but it's still a good idea to run the command line on these files as an extra test, in the event there are bugs with this tool and not the library. This also helps test that the formatting of the tool is correct.
 You can change the `launchSettings.json` file to set the command line arguments that VisualStudio will run the tool with. For running this tool directly from the command line for testing purposes, in the project directory run `dotnet run <arguments> --no-launch-profile`, where `<arguments>` are the arguments to this tool.
+
+# Use of Goto's
+If you disagree with my use of `goto` statements in certain features of this tool, you're more than welcome to develop an alternative implementation and issue a pull request. I will take close look at the implementation, including testing it out. It will likely fail; I do not use goto's lightly, but they were chosen here for good reason. In the event it is actually superior to my implementation, it will be a welcome addition.

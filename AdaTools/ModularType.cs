@@ -16,7 +16,11 @@ namespace AdaTools {
 
 		public Boolean? Contains(UInt64 Value) => (this.Modulus is null) ? null : (Boolean?)(Value >= 0 && Value <= this.Modulus - 1);
 
-		public ModularType(String Name, UInt16 Modulus): base(Name) {
+		public ModularType(String Name) : base(Name) {
+
+		}
+
+		public ModularType(String Name, UInt16 Modulus) : base(Name) {
 			this.Modulus = Modulus;
 		}
 
