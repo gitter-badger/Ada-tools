@@ -394,6 +394,21 @@ namespace AdaTools {
 		}
 
 		/// <summary>
+		/// Try to parse the unit version
+		/// </summary>
+		/// <returns>Returns the unit version if found, or null otherwise</returns>
+		public Version? ParseVersion() {
+			// Try to match the psuedo gnatdoc convention for version comments. Gnatdoc doesn't actually have this, but it's the same style
+			// This is correctly in multiline mode, as Ada comments only exist over single lines
+			String Candidate = this.Match(new Regex(@"--@version.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			if (Candidate is null) return null;
+			
+			String[] Split = Candidate.Split();
+
+			return new Version(Split[1]);
+		}
+
+		/// <summary>
 		/// Try to parse the wide character encoding configuration
 		/// </summary>
 		/// <returns>Returns the encoding type if found, or null if not specified</returns>
