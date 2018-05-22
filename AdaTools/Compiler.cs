@@ -15,19 +15,68 @@ namespace AdaTools {
 			GnatClean.Dispose();
 		}
 
-		public static void Compile(Unit Unit) {
-			Process GnatMake = Process.Start("gnatmake", String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+		/// <summary>
+		/// Call the compiler with appropriate arguments for compiling the <paramref name="Unit"/>
+		/// </summary>
+		/// <remarks>
+		/// This actually calls the linker as well, so that a shared library is built rather than just object code
+		/// </remarks>
+		/// <param name="Unit">Unit to compile</param>
+		/// <param name="march">-march flag setting</param>
+		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
+		public static void Compile(PackageUnit Unit, march march = march.native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+			Process GnatMake;
+			if (Environment.OSVersion.Platform <= (PlatformID)3) {
+				switch (WindowsSubsystem) {
+					case WindowsSubsystem.Windows:
+						GnatMake = Process.Start("gnatmake", "-mwindows " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						break;
+					case WindowsSubsystem.Console:
+					default:
+						GnatMake = Process.Start("gnatmake", "-mconsole " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						break;
+				}
+			} else {
+				GnatMake = Process.Start("gnatmake", String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+			}
 			GnatMake.WaitForExit(); // We need to wait here, because otherwise units will be compiled before their dependencies are finished compiling. That's bad.
 			GnatMake.Dispose();
+			Process CreateLibrary;
+			// Linking is a very different procedure on different systems, so figure out what we're supposed to do
 			if (Environment.OSVersion.Platform <= (PlatformID)3) {
-				Process CreateLibrary = Process.Start("gnatdll", "-d " + Unit.Name + ".dll " + Unit.Name + ".ali");
-				CreateLibrary.WaitForExit();
-				CreateLibrary.Dispose();
+				CreateLibrary = Process.Start("gnatdll", "-d " + Unit.Name + ".dll " + Unit.Name + ".ali");
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
-				Process CreateLibrary = Process.Start("ld", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".so");
-				CreateLibrary.WaitForExit();
-				CreateLibrary.Dispose();
+				CreateLibrary = Process.Start("ld", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".so");
+			} else {
+				throw new Exception("Unable to determine what the Operating System is");
 			}
+			CreateLibrary.WaitForExit(); //? We might not need to wait here
+			CreateLibrary.Dispose();
+		}
+
+		/// <summary>
+		/// Call the compiler with appropriate arguments for compiling the <paramref name="Unit"/>
+		/// </summary>
+		/// <param name="Unit">Program Unit to compile</param>
+		/// <param name="march">-march flag setting</param>
+		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
+		public static void Compile(ProgramUnit Unit, march march = march.native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+			Process GnatMake;
+			if (Environment.OSVersion.Platform <= (PlatformID)3) {
+				switch (WindowsSubsystem) {
+					case WindowsSubsystem.Windows:
+						GnatMake = Process.Start("gnatmake", "-mwindows " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						break;
+					case WindowsSubsystem.Console:
+					default:
+						GnatMake = Process.Start("gnatmake", "-mconsole " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						break;
+				}
+			} else {
+				GnatMake = Process.Start("gnatmake", String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+			}
+			GnatMake.WaitForExit();
+			GnatMake.Dispose();
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Cmdline {
 
 		static void Main(String[] args) {
 			/// <summary>
-			/// Presents the arguments as a queue, which is useful for the parsing strategy taken here
+			/// Presents the arguments as a stack, which is useful for the parsing strategy taken here
 			/// </summary>
 			/// <remarks>
 			/// <para>Arguments are read in left-to-right order, with operations and modifiers being removed. In some cases, a modifier is possible, but turns out to be part of a list, in which case it is popped back on. Once operations and modifiers are done, the remaining arguments, if any, are a list for that operation to operate upon.</para>

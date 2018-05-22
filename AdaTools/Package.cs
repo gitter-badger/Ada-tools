@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
 
 namespace AdaTools {
@@ -49,6 +50,41 @@ namespace AdaTools {
 		/// This is imported from the package unit
 		/// </remarks>
 		public readonly List<String> Dependencies;
+
+		/// <summary>
+		/// Create the package in the filesystem
+		/// </summary>
+		public void Create() {
+			// Try to set the .ali file readonly, as it needs to be or GNAT complains
+			// If the .ali file does not exist, we can safely assume the package has not been built
+			try {
+				File.SetAttributes(this.Name + ".ali", FileAttributes.ReadOnly);
+			} catch (FileNotFoundException) {
+				throw new PackageNotBuildException();
+			}
+			// Create the actual archive and put everything necessary in it
+			using (FileStream File = new FileStream(this.Name + '.' + this.Variant + ".apkg", FileMode.Create)) {
+				using (ZipArchive Archive = new ZipArchive(File, ZipArchiveMode.Update)) {
+					Archive.CreateEntryFromFile(this.Name + ".ali", this.Name + ".ali");
+					Archive.CreateEntryFromFile(this.Name + ".ads", this.Name + ".ads");
+					Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
+					if (Environment.OSVersion.Platform <= (PlatformID)3) {
+						Archive.CreateEntryFromFile(this.Name + ".dll", this.Name + ".dll");
+					} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+						Archive.CreateEntryFromFile(this.Name + ".so", this.Name + ".so");
+					}
+					ZipArchiveEntry InfoEntry = Archive.CreateEntry("info");
+					using (StreamWriter Info = new StreamWriter(InfoEntry.Open())) {
+						Info.WriteLine("Name: " + this.Name);
+						Info.WriteLine("Variant: " + this.Variant);
+						Info.WriteLine("Version: " + this.Version);
+						Info.WriteLine("Description: " + this.Description);
+						Info.WriteLine("Dependencies: " + this.Dependencies);
+					}
+
+				}
+			}
+		}
 
 		/// <summary>
 		/// Create an install package from the specified package unit

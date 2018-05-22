@@ -22,9 +22,7 @@ namespace AdaToolsTests {
 		[TestMethod]
 		public void Plan() {
 			BuildPlan BuildPlan = new BuildPlan(new Project());
-			Assert.AreEqual("Body", BuildPlan[0].Name);
-			Assert.AreEqual("Spec", BuildPlan[1].Name);
-			Assert.AreEqual("Both", BuildPlan[2].Name);
+			//TODO: Removed indexer because it didn't make semantic sense, now how to verify build order?
 		}
 
 	}
