@@ -94,7 +94,7 @@ namespace AdaTools {
 			this.Name = PackageUnit.Name;
 			this.Variant = Variant;
 			this.Version = new Source(PackageUnit.GetSpec()).ParseVersion() ?? new Version(0, 0);
-			this.Description = Description;
+			this.Description = new Source(PackageUnit.GetSpec()).ParseDescription();
 			this.Dependencies = PackageUnit.Dependencies;
 		}
 

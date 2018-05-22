@@ -25,19 +25,29 @@ namespace AdaTools {
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
 		public static void Compile(PackageUnit Unit, march march = march.native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+			String arch;
+			switch (march) {
+				case march.generic:
+					arch = "generic";
+					break;
+				case march.native:
+				default:
+					arch = "native";
+					break;
+			}
 			Process GnatMake;
 			if (Environment.OSVersion.Platform <= (PlatformID)3) {
 				switch (WindowsSubsystem) {
 					case WindowsSubsystem.Windows:
-						GnatMake = Process.Start("gnatmake", "-mwindows " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						GnatMake = Process.Start("gnatmake", "-mwindows -march=" + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 						break;
 					case WindowsSubsystem.Console:
 					default:
-						GnatMake = Process.Start("gnatmake", "-mconsole " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						GnatMake = Process.Start("gnatmake", "-mconsole -march=" + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 						break;
 				}
 			} else {
-				GnatMake = Process.Start("gnatmake", String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+				GnatMake = Process.Start("gnatmake", "-march=" + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 			}
 			GnatMake.WaitForExit(); // We need to wait here, because otherwise units will be compiled before their dependencies are finished compiling. That's bad.
 			GnatMake.Dispose();
@@ -61,19 +71,29 @@ namespace AdaTools {
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
 		public static void Compile(ProgramUnit Unit, march march = march.native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+			String arch;
+			switch (march) {
+				case march.generic:
+					arch = "generic";
+					break;
+				case march.native:
+				default:
+					arch = "native";
+					break;
+			}
 			Process GnatMake;
 			if (Environment.OSVersion.Platform <= (PlatformID)3) {
 				switch (WindowsSubsystem) {
 					case WindowsSubsystem.Windows:
-						GnatMake = Process.Start("gnatmake", "-mwindows " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						GnatMake = Process.Start("gnatmake", "-mwindows -march=" + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 						break;
 					case WindowsSubsystem.Console:
 					default:
-						GnatMake = Process.Start("gnatmake", "-mconsole " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+						GnatMake = Process.Start("gnatmake", "-mconsole -march=" + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 						break;
 				}
 			} else {
-				GnatMake = Process.Start("gnatmake", String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+				GnatMake = Process.Start("gnatmake", "-march=" + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 			}
 			GnatMake.WaitForExit();
 			GnatMake.Dispose();
