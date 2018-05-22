@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdaToolsTests {
 	[TestClass]
-	public class PackageTests {
+	public class PackageUnitTests {
 
 		[TestMethod]
 		public void Constructor() {

@@ -153,6 +153,20 @@ namespace AdaTools {
 		}
 
 		/// <summary>
+		/// Try to parse the description comment
+		/// </summary>
+		/// <returns>The description comment if found, otherwise the summary comment if found, otherwise an empty string</returns>
+		public String ParseDescription() {
+			String Candidate;
+			// This is correctly in multiline mode, as Ada comments only exist over single lines
+			Candidate = this.Match(new Regex(@"--@description.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+			?? "--@description  "; // This last part ensures the parse does not fail, but rather, simply finds an empty description.
+			Console.WriteLine("Candidate: " + Candidate);
+			String[] Split = Candidate.Split();
+			return String.Join(' ', Split.Skip(1).Take(Split.Length-1));
+		}
+
+		/// <summary>
 		/// Try to parse the elaboration checks configuration
 		/// </summary>
 		/// <returns></returns>

@@ -30,6 +30,12 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void ParseDescription() {
+			Assert.AreEqual("Just a simple test package", new Source("Both.ads").ParseDescription());
+			Assert.AreEqual("A pure spec test package", new Source("Pure.ads").ParseDescription());
+		}
+
+		[TestMethod]
 		public void ParseName() {
 			Assert.AreEqual("Both", new Source("Both.ads").ParseName());
 			Assert.AreEqual("Both", new Source("Both.adb").ParseName());
@@ -54,6 +60,12 @@ namespace AdaToolsTests {
 		public void ParseTypes() {
 			Types Types = new Source("Both.ads").ParseTypes();
 			Assert.AreEqual(1, Types.Count);
+		}
+
+		[TestMethod]
+		public void ParseVersion() {
+			AdaTools.Version Version = new Source("Both.ads").ParseVersion() ?? new AdaTools.Version(0, 0);
+			Assert.AreEqual(new AdaTools.Version(1, 0), Version);
 		}
 
 	}

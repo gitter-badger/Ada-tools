@@ -54,8 +54,12 @@ namespace AdaTools {
 		/// Create an install package from the specified package unit
 		/// </summary>
 		/// <param name="PackageUnit">Unit to package</param>
-		public Package(PackageUnit PackageUnit) {
-			
+		public Package(PackageUnit PackageUnit, String Variant, String Description) {
+			this.Name = PackageUnit.Name;
+			this.Variant = Variant;
+			this.Version = new Source(PackageUnit.GetSpec()).ParseVersion() ?? new Version(0, 0);
+			this.Description = Description;
+			this.Dependencies = PackageUnit.Dependencies;
 		}
 
 	}

@@ -67,6 +67,18 @@ namespace AdaTools {
 		}
 
 		/// <summary>
+		/// Get the spec file if it exists
+		/// </summary>
+		/// <returns>The spec file if it exists, or null otherwise</returns>
+		public String GetSpec() => (this.HasSpec) ? this.Name + SpecExtension : null;
+
+		/// <summary>
+		/// Get the body file if it exists
+		/// </summary>
+		/// <returns>The body file if it exists, or null otherwise</returns>
+		public String GetBody() => (this.HasBody) ? this.Name + BodyExtension : null;
+
+		/// <summary>
 		/// Initialize a package with the specified <paramref name="Name"/>
 		/// </summary>
 		/// <remarks>

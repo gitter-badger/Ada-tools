@@ -7,7 +7,7 @@ using AdaTools;
 namespace AdaToolsTests
 {
 	[TestClass]
-	public class ProgramTests {
+	public class ProgramUnitTests {
 
 		[TestMethod]
 		public void Constructor() {
