@@ -37,15 +37,6 @@ namespace AdaTools {
 		/// </summary>
 		public Int32 Length { get => this.Plan.Count; }
 
-		/// <summary>
-		/// Try to look up a unit in the plan by its <paramref name="Index"/>
-		/// </summary>
-		/// <param name="Index">Position of the unit</param>
-		/// <returns>The unit at the specified <paramref name="Index"/></returns>
-		public Unit this[Int32 Index] {
-			get => this.Plan[Index];
-		}
-		
 		IEnumerator IEnumerable.GetEnumerator() => new BuildPlanEnumerator(this.Plan);
 
 		IEnumerator<Unit> IEnumerable<Unit>.GetEnumerator() => new BuildPlanEnumerator(this.Plan);
