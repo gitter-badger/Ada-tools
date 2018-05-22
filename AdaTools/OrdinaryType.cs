@@ -21,7 +21,7 @@ namespace AdaTools {
 		public Boolean? Contains(Range<Double> Range) => this.Range?.Contains(Range);
 
 		public override void Join(Type Type) {
-			if (!(Type is FixedType)) throw new TypeMismatchException();
+			if (!(Type is OrdinaryType)) throw new TypeMismatchException();
 			base.Join(Type);
 			if (this.Delta is null) this.Delta = (Type as OrdinaryType).Delta;
 			if (this.Range is null) this.Range = (Type as OrdinaryType).Range;
