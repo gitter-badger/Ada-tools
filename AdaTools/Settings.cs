@@ -12,8 +12,30 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>A list of each source path</returns>
 		public static List<String> SourceSearchPath {
-			get => new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH")).Split(':'));
-			set => Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(':', value));
+			get {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH")).Split(';'));
+					case PlatformID.Unix:
+					default:
+						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH")).Split(':'));
+				}
+			}
+			set {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(';', value));
+						break;
+					case PlatformID.Unix:
+					default:
+						Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(':', value));
+						break;
+				}
+			}
 		}
 
 		/// <summary>
@@ -21,8 +43,30 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>A list of each object path</returns>
 		public static List<String> ObjectSearchPath {
-			get => new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH")).Split(':'));
-			set => Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(':', value), EnvironmentVariableTarget.Machine);
+			get {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH")).Split(';'));
+					case PlatformID.Unix:
+					default:
+						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH")).Split(':'));
+				}
+			}
+			set {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(';', value));
+						break;
+					case PlatformID.Unix:
+					default:
+						Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(':', value));
+						break;
+				}
+			}
 		}
 
 		/// <summary>
