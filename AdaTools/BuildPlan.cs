@@ -15,7 +15,7 @@ namespace AdaTools {
 		/// <summary>
 		/// The actual plan itself
 		/// </summary>
-		private List<Unit> Plan;
+		private readonly List<Unit> Plan;
 
 		/// <summary>
 		/// Add the <paramref name="Unit"/> to the appropriate order in the plan

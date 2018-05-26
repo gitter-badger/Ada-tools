@@ -126,8 +126,59 @@ namespace Cmdline {
 				case "setting":
 				case "settings":
 					if (Arguments.TryPop(out Mode)) {
-						throw new NotImplementedException();
-						//TODO: This should allow retreiving and setting specific settings
+						switch (Mode.ToLower()) {
+							case "obj":
+							case "objs":
+							case "object":
+							case "objects":
+								if (Arguments.Count >= 1) {
+									Settings.ObjectSearchPath = new List<String>(Arguments);
+								} else {
+									Console.WriteLine(String.Join(' ', Settings.ObjectSearchPath));
+								}
+								return;
+							case "pkg":
+							case "package":
+								if (Arguments.TryPop(out Mode)) {
+									switch (Mode.ToLower()) {
+										case "db":
+										case "database":
+											break;
+										default:
+											throw new UnknownOperationException();
+									}
+									goto case "pkgdb";
+								} else {
+									throw new UnknownOperationException();
+								}
+							case "pkgdb":
+							case "packagedb":
+							case "packagedatabase":
+								if (Arguments.Count >= 1) {
+									Settings.PackageDatabasePath = String.Join(' ', Arguments);
+								} else {
+									Console.WriteLine(Settings.PackageDatabasePath);
+								}
+								return;
+							case "repo":
+							case "repository":
+								if (Arguments.Count >= 1) {
+									Settings.PackageRepositoryPath = String.Join(' ', Arguments);
+								} else {
+									Console.WriteLine(Settings.PackageRepositoryPath);
+								}
+								return;
+							case "source":
+							case "sources":
+								if (Arguments.Count >= 1) {
+									Settings.SourceSearchPath = new List<String>(Arguments);
+								} else {
+									Console.WriteLine(String.Join(' ', Settings.SourceSearchPath));
+								}
+								return;
+							default:
+								throw new NotImplementedException();
+						}
 					} else {
 						Settings.Print();
 						return;

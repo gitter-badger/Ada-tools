@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Win32;
 
 namespace AdaTools {
 	public static class Settings {
@@ -21,7 +22,7 @@ namespace AdaTools {
 		/// <returns>A list of each object path</returns>
 		public static List<String> ObjectSearchPath {
 			get => new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH")).Split(':'));
-			set => Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(':', value));
+			set => Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(':', value), EnvironmentVariableTarget.Machine);
 		}
 
 		/// <summary>
@@ -30,13 +31,60 @@ namespace AdaTools {
 		/// <returns>A single path entry</returns>
 		public static String PackageDatabasePath {
 			get {
-				if (Environment.OSVersion.Platform <= (PlatformID)3) {
-					//TODO: Windows packagedb path
-					throw new NotImplementedException();
-				} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
-					return "/var/lib/adatools"; //TODO: This probably shouldn't be hardcoded, but this is the most sensible location
-				} else {
-					throw new NotImplementedException();
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						return (String)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("AdaTools").GetValue("PackageDatabase");
+					case PlatformID.Unix:
+					default:
+						return Environment.GetEnvironmentVariable("ADA_PACKAGEDB_PATH");
+				}
+			}
+			set {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						Registry.LocalMachine.CreateSubKey("SOFTWARE").CreateSubKey("AdaTools").SetValue("PackageDatabase", value);
+						break;
+					case PlatformID.Unix:
+					default:
+						Environment.SetEnvironmentVariable("ADA_PACKAGEDB_PATH", value);
+						break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// The path to the package repository
+		/// </summary>
+		/// <remarks>
+		/// This isn't currently used and won't be for a while, but the implementation will not need to change for when it is used
+		/// </remarks>
+		public static String PackageRepositoryPath {
+			get {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						return (String)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("AdaTools").GetValue("PackageRepository");
+					case PlatformID.Unix:
+					default:
+						return Environment.GetEnvironmentVariable("ADA_REPOSITORY_PATH");
+				}
+			}
+			set {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						Registry.LocalMachine.CreateSubKey("SOFTWARE").CreateSubKey("AdaTools").SetValue("PackageRepository", value);
+						break;
+					case PlatformID.Unix:
+					default:
+						Environment.SetEnvironmentVariable("ADA_REPOSITORY_PATH", value);
+						break;
 				}
 			}
 		}
