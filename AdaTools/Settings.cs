@@ -17,10 +17,10 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH")).Split(';'));
+						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH", EnvironmentVariableTarget.Machine)).Split(';'));
 					case PlatformID.Unix:
 					default:
-						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH")).Split(':'));
+						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH", EnvironmentVariableTarget.Machine)).Split(':'));
 				}
 			}
 			set {
@@ -28,11 +28,11 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(';', value));
+						Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(';', value), EnvironmentVariableTarget.Machine);
 						break;
 					case PlatformID.Unix:
 					default:
-						Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(':', value));
+						Environment.SetEnvironmentVariable("ADA_INCLUDE_PATH", String.Join(':', value), EnvironmentVariableTarget.Machine);
 						break;
 				}
 			}
@@ -48,10 +48,10 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH")).Split(';'));
+						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH", EnvironmentVariableTarget.Machine)).Split(';'));
 					case PlatformID.Unix:
 					default:
-						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH")).Split(':'));
+						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH", EnvironmentVariableTarget.Machine)).Split(':'));
 				}
 			}
 			set {
@@ -59,11 +59,11 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(';', value));
+						Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(';', value), EnvironmentVariableTarget.Machine);
 						break;
 					case PlatformID.Unix:
 					default:
-						Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(':', value));
+						Environment.SetEnvironmentVariable("ADA_OBJECTS_PATH", String.Join(':', value), EnvironmentVariableTarget.Machine);
 						break;
 				}
 			}
@@ -140,6 +140,7 @@ namespace AdaTools {
 			Console.WriteLine("Source Search Path: " + String.Join("  ", SourceSearchPath));
 			Console.WriteLine("Object Search Path: " + String.Join("  ", ObjectSearchPath));
 			Console.WriteLine("Package Database Path: " + PackageDatabasePath);
+			Console.WriteLine("Package Repository Path: " + PackageRepositoryPath);
 		}
 
 	}

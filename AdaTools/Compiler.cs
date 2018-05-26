@@ -24,13 +24,13 @@ namespace AdaTools {
 		/// <param name="Unit">Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(PackageUnit Unit, march march = march.native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+		public static void Compile(PackageUnit Unit, March march = March.Native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
 			String arch;
 			switch (march) {
-				case march.generic:
+				case March.Generic:
 					arch = "generic";
 					break;
-				case march.native:
+				case March.Native:
 				default:
 					arch = "native";
 					break;
@@ -70,13 +70,13 @@ namespace AdaTools {
 		/// <param name="Unit">Program Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(ProgramUnit Unit, march march = march.native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+		public static void Compile(ProgramUnit Unit, March march = March.Native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
 			String arch;
 			switch (march) {
-				case march.generic:
+				case March.Generic:
 					arch = "generic";
 					break;
-				case march.native:
+				case March.Native:
 				default:
 					arch = "native";
 					break;
