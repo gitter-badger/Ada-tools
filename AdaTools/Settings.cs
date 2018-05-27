@@ -8,6 +8,39 @@ namespace AdaTools {
 	public static class Settings {
 
 		/// <summary>
+		/// Whether packages are built upon install
+		/// </summary>
+		/// <remarks>
+		/// If this setting is true when a package is installed, instead of using the prebuilt generic library, it is build specifically for the native architecture. This is an optimization, but increases install times.
+		/// </remarks>
+		public static Boolean BuildPackagesOnInstall {
+			get {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						return (Boolean)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("AdaTools").GetValue("BuildPackages");
+					case PlatformID.Unix:
+					default:
+						return Boolean.Parse(Environment.GetEnvironmentVariable("ADA_BUILD_PACKAGES", EnvironmentVariableTarget.Machine));
+				}
+			}
+			set {
+				switch (Environment.OSVersion.Platform) {
+					case (PlatformID)1:
+					case (PlatformID)2:
+					case (PlatformID)3:
+						Registry.LocalMachine.CreateSubKey("SOFTWARE").CreateSubKey("AdaTools").SetValue("BuildPackages", value);
+						return;
+					case PlatformID.Unix:
+					default:
+						Environment.SetEnvironmentVariable("ADA_BUILD_PACKAGES", value.ToString(), EnvironmentVariableTarget.Machine);
+						return;
+				}
+			}
+		}
+
+		/// <summary>
 		/// The search path for source files
 		/// </summary>
 		/// <returns>A list of each source path</returns>

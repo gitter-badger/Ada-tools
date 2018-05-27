@@ -24,7 +24,7 @@ namespace AdaTools {
 		/// <param name="Unit">Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(PackageUnit Unit, March march = March.Native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+		public static void Compile(PackageUnit Unit, March march = March.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
 			String arch;
 			switch (march) {
 				case March.Generic:
@@ -70,7 +70,7 @@ namespace AdaTools {
 		/// <param name="Unit">Program Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(ProgramUnit Unit, March march = March.Native, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+		public static void Compile(ProgramUnit Unit, March march = March.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
 			String arch;
 			switch (march) {
 				case March.Generic:

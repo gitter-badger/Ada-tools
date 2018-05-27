@@ -64,7 +64,7 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void ParseVersion() {
-			AdaTools.Version Version = new Source("Both.ads").ParseVersion() ?? new AdaTools.Version(0, 0);
+			AdaTools.Version Version = new Source("Both.ads").ParseVersion();
 			Assert.AreEqual(new AdaTools.Version(1, 0), Version);
 		}
 

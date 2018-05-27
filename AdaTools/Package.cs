@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -54,48 +53,98 @@ namespace AdaTools {
 		/// <summary>
 		/// Create the package in the filesystem
 		/// </summary>
-		public void Create() {
-			// Try to set the .ali file readonly, as it needs to be or GNAT complains
-			// If the .ali file does not exist, we can safely assume the package has not been built
-			try {
-				File.SetAttributes(this.Name + ".ali", FileAttributes.ReadOnly);
-			} catch (FileNotFoundException) {
-				throw new PackageNotBuildException();
-			}
+		/// <param name="IncludeBody">Whether to include the body file or not. This is required for generic units and for native builds. Not including it makes the package closed source.</param>
+		public void Create(Boolean IncludeBody = true) {
 			// Create the actual archive and put everything necessary in it
-			using (FileStream File = new FileStream(this.Name + '.' + this.Variant + ".apkg", FileMode.Create)) {
+			String ArchiveName;
+			if (this.Variant is null || this.Variant == "") {
+				ArchiveName = this.Name + ".apkg";
+			} else {
+				ArchiveName = this.Name + "." + this.Variant + ".apkg";
+			}
+			using (FileStream File = new FileStream(ArchiveName, FileMode.Create)) {
 				using (ZipArchive Archive = new ZipArchive(File, ZipArchiveMode.Update)) {
-					Archive.CreateEntryFromFile(this.Name + ".ali", this.Name + ".ali");
-					Archive.CreateEntryFromFile(this.Name + ".ads", this.Name + ".ads");
-					Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
-					if (Environment.OSVersion.Platform <= (PlatformID)3) {
-						Archive.CreateEntryFromFile(this.Name + ".dll", this.Name + ".dll");
-					} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
-						Archive.CreateEntryFromFile(this.Name + ".so", this.Name + ".so");
+					try {
+						Archive.CreateEntryFromFile(this.Name + ".ali", this.Name + ".ali");
+						Archive.CreateEntryFromFile(this.Name + ".ads", this.Name + ".ads");
+						if (IncludeBody) {
+							Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
+						}
+						if (Environment.OSVersion.Platform <= (PlatformID)3) {
+							Archive.CreateEntryFromFile(this.Name + ".dll", this.Name + ".dll");
+						} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+							Archive.CreateEntryFromFile(this.Name + ".so", this.Name + ".so");
+						}
+					} catch (FileNotFoundException) {
+						// A file to be packaged was not found, so we can assume the package has not been built
+						throw new PackageNotBuildException();
 					}
+					// Create the package info file and write everything to it
 					ZipArchiveEntry InfoEntry = Archive.CreateEntry("info");
-					using (StreamWriter Info = new StreamWriter(InfoEntry.Open())) {
-						Info.WriteLine("Name: " + this.Name);
-						Info.WriteLine("Variant: " + this.Variant);
-						Info.WriteLine("Version: " + this.Version);
-						Info.WriteLine("Description: " + this.Description);
-						Info.WriteLine("Dependencies: " + this.Dependencies);
+					using (StreamWriter InfoFile = new StreamWriter(InfoEntry.Open())) {
+						this.Info(InfoFile);
 					}
-
 				}
 			}
+		}
+
+		/// <summary>
+		/// Write the info of this package out to the console
+		/// </summary>
+		public void Info() {
+			Console.WriteLine("Name: " + this.Name);
+			Console.WriteLine("Variant: " + this.Variant);
+			Console.WriteLine("Version: " + this.Version);
+			Console.WriteLine("Description: " + this.Description);
+			Console.WriteLine("Dependencies: " + String.Join(", ", this.Dependencies));
+		}
+
+		/// <summary>
+		/// Write the info of this package out to the specified <paramref name="Output"/> Stream
+		/// </summary>
+		/// <param name="Output">Output Stream to write to</param>
+		public void Info(StreamWriter Output) {
+			Output.WriteLine(this.Name);
+			Output.WriteLine(this.Variant);
+			Output.WriteLine(this.Version);
+			Output.WriteLine(this.Description);
+			Output.WriteLine(String.Join(',', this.Dependencies));
 		}
 
 		/// <summary>
 		/// Create an install package from the specified package unit
 		/// </summary>
 		/// <param name="PackageUnit">Unit to package</param>
-		public Package(PackageUnit PackageUnit, String Variant, String Description) {
+		public Package(PackageUnit PackageUnit, String Variant = "") {
 			this.Name = PackageUnit.Name;
 			this.Variant = Variant;
-			this.Version = new Source(PackageUnit.GetSpec()).ParseVersion() ?? new Version(0, 0);
+			this.Version = new Source(PackageUnit.GetSpec()).ParseVersion();
 			this.Description = new Source(PackageUnit.GetSpec()).ParseDescription();
 			this.Dependencies = PackageUnit.Dependencies;
+		}
+
+		/// <summary>
+		/// Parse an install package
+		/// </summary>
+		/// <param name="FileName">Filename of the install package</param>
+		public Package(String FileName) {
+			try {
+				using (FileStream File = new FileStream(FileName, FileMode.Open)) {
+					using (ZipArchive Archive = new ZipArchive(File, ZipArchiveMode.Read)) {
+						using (StreamReader Stream = new StreamReader(Archive.GetEntry("info").Open())) {
+							this.Name = Stream.ReadLine();
+							this.Variant = Stream.ReadLine();
+							this.Version = new Version(Stream.ReadLine());
+							this.Description = Stream.ReadLine();
+							this.Dependencies = new List<String>(Stream.ReadLine().Split(','));
+						}
+					}
+				}
+			} catch {
+				// If any of the above failed, we can pretty reliably assume it wasn't actually an install package we were reading.
+				//? Shouldn't the case of reading the package info be given a different exception if it's malformatted?
+				throw new NotInstallPackageException();
+			}
 		}
 
 	}

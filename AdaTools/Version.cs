@@ -15,6 +15,8 @@ namespace AdaTools {
 
 		public readonly UInt16 Patch;
 
+		public override String ToString() => this.Major.ToString() + '.' + this.Minor.ToString() + '.' + this.Patch.ToString();
+
 		public override Boolean Equals(Object Object) =>
 		(Object is Version) ?
 		this == (Version)Object : false;

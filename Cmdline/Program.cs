@@ -123,6 +123,23 @@ namespace Cmdline {
 						List.Each();
 						return;
 					}
+				case "pkg":
+				case "package":
+					if (Arguments.TryPop(out Mode)) {
+						switch (Mode.ToLower()) {
+							case "help":
+								Packager.FullHelp();
+								return;
+							case "info":
+								Packager.Info(Arguments);
+								return;
+							default:
+								throw new NotImplementedException();
+						}
+					} else {
+						Packager.Each();
+						return;
+					}
 				case "setting":
 				case "settings":
 					if (Arguments.TryPop(out Mode)) {
@@ -210,6 +227,7 @@ namespace Cmdline {
 			Dependencies.Help();
 			Files.Help();
 			List.Help();
+			Packager.Help();
 			Types.Help();
 		}
 	}

@@ -2,6 +2,7 @@
 use Ada.Text_IO, Spec;
 
 package Both is
+--@version 1.0
 
 	type TestInt is range 0 .. 1;
 
