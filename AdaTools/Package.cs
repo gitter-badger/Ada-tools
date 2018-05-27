@@ -55,13 +55,14 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="IncludeBody">Whether to include the body file or not. This is required for generic units and for native builds. Not including it makes the package closed source.</param>
 		public void Create(Boolean IncludeBody = true) {
-			// Create the actual archive and put everything necessary in it
+			// Figure out how to name the archive.
 			String ArchiveName;
 			if (this.Variant is null || this.Variant == "") {
 				ArchiveName = this.Name + ".apkg";
 			} else {
 				ArchiveName = this.Name + "." + this.Variant + ".apkg";
 			}
+			// Create the actual archive and put everything necessary in it
 			using (FileStream File = new FileStream(ArchiveName, FileMode.Create)) {
 				using (ZipArchive Archive = new ZipArchive(File, ZipArchiveMode.Update)) {
 					try {
@@ -82,7 +83,7 @@ namespace AdaTools {
 					// Create the package info file and write everything to it
 					ZipArchiveEntry InfoEntry = Archive.CreateEntry("info");
 					using (StreamWriter InfoFile = new StreamWriter(InfoEntry.Open())) {
-						this.Info(InfoFile);
+						this.WriteInfo(InfoFile);
 					}
 				}
 			}
@@ -91,7 +92,7 @@ namespace AdaTools {
 		/// <summary>
 		/// Write the info of this package out to the console
 		/// </summary>
-		public void Info() {
+		public void WriteInfo() {
 			Console.WriteLine("Name: " + this.Name);
 			Console.WriteLine("Variant: " + this.Variant);
 			Console.WriteLine("Version: " + this.Version);
@@ -103,7 +104,7 @@ namespace AdaTools {
 		/// Write the info of this package out to the specified <paramref name="Output"/> Stream
 		/// </summary>
 		/// <param name="Output">Output Stream to write to</param>
-		public void Info(StreamWriter Output) {
+		public void WriteInfo(StreamWriter Output) {
 			Output.WriteLine(this.Name);
 			Output.WriteLine(this.Variant);
 			Output.WriteLine(this.Version);

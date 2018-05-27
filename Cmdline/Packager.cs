@@ -18,7 +18,7 @@ namespace Cmdline {
 		internal static void Info(Stack<String> Arguments) {
 			foreach (String Name in Arguments) {
 				try {
-					new Package(Name).Info();
+					new Package(Name).WriteInfo();
 				} catch (NotInstallPackageException) {
 					Console.WriteLine("\"Name\" doesn't appear to be an install package");
 				}
