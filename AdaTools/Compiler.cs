@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace AdaTools {
@@ -13,6 +14,16 @@ namespace AdaTools {
 			Process GnatClean = Process.Start("gnatclean", String.Join(' ', Unit.GetFiles()));
 			GnatClean.WaitForExit(); // We wait only because concurrent processes do terrible things to the command line text. This could be fixed by buffering the output then oneshot printing it.
 			GnatClean.Dispose();
+			foreach (String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
+				switch (Path.GetExtension(FileName).ToUpper()) {
+					case ".APKG":
+						File.Delete(FileName);
+						Console.WriteLine("\"." + Path.DirectorySeparatorChar + Path.GetFileName(FileName) + "\" has been deleted");
+						break;
+					default:
+						continue;
+				}
+			}
 		}
 
 		/// <summary>

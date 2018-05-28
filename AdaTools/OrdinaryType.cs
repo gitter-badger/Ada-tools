@@ -27,8 +27,28 @@ namespace AdaTools {
 			if (this.Range is null) this.Range = (Type as OrdinaryType).Range;
 		}
 
+		public override String ToString() {
+			if (this.Range is null) {
+				return "type " + this.Name + " is delta " + this.Delta + ";";
+			} else {
+				return "type " + this.Name + " is delta " + this.Delta + " range " + this.Range + ";";
+			}
+		}
+
+		public override Boolean Equals(Object obj) {
+			if (!(obj is OrdinaryType)) return false;
+			return this.Delta == (obj as OrdinaryType).Delta
+				&& this.Range == (obj as OrdinaryType).Range;
+		}
+
+		public override Int32 GetHashCode() => base.GetHashCode();
+
 		public OrdinaryType(String Name, Double Delta) : base(Name) {
 			this.Delta = Delta;
+		}
+
+		public OrdinaryType(String Name, Double Delta, Double Lower, Double Upper) : this(Name, Delta, new Range<Double>(Lower, Upper)) {
+
 		}
 
 		public OrdinaryType(String Name, Double Delta, Range<Double> Range) : this(Name, Delta) {

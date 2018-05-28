@@ -19,7 +19,6 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Type">Type definition to add.</param>
 		public void Add(Type Type) {
-			Console.WriteLine("Types.Add()");
 			if (Type is null) return;
 			foreach (Type T in this.Collection) {
 				if (T == Type) {
@@ -28,11 +27,9 @@ namespace AdaTools {
 				}
 			}
 			this.Collection.Add(Type);
-			Console.WriteLine("Count: " + this.Collection.Count);
 		}
 
 		public void Add(params Type[] Types) {
-			Console.WriteLine(".Add(params Type[])");
 			if (Types is null) return;
 			foreach (Type T in Types) {
 				this.Add(T);
@@ -40,7 +37,6 @@ namespace AdaTools {
 		}
 
 		public void Add(IEnumerable<Type> Types) {
-			Console.WriteLine(".Add(IEnumerable<Type>");
 			if (Types is null) return;
 			foreach (Type T in Types) {
 				this.Add(T);
@@ -68,12 +64,10 @@ namespace AdaTools {
 		}
 
 		IEnumerator IEnumerable.GetEnumerator() {
-			Console.WriteLine("this.Collection.Count: " + this.Collection.Count);
 			return new TypesEnumerator(this.Collection);
 		}
 
 		IEnumerator<Type> IEnumerable<Type>.GetEnumerator() {
-			Console.WriteLine("this.Collection.Count: " + this.Collection.Count);
 			return new TypesEnumerator(this.Collection);
 		}
 

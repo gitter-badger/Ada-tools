@@ -71,14 +71,10 @@ namespace AdaTools {
 		/// </summary>
 		public Types Types {
 			get {
-				Console.WriteLine("get Types");
 				Types Types = new Types();
 				foreach (Unit U in this.Units) {
-					Console.WriteLine("Unit: " + U.Name);
-					Console.WriteLine("Unit.Types.Count: " + U.Types.Count);
 					Types.Add(U.Types);
 				}
-				Console.WriteLine("Types.Count: " + Types.Count);
 				return Types;
 			}
 		}

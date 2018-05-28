@@ -16,6 +16,15 @@ namespace AdaTools {
 
 		public Boolean? Contains(UInt64 Value) => (this.Modulus is null) ? null : (Boolean?)(Value >= 0 && Value <= this.Modulus - 1);
 
+		public override String ToString() => "type " + this.Name + " is mod " + this.Modulus + ";";
+
+		public override Boolean Equals(Object obj) {
+			if (!(obj is ModularType)) return false;
+			return this.Modulus == (obj as ModularType).Modulus;
+		}
+
+		public override Int32 GetHashCode() => base.GetHashCode();
+
 		public ModularType(String Name) : base(Name) {
 
 		}

@@ -86,7 +86,6 @@ namespace AdaTools {
 		/// </remarks>
 		/// <param name="Name">The name of the package</param>
 		public PackageUnit(String Name) : base(Name) {
-			Console.WriteLine("new PackageUnit");
 
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;
@@ -119,7 +118,6 @@ namespace AdaTools {
 				BodySource = null;
 				this.HasBody = false;
 			}
-			Console.WriteLine("Types.Count: " + this.Types);
 
 			// Validate all the names match up
 			if (SpecName != null && this.Name.ToLower() != SpecName.ToLower()) throw new PackageNameDoesNotMatchException();

@@ -26,9 +26,30 @@ namespace AdaTools {
 			if (this.Range is null) this.Range = (Type as DecimalType).Range;
 		}
 
+		public override String ToString() {
+			if (this.Range is null) {
+				return "type " + this.Name + " is delta " + this.Delta + ";";
+			} else {
+				return "type " + this.Name + " is delta " + this.Delta + " range " + this.Range + ";";
+			}
+		}
+
+		public override Boolean Equals(Object obj) {
+			if (!(obj is DecimalType)) return false;
+			return this.Delta == (obj as DecimalType).Delta
+				&& this.Digits == (obj as DecimalType).Digits
+				&& this.Range == (obj as DecimalType).Range;
+		}
+
+		public override Int32 GetHashCode() => base.GetHashCode();
+
 		public DecimalType(String Name, Decimal Delta, UInt16 Digits) : base(Name) {
 			this.Delta = Delta;
 			this.Digits = Digits;
+		}
+
+		public DecimalType(String Name, Decimal Delta, UInt16 Digits, Decimal Lower, Decimal Upper) : this(Name, Delta, Digits, new Range<Decimal>(Lower, Upper)) {
+
 		}
 
 		public DecimalType(String Name, Decimal Delta, UInt16 Digits, Range<Decimal> Range) : this(Name, Delta, Digits) {

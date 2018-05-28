@@ -40,6 +40,8 @@ namespace AdaTools {
 			return Range.Lower.CompareTo(this.Lower) >= 0 && Range.Upper.CompareTo(this.Upper) <= 0;
 		}
 
+		public override String ToString() => this.Lower + ".." + this.Upper;
+
 		public override Boolean Equals(Object obj) => (obj is Range<Type>) && this == (Range<Type>)obj;
 
 		public override Int32 GetHashCode() => base.GetHashCode();

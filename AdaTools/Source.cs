@@ -367,39 +367,83 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>The types found</returns>
 		public Types ParseTypes() {
-			Console.WriteLine("ParseTypes()");
 			Types Types = new Types();
 			String[] Candidates = this.Matches(new Regex(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;", RegexOptions.IgnoreCase | RegexOptions.Singleline));
 			Stack<String> Split;
 			String TypeName;
 			String TypeRange;
 			foreach (String Candidate in Candidates) {
-				Console.WriteLine("Candidate: " + Candidate);
 				if (new Regex(@"\btype\s+(\w|_)+\s+is\s+range\s+\d+\s*\.\.\s*\d+\s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
-					Console.WriteLine("Signed Integer");
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
-					Console.WriteLine("TypeName: " + TypeName);
 					Split.Pop(); // "is"
 					Split.Pop(); // "range"
-					TypeRange = String.Join(null, Split); //Join the remaining candidate back together, because it's going to be split differently
+					TypeRange = String.Join(null, Split); // Join the remaining candidate back together, because it's going to be split differently
 					Int64 Lower = Int64.Parse(TypeRange.Split("..")[0]);
 					Int64 Upper = Int64.Parse(TypeRange.Split("..")[1]);
-					Console.WriteLine("Range: " + Lower + " to " + Upper);
 					Types.Add(new SignedType(TypeName, new Range<Int64>(Lower, Upper)));
-				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+mod\s+\d+s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
-					Console.WriteLine("Modular Integer");
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+mod\s+\d+\s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
-					Console.WriteLine("TypeName: " + TypeName);
 					Split.Pop(); // "is"
 					Split.Pop(); // "mod"
-					TypeRange = Split.Pop();
-					UInt32 Mod = UInt32.Parse(TypeRange);
-					Console.WriteLine("Mod: " + Mod);
+					UInt32 Mod = UInt32.Parse(Split.Pop());
 					Types.Add(new ModularType(TypeName, Mod));
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+digits\s+\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
+					Split.Pop(); // "type"
+					TypeName = Split.Pop();
+					Split.Pop(); // "is"
+					Split.Pop(); // "digits"
+					UInt16 Digits = UInt16.Parse(Split.Pop());
+					// If there is more than 2 items on the stack, there is definately a range clause, so parse that too
+					if (Split.Count >= 2) {
+						Split.Pop(); // "range"
+						TypeRange = String.Join(null, Split); // Join the remaining candidate back together, because it's going to be split differently
+						Double Lower = Double.Parse(TypeRange.Split("..")[0]);
+						Double Upper = Double.Parse(TypeRange.Split("..")[1]);
+						Types.Add(new FloatType(TypeName, Digits, new Range<Double>(Lower, Upper)));
+					} else {
+						Types.Add(new FloatType(TypeName, Digits));
+					}
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+delta\s+\d+\.\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
+					Split.Pop(); // "type"
+					TypeName = Split.Pop();
+					Split.Pop(); // "is"
+					Split.Pop(); // "delta"
+					Double Delta = Double.Parse(Split.Pop());
+					// If there is more than 2 items on the stack, there is definately a range clause, so parse that too
+					if (Split.Count >= 2) {
+						Split.Pop(); // "range"
+						TypeRange = String.Join(null, Split); // Join the remaining candidate back together, because it's going to be split differently
+						Double Lower = Double.Parse(TypeRange.Split("..")[0]);
+						Double Upper = Double.Parse(TypeRange.Split("..")[1]);
+						Types.Add(new OrdinaryType(TypeName, Delta, Lower, Upper));
+					} else {
+						Types.Add(new OrdinaryType(TypeName, Delta));
+					}
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+delta\s+\d+\.\d+\s+digits\s+\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
+					Split.Pop(); // "type"
+					TypeName = Split.Pop();
+					Split.Pop(); // "is"
+					Split.Pop(); // "delta"
+					Decimal Delta = Decimal.Parse(Split.Pop());
+					Split.Pop(); // "digits"
+					UInt16 Digits = UInt16.Parse(Split.Pop());
+					// If there is more than 2 items on the stack, there is definately a range clause, so parse that too
+					if (Split.Count >= 2) {
+						Split.Pop(); // "range"
+						TypeRange = String.Join(null, Split); // Join the remaining candidate back together, because it's going to be split differently
+						Decimal Lower = Decimal.Parse(TypeRange.Split("..")[0]);
+						Decimal Upper = Decimal.Parse(TypeRange.Split("..")[1]);
+						Types.Add(new DecimalType(TypeName, Delta, Digits, Lower, Upper));
+					} else {
+						Types.Add(new DecimalType(TypeName, Delta, Digits));
+					}
 				} else {
 					continue;
 				}

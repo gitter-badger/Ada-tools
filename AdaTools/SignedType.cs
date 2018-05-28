@@ -28,7 +28,20 @@ namespace AdaTools {
 			if (this.Range is null) this.Range = (Type as SignedType).Range;
 		}
 
+		public override String ToString() => "type " + this.Name + " is range " + this.Range + ";";
+
+		public override Boolean Equals(Object obj) {
+			if (!(obj is SignedType)) return false;
+			return this.Range == (obj as SignedType).Range;
+		}
+
+		public override Int32 GetHashCode() => base.GetHashCode();
+
 		public SignedType(String Name) : base(Name) {
+
+		}
+
+		public SignedType(String Name, Int16 Lower, Int16 Upper) : this(Name, new Range<Int16>(Lower, Upper)) {
 
 		}
 
@@ -36,8 +49,16 @@ namespace AdaTools {
 			this.Range = new Range<Int64>(Range.Lower, Range.Upper);
 		}
 
+		public SignedType(String Name, Int32 Lower, Int32 Upper) : this(Name, new Range<Int32>(Lower, Upper)) {
+
+		}
+
 		public SignedType(String Name, Range<Int32> Range) : base(Name) {
 			this.Range = new Range<Int64>(Range.Lower, Range.Upper);
+		}
+
+		public SignedType(String Name, Int64 Lower, Int64 Upper) : this(Name, new Range<Int64>(Lower, Upper)) {
+
 		}
 
 		public SignedType(String Name, Range<Int64> Range) : base(Name) {

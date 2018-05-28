@@ -59,13 +59,18 @@ namespace AdaToolsTests {
 		[TestMethod]
 		public void ParseTypes() {
 			Types Types = new Source("Both.ads").ParseTypes();
-			Assert.AreEqual(1, Types.Count);
+			Assert.AreEqual(new SignedType("TestInt", 0, 1), Types["TestInt"]);
+			Assert.AreEqual(new ModularType("TestMod", 8), Types["TestMod"]);
+			Assert.AreEqual(new FloatType("TestFloat", 8), Types["TestFloat"]);
+			Assert.AreEqual(new FloatType("TestFloatRange", 8, 0.0, 12.0), Types["TestFloatRange"]);
+			Assert.AreEqual(new OrdinaryType("TestFixed", 0.01, 0.0, 8.0), Types["TestFixed"]);
+			Assert.AreEqual(new DecimalType("TestDecimal", 0.1m, 8), Types["TestDecimal"]);
+			Assert.AreEqual(new DecimalType("TestDecimalRange", 0.1m, 8, 0.0m, 10.0m), Types["TestDecimalRange"]);
 		}
 
 		[TestMethod]
 		public void ParseVersion() {
-			AdaTools.Version Version = new Source("Both.ads").ParseVersion();
-			Assert.AreEqual(new AdaTools.Version(1, 0), Version);
+			Assert.AreEqual(new AdaTools.Version(1, 0), new Source("Both.ads").ParseVersion());
 		}
 
 	}

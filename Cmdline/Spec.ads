@@ -4,4 +4,5 @@
 	pragma Pure(Spec);
 
 	Name : constant String := "Ada-tools";
+
 end Spec;

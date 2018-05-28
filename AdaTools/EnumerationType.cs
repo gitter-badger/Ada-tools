@@ -17,6 +17,15 @@ namespace AdaTools {
 			return false;
 		}
 
+		public override String ToString() => "type " + this.Name + " is (" + String.Join(", ", this.Values) + ");";
+
+		public override Boolean Equals(Object obj) {
+			if (!(obj is EnumerationType)) return false;
+			return this.Values == (obj as EnumerationType).Values;
+		}
+
+		public override Int32 GetHashCode() => base.GetHashCode();
+
 		public EnumerationType(String Name, params String[] Values) : base(Name) {
 			this.Values = Values;
 		}
