@@ -41,7 +41,7 @@ namespace AdaTools {
 				&& this.Range == (obj as OrdinaryType).Range;
 		}
 
-		public override Int32 GetHashCode() => base.GetHashCode();
+		public override Int32 GetHashCode() => this.Delta.GetHashCode() ^ this.Range.GetHashCode();
 
 		public OrdinaryType(String Name, Double Delta) : base(Name) {
 			this.Delta = Delta;

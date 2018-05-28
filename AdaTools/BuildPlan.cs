@@ -11,7 +11,6 @@ namespace AdaTools {
 	/// <para>This is, essentially, a priority queue. The exact implementation may change, but it will always semantically be a priority queue.</para>
 	/// </remarks>
 	public sealed class BuildPlan : IEnumerable<Unit> {
-		//TODO: If the plan is, instead, a jagged polylist, each level can indicate units that can be built concurrently or even distributively. Respectively, a higher level or lower level would indicate dependent upon or dependency of (potentially). This would offer potentially huge improvements to build time, especially as I've noticed over the years that the GNAT planner is deficient. This feature is low on the priority list currently, as the build system needs to actually _work_ first, and the major benefit to structuring the build plan that way only shows up on massively parallel systems. Either a large number of cores or a collection of build servers is needed; this requires an actual build service/daemon be built.
 
 		/// <summary>
 		/// The actual plan itself

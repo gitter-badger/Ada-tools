@@ -41,7 +41,7 @@ namespace AdaTools {
 				&& this.Range == (obj as DecimalType).Range;
 		}
 
-		public override Int32 GetHashCode() => base.GetHashCode();
+		public override Int32 GetHashCode() => this.Delta.GetHashCode() ^ this.Digits.GetHashCode() ^ this.Range.GetHashCode();
 
 		public DecimalType(String Name, Decimal Delta, UInt16 Digits) : base(Name) {
 			this.Delta = Delta;

@@ -23,7 +23,7 @@ namespace AdaTools {
 			return this.Modulus == (obj as ModularType).Modulus;
 		}
 
-		public override Int32 GetHashCode() => base.GetHashCode();
+		public override Int32 GetHashCode() => this.Modulus.GetHashCode();
 
 		public ModularType(String Name) : base(Name) {
 

@@ -24,7 +24,13 @@ namespace AdaTools {
 			return this.Values == (obj as EnumerationType).Values;
 		}
 
-		public override Int32 GetHashCode() => base.GetHashCode();
+		public override Int32 GetHashCode() {
+			Int32 Result = 0;
+			foreach (String Value in this.Values) {
+				Result ^= Value.GetHashCode();
+			}
+			return Result;
+		}
 
 		public EnumerationType(String Name, params String[] Values) : base(Name) {
 			this.Values = Values;

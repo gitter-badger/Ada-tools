@@ -21,7 +21,7 @@ namespace AdaTools {
 		(Object is Version) ?
 		this == (Version)Object : false;
 
-		public override Int32 GetHashCode() => this.Major ^ this.Minor ^ this.Patch;
+		public override Int32 GetHashCode() => this.Major.GetHashCode() ^ this.Minor.GetHashCode() ^ this.Patch.GetHashCode();
 
 		public static Boolean operator ==(Version Left, Version Right) => (Left.Major == Right.Major && Left.Minor == Right.Minor && Left.Patch == Right.Patch);
 

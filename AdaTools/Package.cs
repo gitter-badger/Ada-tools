@@ -112,6 +112,8 @@ namespace AdaTools {
 			Output.WriteLine(String.Join(',', this.Dependencies));
 		}
 
+		public override Int32 GetHashCode() => this.Name.GetHashCode() ^ this.Variant.GetHashCode() ^ this.Version.GetHashCode();
+
 		/// <summary>
 		/// Create an install package from the specified package unit
 		/// </summary>

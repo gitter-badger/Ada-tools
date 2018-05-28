@@ -35,7 +35,7 @@ namespace AdaTools {
 			return this.Range == (obj as SignedType).Range;
 		}
 
-		public override Int32 GetHashCode() => base.GetHashCode();
+		public override Int32 GetHashCode() => this.Range.GetHashCode();
 
 		public SignedType(String Name) : base(Name) {
 

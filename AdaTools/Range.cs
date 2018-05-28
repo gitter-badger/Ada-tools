@@ -44,7 +44,7 @@ namespace AdaTools {
 
 		public override Boolean Equals(Object obj) => (obj is Range<Type>) && this == (Range<Type>)obj;
 
-		public override Int32 GetHashCode() => base.GetHashCode();
+		public override Int32 GetHashCode() => this.Lower.GetHashCode() ^ this.Upper.GetHashCode();
 
 		public static Boolean operator ==(Range<Type> Left, Range<Type> Right) => Left.Lower.Equals(Right.Lower) && Left.Upper.Equals(Right.Upper);
 

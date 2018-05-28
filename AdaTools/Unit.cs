@@ -116,6 +116,8 @@ namespace AdaTools {
 		/// <returns>True if a dependency, false otherwise</returns>
 		public Boolean DependsOn(Unit Unit) => this.Dependencies.Contains(Unit.Name);
 
+		public override Int32 GetHashCode() => this.Name.GetHashCode();
+
 		protected Unit(String Name) {
 			this.Name = Name;
 		}
