@@ -18,7 +18,9 @@ namespace AdaToolsTests {
 		public void Add() {
 			Types Types = new Types(new SignedType("Integer"));
 			Assert.AreEqual(1, Types.Count);
-			Types.Add(new ModularType("Modular", 2 ^ 32));
+			Types.Add(new FloatType("Float", 8));
+			Assert.AreEqual(2, Types.Count);
+			Types.Add(new FloatType("Float", 8, 0.0, 8.0)); // This should join, not add
 			Assert.AreEqual(2, Types.Count);
 		}
 
@@ -29,6 +31,11 @@ namespace AdaToolsTests {
 			Types Types = new Types(Integer, Modular);
 			Assert.AreEqual(Integer, Types["Integer"]);
 			Assert.AreEqual(Modular, Types["Modular"]);
+			Types.Add(new FloatType("Float", 8));
+			Assert.AreEqual(new FloatType("Float", 8), Types["Float"]);
+			Types.Add(new FloatType("Float", 8, 0.0, 8.0)); // This should join, not add
+			Assert.AreNotEqual(new FloatType("Float", 8), Types["Float"]);
+			Assert.AreEqual(new FloatType("Float", 8, 0.0, 8.0), Types["Float"]);
 		}
 
 	}

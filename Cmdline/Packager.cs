@@ -20,7 +20,7 @@ namespace Cmdline {
 				try {
 					new Package(Name).WriteInfo();
 				} catch (NotInstallPackageException) {
-					Console.WriteLine("\"Name\" doesn't appear to be an install package");
+					Console.WriteLine("\"" + Name + "\" doesn't appear to be an install package");
 				}
 			}
 		}

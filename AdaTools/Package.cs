@@ -77,8 +77,7 @@ namespace AdaTools {
 							Archive.CreateEntryFromFile(this.Name + ".so", this.Name + ".so");
 						}
 					} catch (FileNotFoundException) {
-						// A file to be packaged was not found, so we can assume the package has not been built
-						throw new PackageNotBuildException();
+						goto Cleanup; // This goto is so that we can move outside of the `using` block, where File has been properly closed and disposed of, so that we can delete it.
 					}
 					// Create the package info file and write everything to it
 					ZipArchiveEntry InfoEntry = Archive.CreateEntry("info");
@@ -87,6 +86,12 @@ namespace AdaTools {
 					}
 				}
 			}
+			return; // Proper execution stops here
+Cleanup:
+			// Delete the archive, since we can't properly create it
+			System.IO.File.Delete(ArchiveName);
+			// A file to be packaged was not found, so we can assume the package has not been built
+			throw new PackageNotBuildException();
 		}
 
 		/// <summary>
