@@ -24,22 +24,22 @@ namespace Cmdline {
 				return;
 			}
 			// Do whatever the operation is
-			switch (Operation.ToLower()) {
-				case "help":
+			switch (Operation.ToUpper()) {
+				case "HELP":
 					Program.Help();
 					break;
-				case "build":
-				case "compile":
-				case "make":
+				case "BUILD":
+				case "COMPILE":
+				case "MAKE":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "flags":
+						switch (Mode.ToUpper()) {
+							case "FLAGS":
 								Build.Flags();
 								return;
-							case "help":
+							case "HELP":
 								Build.FullHelp();
 								return;
-							case "plan":
+							case "PLAN":
 								Build.Plan();
 								return;
 							default:
@@ -49,15 +49,15 @@ namespace Cmdline {
 						Build.Simple();
 						return;
 					}
-				case "clean":
+				case "CLEAN":
 					Cleaner.Clean();
 					return;
-				case "config":
-				case "configure":
-				case "configuration":
+				case "CONFIG":
+				case "CONFIGURE":
+				case "CONFIGURATION":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "help":
+						switch (Mode.ToUpper()) {
+							case "HELP":
 								Config.FullHelp();
 								return;
 							default:
@@ -67,19 +67,19 @@ namespace Cmdline {
 						Config.Interactive();
 						return;
 					}
-				case "dep":
-				case "deps":
-				case "depend":
-				case "depends":
-				case "dependency":
-				case "dependencies":
+				case "DEP":
+				case "DEPS":
+				case "DEPEND":
+				case "DEPENDS":
+				case "DEPENDENCY":
+				case "DEPENDENCIES":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "all":
-							case "project":
+						switch (Mode.ToUpper()) {
+							case "ALL":
+							case "PROJECT":
 								Dependencies.Project();
 								return;
-							case "help":
+							case "HELP":
 								Dependencies.FullHelp();
 								return;
 							default:
@@ -90,11 +90,11 @@ namespace Cmdline {
 						Dependencies.Each();
 						return;
 					}
-				case "file":
-				case "files":
+				case "FILE":
+				case "FILES":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "help":
+						switch (Mode.ToUpper()) {
+							case "HELP":
 								Files.FullHelp();
 								return;
 							default:
@@ -106,14 +106,14 @@ namespace Cmdline {
 						Files.Each();
 						return;
 					}
-				case "list":
-				case "units":
+				case "LIST":
+				case "UNITS":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "help":
+						switch (Mode.ToUpper()) {
+							case "HELP":
 								List.FullHelp();
 								return;
-							case "table":
+							case "TABLE":
 								List.Table();
 								return;
 							default:
@@ -123,14 +123,14 @@ namespace Cmdline {
 						List.Each();
 						return;
 					}
-				case "pkg":
-				case "package":
+				case "PKG":
+				case "PACKAGE":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "help":
+						switch (Mode.ToUpper()) {
+							case "HELP":
 								Packager.FullHelp();
 								return;
-							case "info":
+							case "INFO":
 								Packager.Info(Arguments);
 								return;
 							default:
@@ -140,53 +140,53 @@ namespace Cmdline {
 						Packager.Each();
 						return;
 					}
-				case "setting":
-				case "settings":
+				case "SETTING":
+				case "SETTINGS":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "obj":
-							case "objs":
-							case "object":
-							case "objects":
+						switch (Mode.ToUpper()) {
+							case "OBJ":
+							case "OBJS":
+							case "OBJECT":
+							case "OBJECTS":
 								if (Arguments.Count >= 1) {
 									Settings.ObjectSearchPath = new List<String>(Arguments);
 								} else {
 									Console.WriteLine(String.Join(' ', Settings.ObjectSearchPath));
 								}
 								return;
-							case "pkg":
-							case "package":
+							case "PKG":
+							case "PACKAGE":
 								if (Arguments.TryPop(out Mode)) {
-									switch (Mode.ToLower()) {
-										case "db":
-										case "database":
+									switch (Mode.ToUpper()) {
+										case "DB":
+										case "DATABASE":
 											break;
 										default:
 											throw new UnknownOperationException();
 									}
-									goto case "pkgdb";
+									goto case "PKGDB";
 								} else {
 									throw new UnknownOperationException();
 								}
-							case "pkgdb":
-							case "packagedb":
-							case "packagedatabase":
+							case "PKGDB":
+							case "PACKAGEDB":
+							case "PACKAGEDATABASE":
 								if (Arguments.Count >= 1) {
 									Settings.PackageDatabasePath = String.Join(' ', Arguments);
 								} else {
 									Console.WriteLine(Settings.PackageDatabasePath);
 								}
 								return;
-							case "repo":
-							case "repository":
+							case "REPO":
+							case "REPOSITORY":
 								if (Arguments.Count >= 1) {
 									Settings.PackageRepositoryPath = String.Join(' ', Arguments);
 								} else {
 									Console.WriteLine(Settings.PackageRepositoryPath);
 								}
 								return;
-							case "source":
-							case "sources":
+							case "SOURCE":
+							case "SOURCES":
 								if (Arguments.Count >= 1) {
 									Settings.SourceSearchPath = new List<String>(Arguments);
 								} else {
@@ -200,10 +200,10 @@ namespace Cmdline {
 						Settings.Print();
 						return;
 					}
-				case "types":
+				case "TYPES":
 					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToLower()) {
-							case "help":
+						switch (Mode.ToUpper()) {
+							case "HELP":
 								Types.FullHelp();
 								return;
 							default:
