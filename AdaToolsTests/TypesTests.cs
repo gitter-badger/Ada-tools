@@ -25,6 +25,29 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void AddGroup() {
+			Types Types = new Types();
+			Types.Add(new SignedType("Int1"), new SignedType("Int2"));
+			Assert.AreEqual(2, Types.Count);
+		}
+
+		[TestMethod]
+		public void Combine() {
+			Types Types1 = new Types(new SignedType("Int1"), new SignedType("Int2"));
+			Types Types2 = new Types(new ModularType("Mod1"), new ModularType("Mod2"));
+			Types CombinedTypes = new Types();
+			Assert.AreEqual(0, CombinedTypes.Count);
+			CombinedTypes.Add(Types1);
+			Assert.AreEqual(2, CombinedTypes.Count);
+			CombinedTypes.Add(Types2);
+			Assert.AreEqual(4, CombinedTypes.Count);
+			CombinedTypes.Add();
+			Assert.AreEqual(4, CombinedTypes.Count);
+			CombinedTypes.Add(new Types());
+			Assert.AreEqual(4, CombinedTypes.Count);
+		}
+
+		[TestMethod]
 		public void Indexer() {
 			SignedType Integer = new SignedType("Integer");
 			ModularType Modular = new ModularType("Modular", 2 ^ 32);

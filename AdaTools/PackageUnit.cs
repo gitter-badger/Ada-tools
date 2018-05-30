@@ -87,6 +87,9 @@ namespace AdaTools {
 		/// <param name="Name">The name of the package</param>
 		public PackageUnit(String Name) : base(Name) {
 
+			// These are managed collections, and need to be initialized now before we add to them
+			this.Types = new Types();
+
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;
 			String SpecName = null;
@@ -98,7 +101,7 @@ namespace AdaTools {
 				this.Dependencies.AddRange(SpecSource.ParseDependencies());
 				this.IsPure = SpecSource.ParsePurity();
 				this.IsRemoteCallInterface = SpecSource.ParseRemoteCallInterface();
-				this.Types = SpecSource.ParseTypes();
+				this.Types.Add(SpecSource.ParseTypes());
 			} catch {
 				SpecSource = null;
 				this.HasSpec = false;
@@ -113,7 +116,7 @@ namespace AdaTools {
 				BodyName = BodySource.ParseName();
 				this.HasBody = true;
 				this.Dependencies.AddRange(BodySource.ParseDependencies());
-				this.Types = BodySource.ParseTypes();
+				this.Types.Add(BodySource.ParseTypes());
 			} catch {
 				BodySource = null;
 				this.HasBody = false;

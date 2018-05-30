@@ -7,9 +7,8 @@ namespace Cmdline {
 	public static class Types {
 
 		public static void Each() {
-			Console.WriteLine("Types.Each()");
 			foreach (AdaTools.Type T in new Project().Types) {
-				Console.WriteLine(T.Name);
+				Console.Write(T.Name + "  ");
 			}
 		}
 

@@ -28,13 +28,7 @@ namespace AdaTools {
 		public void Reset() => this.Index = -1;
 
 		public TypesEnumerator(List<Type> Types) {
-			Console.WriteLine("new TypesEnumerator");
-			Console.WriteLine("Types.Count: " + Types.Count);
 			this.Types = Types.ToArray();
-			Console.WriteLine("this.Types.Count: " + this.Types.Length);
-			foreach (Type Type in Types) {
-				Console.WriteLine(Type.Name);
-			}
 		}
 
 	}

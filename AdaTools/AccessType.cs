@@ -7,10 +7,14 @@ namespace AdaTools {
 	/// Represents an access type
 	/// </summary>
 	public sealed class AccessType : ElementaryType {
-		//TODO: This doesn't actually do anything, but it needs to
 
-		public AccessType(String Name) : base(Name) {
+		/// <summary>
+		/// The actual type this accesses
+		/// </summary>
+		public readonly Type Accesses;
 
+		public AccessType(String Name, Type Accesses) : base(Name) {
+			this.Accesses = Accesses;
 		}
 	}
 }

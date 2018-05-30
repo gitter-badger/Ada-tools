@@ -36,14 +36,11 @@ namespace AdaTools {
 			}
 		}
 
-		public void Add(IEnumerable<Type> Types) {
-			if (Types is null) return;
-			foreach (Type T in Types) {
-				this.Add(T);
+		public void Add(Types Types) {
+			foreach (Type Type in Types.Collection) {
+				this.Add(Type);
 			}
 		}
-
-		public void Add(Types Types) => this.Add(Types?.Collection);
 
 		public Boolean Contains(Type Type) => this.Collection.Contains(Type);
 
