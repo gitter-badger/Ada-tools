@@ -38,7 +38,7 @@ namespace AdaTools {
 		/// <summary>
 		/// All the units in this project
 		/// </summary>
-		public List<Unit> Units { get; private set; }
+		public Units Units { get; private set; }
 
 		/// <summary>
 		/// All the packages in this project
@@ -110,7 +110,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Location">Location of the project</param>
 		public Project(String Location) {
-			this.Units = new List<Unit>();
+			this.Units = new Units();
 			List<String> AdaSources = new List<String>();
 			// Assign the project name to the current directory
 			this.Name = new DirectoryInfo(Location).Name;

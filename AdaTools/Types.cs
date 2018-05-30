@@ -17,7 +17,7 @@ namespace AdaTools {
 		/// <summary>
 		/// Add the <paramref name="Type"/> definition to the collection, joining the definitions if one already exists
 		/// </summary>
-		/// <param name="Type">Type definition to add.</param>
+		/// <param name="Type">Type definition to add</param>
 		public void Add(Type Type) {
 			if (Type is null) return;
 			foreach (Type T in this.Collection) {
@@ -54,19 +54,15 @@ namespace AdaTools {
 		public Type this[String Name] {
 			get {
 				foreach (Type T in this.Collection) {
-					if (T.Name == Name) return T;
+					if (T.Name.ToUpper() == Name.ToUpper()) return T;
 				}
 				return null;
 			}
 		}
 
-		IEnumerator IEnumerable.GetEnumerator() {
-			return new TypesEnumerator(this.Collection);
-		}
+		IEnumerator IEnumerable.GetEnumerator() => new TypesEnumerator(this.Collection);
 
-		IEnumerator<Type> IEnumerable<Type>.GetEnumerator() {
-			return new TypesEnumerator(this.Collection);
-		}
+		IEnumerator<Type> IEnumerable<Type>.GetEnumerator() => new TypesEnumerator(this.Collection);
 
 		public Types() {
 			this.Collection = new List<Type>();
