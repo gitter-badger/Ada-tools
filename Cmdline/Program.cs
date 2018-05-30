@@ -200,11 +200,22 @@ namespace Cmdline {
 						Settings.Print();
 						return;
 					}
+				case "TYPE":
 				case "TYPES":
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToUpper()) {
 							case "HELP":
 								Types.FullHelp();
+								return;
+							case "INFO":
+								if (Arguments.TryPop(out Mode)) {
+									Types.Info(Mode);
+									return;
+								} else {
+									throw new MissingOperationException();
+								}
+							case "TABLE":
+								Types.Table();
 								return;
 							default:
 								throw new NotImplementedException();
