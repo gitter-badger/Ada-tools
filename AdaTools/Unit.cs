@@ -76,7 +76,7 @@ namespace AdaTools {
 		/// </summary>
 		public abstract Boolean IsRemoteCallInterface { get; protected set; }
 
-		public Types Types { get; protected set; }
+		public TypesCollection Types { get; protected set; }
 
 		/// <summary>
 		/// Get all associated files of this unit

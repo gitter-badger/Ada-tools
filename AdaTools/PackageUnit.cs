@@ -88,7 +88,7 @@ namespace AdaTools {
 		public PackageUnit(String Name) : base(Name) {
 
 			// These are managed collections, and need to be initialized now before we add to them
-			this.Types = new Types();
+			this.Types = new TypesCollection();
 
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;

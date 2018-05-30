@@ -58,7 +58,7 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void ParseTypes() {
-			Types Types = new Source("Both.ads").ParseTypes();
+			TypesCollection Types = new Source("Both.ads").ParseTypes();
 			Assert.AreEqual(new SignedType("TestInt", 0, 1), Types["TestInt"]);
 			Assert.AreEqual(new ModularType("TestMod", 8), Types["TestMod"]);
 			Assert.AreEqual(new FloatType("TestFloat", 8), Types["TestFloat"]);

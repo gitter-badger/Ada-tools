@@ -366,8 +366,8 @@ namespace AdaTools {
 		/// Try to parse the types within the source
 		/// </summary>
 		/// <returns>The types found</returns>
-		public Types ParseTypes() {
-			Types Types = new Types();
+		public TypesCollection ParseTypes() {
+			TypesCollection Types = new TypesCollection();
 			String[] Candidates = this.Matches(new Regex(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;", RegexOptions.IgnoreCase | RegexOptions.Singleline));
 			Stack<String> Split;
 			String TypeName;

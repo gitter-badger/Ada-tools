@@ -38,7 +38,7 @@ namespace AdaTools {
 		/// <summary>
 		/// All the units in this project
 		/// </summary>
-		public Units Units { get; private set; }
+		public UnitsCollection Units { get; private set; }
 
 		/// <summary>
 		/// All the packages in this project
@@ -69,9 +69,9 @@ namespace AdaTools {
 		/// <summary>
 		/// All the types in this project
 		/// </summary>
-		public Types Types {
+		public TypesCollection Types {
 			get {
-				Types Types = new Types();
+				TypesCollection Types = new TypesCollection();
 				foreach (Unit U in this.Units) {
 					Types.Add(U.Types);
 				}
@@ -91,7 +91,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Location">Location of the project</param>
 		public Project(String Location) {
-			this.Units = new Units();
+			this.Units = new UnitsCollection();
 			List<String> AdaSources = new List<String>();
 			// Assign the project name to the current directory
 			this.Name = new DirectoryInfo(Location).Name;

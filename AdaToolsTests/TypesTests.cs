@@ -10,13 +10,13 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void Constructor() {
-			Types Types = new Types(new SignedType("Integer"));
+			TypesCollection Types = new TypesCollection(new SignedType("Integer"));
 			Assert.AreEqual(1, Types.Count);
 		}
 
 		[TestMethod]
 		public void Add() {
-			Types Types = new Types(new SignedType("Integer"));
+			TypesCollection Types = new TypesCollection(new SignedType("Integer"));
 			Assert.AreEqual(1, Types.Count);
 			Types.Add(new FloatType("Float", 8));
 			Assert.AreEqual(2, Types.Count);
@@ -26,16 +26,16 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void AddGroup() {
-			Types Types = new Types();
+			TypesCollection Types = new TypesCollection();
 			Types.Add(new SignedType("Int1"), new SignedType("Int2"));
 			Assert.AreEqual(2, Types.Count);
 		}
 
 		[TestMethod]
 		public void Combine() {
-			Types Types1 = new Types(new SignedType("Int1"), new SignedType("Int2"));
-			Types Types2 = new Types(new ModularType("Mod1"), new ModularType("Mod2"));
-			Types CombinedTypes = new Types();
+			TypesCollection Types1 = new TypesCollection(new SignedType("Int1"), new SignedType("Int2"));
+			TypesCollection Types2 = new TypesCollection(new ModularType("Mod1"), new ModularType("Mod2"));
+			TypesCollection CombinedTypes = new TypesCollection();
 			Assert.AreEqual(0, CombinedTypes.Count);
 			CombinedTypes.Add(Types1);
 			Assert.AreEqual(2, CombinedTypes.Count);
@@ -43,7 +43,7 @@ namespace AdaToolsTests {
 			Assert.AreEqual(4, CombinedTypes.Count);
 			CombinedTypes.Add();
 			Assert.AreEqual(4, CombinedTypes.Count);
-			CombinedTypes.Add(new Types());
+			CombinedTypes.Add(new TypesCollection());
 			Assert.AreEqual(4, CombinedTypes.Count);
 		}
 
@@ -51,7 +51,7 @@ namespace AdaToolsTests {
 		public void Indexer() {
 			SignedType Integer = new SignedType("Integer");
 			ModularType Modular = new ModularType("Modular", 2 ^ 32);
-			Types Types = new Types(Integer, Modular);
+			TypesCollection Types = new TypesCollection(Integer, Modular);
 			Assert.AreEqual(Integer, Types["Integer"]);
 			Assert.AreEqual(Modular, Types["Modular"]);
 			Types.Add(new FloatType("Float", 8));

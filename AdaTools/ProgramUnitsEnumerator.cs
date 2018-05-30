@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AdaTools {
-	public class UnitsEnumerator : IEnumerator, IEnumerator<Unit> {
+	public class ProgramUnitsEnumerator : IEnumerator, IEnumerator<ProgramUnit> {
 
-		private readonly Unit[] Units;
+		private readonly ProgramUnit[] Units;
 
 		private Int32 Index = -1;
 
 		Object IEnumerator.Current { get => this.Units[this.Index]; }
 
-		Unit IEnumerator<Unit>.Current { get => this.Units[this.Index]; }
+		ProgramUnit IEnumerator<ProgramUnit>.Current { get => this.Units[this.Index]; }
 
 		public void Dispose() { }
 
@@ -27,14 +27,7 @@ namespace AdaTools {
 
 		public void Reset() => this.Index = -1;
 
-		public UnitsEnumerator(PackageUnitsCollection PackageUnits, ProgramUnitsCollection ProgramUnits) {
-			List<Unit> Units = new List<Unit>();
-			foreach (Unit U in PackageUnits) {
-				Units.Add(U);
-			}
-			foreach (Unit U in ProgramUnits) {
-				Units.Add(U);
-			}
+		public ProgramUnitsEnumerator(List<ProgramUnit> Units) {
 			this.Units = Units.ToArray();
 		}
 
