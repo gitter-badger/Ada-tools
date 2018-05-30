@@ -80,25 +80,6 @@ namespace AdaTools {
 		}
 
 		/// <summary>
-		/// Attempt to lookup the type by its <paramref name="Name"/>
-		/// </summary>
-		/// <param name="Name">The name of the type to lookup</param>
-		/// <returns>The type with the specified <paramref name="Name"/> if found, otherwise null</returns>
-		public Type LookupType(String Name) => this.Types[Name];
-
-		/// <summary>
-		/// Attempt to lookup the unit by its <paramref name="Name"/>
-		/// </summary>
-		/// <param name="Name">The name of the unit to lookup</param>
-		/// <returns>The unit with the specified <paramref name="Name"/> if found, otherwise null</returns>
-		public Unit LookupUnit(String Name) {
-			foreach (Unit U in this.Units) {
-				if (U.Name == Name) return U;
-			}
-			return null;
-		}
-
-		/// <summary>
 		/// Initialize a project in the current directory
 		/// </summary>
 		public Project() : this(Directory.GetCurrentDirectory()) {
