@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using AdaTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

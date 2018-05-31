@@ -1,11 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using AdaTools;
 
-namespace AdaToolsTests
-{
+namespace AdaToolsTests {
 	[TestClass]
 	public class ProgramUnitTests {
 
