@@ -86,17 +86,14 @@ namespace AdaTools {
 
 		public override Boolean IsAllCallsRemote {
 			get => false;
-			protected set { }
 		}
 
 		public override Boolean IsPure {
 			get => false;
-			protected set { }
 		}
 
 		public override Boolean IsRemoteCallInterface {
 			get => false;
-			protected set { }
 		}
 
 		public override String[] GetFiles() => new String[] { this.Name + Extension };

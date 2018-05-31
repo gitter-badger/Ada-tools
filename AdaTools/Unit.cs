@@ -84,17 +84,17 @@ namespace AdaTools {
 		/// <summary>
 		/// Whether the unit makes entirely remote calls
 		/// </summary>
-		public abstract Boolean IsAllCallsRemote { get; protected set; }
+		public abstract Boolean IsAllCallsRemote { get; }
 
 		/// <summary>
 		/// Whether the unit is pure
 		/// </summary>
-		public abstract Boolean IsPure { get; protected set; }
+		public abstract Boolean IsPure { get; }
 
 		/// <summary>
 		/// Whether the unit is a remote call interface
 		/// </summary>
-		public abstract Boolean IsRemoteCallInterface { get; protected set; }
+		public abstract Boolean IsRemoteCallInterface { get; }
 
 		/// <summary>
 		/// Holds the actual types collection

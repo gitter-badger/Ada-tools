@@ -21,19 +21,50 @@ namespace AdaTools {
 		public override Boolean HasBody { get; protected set; }
 
 		/// <summary>
-		/// Whether the package uses entirely remote calls
+		/// Whether the unit makes entirely remote calls
 		/// </summary>
-		public override Boolean IsAllCallsRemote { get; protected set; }
+		/// <remarks>
+		/// This implements lazy loading even though it doesn't use the Lazy class
+		/// </remarks>
+		public override Boolean IsAllCallsRemote {
+			get {
+				foreach (String FileName in this.GetFiles()) {
+					if (new Source(FileName).ParseAllCallsRemote()) return true;
+				}
+				return false;
+			}
+		}
 
 		/// <summary>
-		/// Whether the package is pure
+		/// Whether the unit is pure
 		/// </summary>
-		public override Boolean IsPure { get; protected set; }
+		/// <remarks>
+		/// This implements lazy loading even though it doesn't use the Lazy class
+		/// </remarks>
+		public override Boolean IsPure {
+			get {
+				foreach (String FileName in this.GetFiles()) {
+					if (new Source(FileName).ParsePurity()) return true;
+				}
+				return false;
+			}
+		}
 
 		/// <summary>
-		/// Whether the package is a remote call interface
+		/// Whether the unit is a remote call interface
 		/// </summary>
-		public override Boolean IsRemoteCallInterface { get; protected set; }
+		/// <remarks>
+		/// This implements lazy loading even though it doesn't use the Lazy class
+		/// </remarks>
+		public override Boolean IsRemoteCallInterface {
+			get {
+				foreach (String FileName in this.GetFiles()) {
+					if (new Source(FileName).ParseRemoteCallInterface()) return true;
+				}
+				return false;
+			}
+		}
+
 
 		/// <summary>
 		/// Return the output argument section for this unit
@@ -94,15 +125,9 @@ namespace AdaTools {
 				SpecSource = new Source(Name + SpecExtension);
 				SpecName = SpecSource.ParseName();
 				this.HasSpec = true;
-				this.IsAllCallsRemote = SpecSource.ParseAllCallsRemote();
-				this.IsPure = SpecSource.ParsePurity();
-				this.IsRemoteCallInterface = SpecSource.ParseRemoteCallInterface();
 			} catch {
 				SpecSource = null;
 				this.HasSpec = false;
-				this.IsAllCallsRemote = false;
-				this.IsPure = false;
-				this.IsRemoteCallInterface = false;
 			}
 			Source BodySource;
 			String BodyName = null;

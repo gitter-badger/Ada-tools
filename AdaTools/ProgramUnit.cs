@@ -25,10 +25,7 @@ namespace AdaTools {
 		/// <remarks>
 		/// This intentionally is a false getter and a null setter because a program unit only involves a body.
 		/// </remarks>
-		public override Boolean HasSpec {
-			get => false;
-			protected set { }
-		}
+		public override Boolean HasSpec { get => false; protected set { } }
 
 		/// <summary>
 		/// Whether a body file for this program was found
@@ -38,23 +35,20 @@ namespace AdaTools {
 		/// <summary>
 		/// Whether the program uses entirely remote calls
 		/// </summary>
-		public override Boolean IsAllCallsRemote { get; protected set; }
+		public override Boolean IsAllCallsRemote { get; }
 
 		/// <summary>
 		/// Whether the program is pure
 		/// </summary>
-		public override Boolean IsPure { get; protected set; }
+		public override Boolean IsPure { get; }
 
 		/// <summary>
 		/// Whether the program is a remote call interface
 		/// </summary>
 		/// <remarks>
-		/// This intentionally is a false getter and a null setter because a program unit can not be a remote call interface
+		/// This intentionally is a false getter because a program unit can not be a remote call interface
 		/// </remarks>
-		public override Boolean IsRemoteCallInterface {
-			get => false;
-			protected set { }
-		}
+		public override Boolean IsRemoteCallInterface { get => false; }
 
 		public override String OutputArguments {
 			get {
