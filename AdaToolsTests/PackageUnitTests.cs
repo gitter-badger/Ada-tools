@@ -44,12 +44,12 @@ namespace AdaToolsTests {
 
 		[TestMethod]
 		public void DependencyArguments() {
-			Assert.AreEqual(" -lSpec -lBody ", new PackageUnit("Both").DependencyArguments);
+			Assert.AreEqual(" -lBody -lSpec ", new PackageUnit("Both").DependencyArguments);
 		}
 
 		[TestMethod]
 		public void LinkerArguments() {
-			Assert.AreEqual(" -lSpec -lBody ", new PackageUnit("Both").LinkerArguments);
+			Assert.AreEqual(" -lBody -lSpec ", new PackageUnit("Both").LinkerArguments);
 		}
 
 		[TestMethod]

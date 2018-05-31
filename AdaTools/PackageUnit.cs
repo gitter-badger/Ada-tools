@@ -95,7 +95,6 @@ namespace AdaTools {
 				SpecName = SpecSource.ParseName();
 				this.HasSpec = true;
 				this.IsAllCallsRemote = SpecSource.ParseAllCallsRemote();
-				this.Dependencies.AddRange(SpecSource.ParseDependencies());
 				this.IsPure = SpecSource.ParsePurity();
 				this.IsRemoteCallInterface = SpecSource.ParseRemoteCallInterface();
 			} catch {
@@ -111,7 +110,6 @@ namespace AdaTools {
 				BodySource = new Source(Name + BodyExtension);
 				BodyName = BodySource.ParseName();
 				this.HasBody = true;
-				this.Dependencies.AddRange(BodySource.ParseDependencies());
 			} catch {
 				BodySource = null;
 				this.HasBody = false;

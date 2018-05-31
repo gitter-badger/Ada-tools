@@ -14,10 +14,30 @@ namespace AdaTools {
 		/// </summary>
 		public readonly String Name;
 
+		private List<String> dependencies;
+
+
 		/// <summary>
 		/// The full list of package names this unit depends on
 		/// </summary>
-		public readonly List<String> Dependencies = new List<String>();
+		/// <remarks>
+		/// This implements lazy loading even though it doesn't use the Lazy class
+		/// </remarks>
+		public List<String> Dependencies {
+			get {
+				if (this.dependencies is null) {
+					this.dependencies = new List<String>();
+					foreach (String FileName in this.GetFiles()) {
+						foreach (String Dep in new Source(FileName).ParseDependencies()) {
+							if (!this.dependencies.Contains(Dep)) {
+								this.dependencies.Add(Dep);
+							}
+						}
+					}
+				}
+				return this.dependencies;
+			}
+		}
 
 		/// <summary>
 		/// Return the library dependency argument section for this unit
@@ -76,6 +96,9 @@ namespace AdaTools {
 		/// </summary>
 		public abstract Boolean IsRemoteCallInterface { get; protected set; }
 
+		/// <summary>
+		/// Holds the actual types collection
+		/// </summary>
 		private TypesCollection typesCollection;
 
 		/// <summary>
