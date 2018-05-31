@@ -17,9 +17,7 @@ namespace AdaTools {
 
 		public override String ToString() => this.Major.ToString() + '.' + this.Minor.ToString() + '.' + this.Patch.ToString();
 
-		public override Boolean Equals(Object Object) =>
-		(Object is Version) ?
-		this == (Version)Object : false;
+		public override Boolean Equals(Object Object) => (Object is Version) ? this == (Version)Object : false;
 
 		public override Int32 GetHashCode() => this.Major.GetHashCode() ^ this.Minor.GetHashCode() ^ this.Patch.GetHashCode();
 

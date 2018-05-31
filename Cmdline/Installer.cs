@@ -3,7 +3,7 @@ using System.IO;
 using AdaTools;
 
 namespace Cmdline {
-	static class Install {
+	static class Installer {
 
 		/// <summary>
 		/// 

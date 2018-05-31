@@ -34,19 +34,19 @@ namespace Cmdline {
 					if (Arguments.TryPop(out Mode)) {
 						switch (Mode.ToUpper()) {
 							case "FLAGS":
-								Build.Flags();
+								Builder.Flags();
 								return;
 							case "HELP":
-								Build.FullHelp();
+								Builder.FullHelp();
 								return;
 							case "PLAN":
-								Build.Plan();
+								Builder.Plan();
 								return;
 							default:
 								throw new NotImplementedException();
 						}
 					} else {
-						Build.Simple();
+						Builder.Simple();
 						return;
 					}
 				case "CLEAN":
@@ -233,7 +233,7 @@ namespace Cmdline {
 
 		static void Help() {
 			Console.WriteLine("adatool");
-			Build.Help();
+			Builder.Help();
 			Config.Help();
 			Dependencies.Help();
 			Files.Help();
