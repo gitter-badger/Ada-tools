@@ -76,7 +76,26 @@ namespace AdaTools {
 		/// </summary>
 		public abstract Boolean IsRemoteCallInterface { get; protected set; }
 
-		public TypesCollection Types { get; protected set; }
+		private TypesCollection typesCollection;
+
+		/// <summary>
+		/// The types within this unit
+		/// </summary>
+		/// <remarks>
+		/// This implements lazy loading even though it doesn't use the Lazy class
+		/// </remarks>
+		public TypesCollection Types {
+			get {
+				// If the types have not been parsed, do so now
+				if (this.typesCollection is null) {
+					this.typesCollection = new TypesCollection();
+					foreach (String FileName in this.GetFiles()) {
+						this.typesCollection.Add(new Source(FileName).ParseTypes());
+					}
+				}
+				return this.typesCollection;
+			}
+		}
 
 		/// <summary>
 		/// Get all associated files of this unit
