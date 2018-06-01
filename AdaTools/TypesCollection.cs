@@ -81,6 +81,8 @@ namespace AdaTools {
 
 		Boolean ICollection<Type>.IsReadOnly { get => this.Readonly; }
 
+		public Type[] ToArray() => this.Collection.ToArray();
+
 		public TypesCollection() {
 			this.Collection = new List<Type>();
 		}

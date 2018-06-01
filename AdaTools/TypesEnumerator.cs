@@ -27,6 +27,10 @@ namespace AdaTools {
 
 		public void Reset() => this.Index = -1;
 
+		public TypesEnumerator(TypesCollection Types) {
+			this.Types = Types.ToArray();
+		}
+
 		public TypesEnumerator(List<Type> Types) {
 			this.Types = Types.ToArray();
 		}

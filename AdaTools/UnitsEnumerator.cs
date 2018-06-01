@@ -27,6 +27,10 @@ namespace AdaTools {
 
 		public void Reset() => this.Index = -1;
 
+		public UnitsEnumerator(UnitsCollection Units) {
+			this.Units = Units.ToArray();
+		}
+
 		public UnitsEnumerator(List<Unit> Units) {
 			this.Units = Units.ToArray();
 		}

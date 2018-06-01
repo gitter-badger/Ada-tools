@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace AdaTools {
 	/// <summary>
 	/// Represents an Ada project
 	/// </summary>
-	public sealed class Project {
+	public sealed class Project : IEnumerable<Type>, IEnumerable<Unit> {
 
 		/// <summary>
 		/// The name of the project
@@ -78,6 +79,12 @@ namespace AdaTools {
 				return Types;
 			}
 		}
+
+		IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
+
+		IEnumerator<Type> IEnumerable<Type>.GetEnumerator() => new TypesEnumerator(this.Types);
+
+		IEnumerator<Unit> IEnumerable<Unit>.GetEnumerator() => new UnitsEnumerator(this.Units);
 
 		/// <summary>
 		/// Initialize a project in the current directory

@@ -69,6 +69,8 @@ namespace AdaTools {
 
 		Boolean ICollection<Unit>.IsReadOnly { get => this.Readonly; }
 
+		public Unit[] ToArray() => this.Collection.ToArray();
+
 		public UnitsCollection() {
 			this.Collection = new List<Unit>();
 		}
