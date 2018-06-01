@@ -160,7 +160,11 @@ namespace AdaTools {
 
 		public override Int32 GetHashCode() => this.Name.GetHashCode();
 
-		protected Unit(String Name) {
+		protected Unit() {
+
+		}
+
+		protected Unit(String Name) : this() {
 			this.Name = Name;
 		}
 

@@ -110,6 +110,37 @@ namespace AdaTools {
 		public String GetBody() => (this.HasBody) ? this.Name + BodyExtension : null;
 
 		/// <summary>
+		/// Initialize the Standard package
+		/// </summary>
+		/// <remarks>
+		/// This does not parse a source, but rather, is for setting up Standard, a package that doesn't actual exist as code
+		/// </remarks>
+		private PackageUnit() : base("Standard") {
+			this.HasBody = false;
+			this.HasSpec = false;
+			this.Types.Add(
+				new EnumerationType("Boolean", "False", "True"),
+				new SignedType("Short_Short_Integer"),
+				new SignedType("Short_Integer"),
+				new SignedType("Integer"),
+				new SignedType("Long_Integer"),
+				new SignedType("Long_Long_Integer"),
+				new FloatType("Short_Float"),
+				new FloatType("Float"),
+				new FloatType("Long_Float"),
+				new FloatType("Long_Long_Float"),
+				new EnumerationType("Character"),
+				new EnumerationType("Wide_Character"),
+				new EnumerationType("Wide_Wide_Character"),
+				new OrdinaryType("Duration"));
+			// This has to come after, as a separate add, so that the reference lookup actually finds what it needs to
+			this.Types.Add(
+				new ArrayType("String", this.Types["Character"]),
+				new ArrayType("Wide_String", this.Types["Wide_Character"]),
+				new ArrayType("Wide_Wide_String", this.Types["Wide_Wide_Character"]));
+		}
+
+		/// <summary>
 		/// Initialize a package with the specified <paramref name="Name"/>
 		/// </summary>
 		/// <remarks>
@@ -155,6 +186,14 @@ namespace AdaTools {
 		/// The file extension to use for package bodies
 		/// </summary>
 		public static String BodyExtension = ".adb";
+
+		/// <summary>
+		/// Get the Standard package
+		/// </summary>
+		/// <returns>A package unit representing Standard</returns>
+		internal static PackageUnit Standard() {
+			return new PackageUnit();
+		}
 
 	}
 }

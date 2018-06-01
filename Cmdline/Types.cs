@@ -22,6 +22,15 @@ namespace Cmdline {
 					}
 				}
 			}
+			foreach (Unit U in Library.Units) {
+				foreach (AdaTools.Type T in U.Types) {
+					if (T.Name.ToUpper() == TypeName.ToUpper()) {
+						Type = T;
+						Unit = U;
+						return;
+					}
+				}
+			}
 			Type = null;
 			Unit = null;
 		}
@@ -57,6 +66,10 @@ namespace Cmdline {
 					case AccessType AccessType:
 						Console.WriteLine("Access to: " + AccessType.Accesses.Name);
 						break;
+					case ArrayType ArrayType:
+						Console.WriteLine("Array of " + ArrayType.Of.Name);
+						//TODO: Write out indices
+						break;
 					case DecimalType DecimalType:
 						Console.WriteLine("Decimal Fixed Point");
 						Console.WriteLine("Delta: " + DecimalType.Delta);
@@ -64,6 +77,10 @@ namespace Cmdline {
 						if (!(DecimalType.Range is null)) {
 							Console.WriteLine("Range: " + DecimalType.Range);
 						}
+						break;
+					case EnumerationType EnumerationType:
+						Console.WriteLine("Enumeration");
+						Console.WriteLine("Values: " + String.Join("  ", EnumerationType.Values));
 						break;
 					case FloatType FloatType:
 						Console.WriteLine("Floating Point");

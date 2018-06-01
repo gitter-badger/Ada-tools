@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdaTools", "AdaTools\AdaToo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdaToolsTests", "AdaToolsTests\AdaToolsTests.csproj", "{E14889A1-147C-40D3-8DC5-4070066A1631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cmdline", "Cmdline\Cmdline.csproj", "{B6971847-6117-4763-A1DB-6E153DD46817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cmdline", "Cmdline\Cmdline.csproj", "{B6971847-6117-4763-A1DB-6E153DD46817}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
