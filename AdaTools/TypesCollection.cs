@@ -10,7 +10,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// <para>This is used to hold all the types found within a unit, or within a project. Collecting them all enables easy updating of types when they are listed twice, for example, with private implementations of publicly visible types.</para>
 	/// </remarks>
-	public class TypesCollection : IEnumerable<Type> {
+	public class TypesCollection : IEnumerable<Type>, ICollection<Type> {
 
 		private List<Type> Collection;
 
@@ -19,7 +19,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Type">Type definition to add</param>
 		public void Add(Type Type) {
-			if (Type is null) return;
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
 			foreach (Type T in this.Collection) {
 				if (T == Type) {
 					T.Join(Type);
@@ -30,21 +30,34 @@ namespace AdaTools {
 		}
 
 		public void Add(params Type[] Types) {
-			if (Types is null) return;
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
 			foreach (Type T in Types) {
 				this.Add(T);
 			}
 		}
 
 		public void Add(TypesCollection Types) {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
 			foreach (Type Type in Types.Collection) {
 				this.Add(Type);
 			}
 		}
 
+		void ICollection<Type>.Clear() {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			this.Collection.Clear();
+		}
+
 		public Boolean Contains(Type Type) => this.Collection.Contains(Type);
 
+		void ICollection<Type>.CopyTo(Type[] Array, Int32 Index) => this.Collection.CopyTo(Array, Index);
+
 		public Int32 Count { get => this.Collection.Count; }
+
+		Boolean ICollection<Type>.Remove(Type Type) {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			return this.Collection.Remove(Type);
+		}
 
 		/// <summary>
 		/// Look up the type by <paramref name="Name"/>
@@ -63,6 +76,10 @@ namespace AdaTools {
 		IEnumerator IEnumerable.GetEnumerator() => new TypesEnumerator(this.Collection);
 
 		IEnumerator<Type> IEnumerable<Type>.GetEnumerator() => new TypesEnumerator(this.Collection);
+
+		private readonly Boolean Readonly = false;
+
+		Boolean ICollection<Type>.IsReadOnly { get => this.Readonly; }
 
 		public TypesCollection() {
 			this.Collection = new List<Type>();
