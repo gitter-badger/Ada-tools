@@ -43,7 +43,11 @@ namespace AdaTools {
 
 		public override Int32 GetHashCode() => this.Delta.GetHashCode() ^ this.Digits.GetHashCode() ^ this.Range.GetHashCode();
 
-		public DecimalType(String Name, Decimal Delta, UInt16 Digits) : base(Name) {
+		public DecimalType(String Name) : base(Name) {
+
+		}
+
+		public DecimalType(String Name, Decimal Delta, UInt16 Digits) : this(Name) {
 			this.Delta = Delta;
 			this.Digits = Digits;
 		}

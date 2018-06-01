@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace AdaTools {
@@ -40,6 +43,38 @@ namespace AdaTools {
 			}
 		}
 
+		internal static String GNATSearchPath {
+			get {
+				Process GnatLS = new Process();
+				GnatLS.StartInfo.FileName = "gnatls";
+				GnatLS.StartInfo.Arguments = "-v";
+				GnatLS.StartInfo.RedirectStandardOutput = true;
+				GnatLS.Start();
+				Match Match;
+				while (!GnatLS.StandardOutput.EndOfStream) {
+					Match = new Regex(@"^.*(gcc|gnat).*adainclude", RegexOptions.IgnoreCase).Match(GnatLS.StandardOutput.ReadLine());
+					if (Match.Value != "")  return Match.Value.Trim(); 
+				}
+				return "";
+			}
+		}
+
+		internal static String GNATObjectsPath {
+			get {
+				Process GnatLS = new Process();
+				GnatLS.StartInfo.FileName = "gnatls";
+				GnatLS.StartInfo.Arguments = "-v";
+				GnatLS.StartInfo.RedirectStandardOutput = true;
+				GnatLS.Start();
+				Match Match;
+				while (!GnatLS.StandardOutput.EndOfStream) {
+					Match = new Regex(@"^.*(gcc|gnat).*adalib", RegexOptions.IgnoreCase).Match(GnatLS.StandardOutput.ReadLine());
+					if (Match.Value != "") return Match.Value.Trim();
+				}
+				return "";
+			}
+		}
+
 		/// <summary>
 		/// The search path for source files
 		/// </summary>
@@ -50,10 +85,10 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH", EnvironmentVariableTarget.Machine)).Split(';'));
+						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH", EnvironmentVariableTarget.Machine) + ";" + GNATSearchPath).Split(';'));
 					case PlatformID.Unix:
 					default:
-						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH", EnvironmentVariableTarget.Machine)).Split(':'));
+						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_INCLUDE_PATH", EnvironmentVariableTarget.Machine) + ":" + GNATSearchPath).Split(':'));
 				}
 			}
 			set {
@@ -81,10 +116,10 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH", EnvironmentVariableTarget.Machine)).Split(';'));
+						return new List<String>((".\\;" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH", EnvironmentVariableTarget.Machine) + ";" + GNATObjectsPath).Split(';'));
 					case PlatformID.Unix:
 					default:
-						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH", EnvironmentVariableTarget.Machine)).Split(':'));
+						return new List<String>(("./:" + Environment.GetEnvironmentVariable("ADA_OBJECTS_PATH", EnvironmentVariableTarget.Machine) + ":" + GNATObjectsPath).Split(':'));
 				}
 			}
 			set {

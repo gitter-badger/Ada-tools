@@ -43,7 +43,11 @@ namespace AdaTools {
 
 		public override Int32 GetHashCode() => this.Digits.GetHashCode() ^ this.Range.GetHashCode();
 
-		public FloatType(String Name, UInt16 Digits) : base(Name) {
+		public FloatType(String Name) : base(Name) {
+
+		}
+
+		public FloatType(String Name, UInt16 Digits) : this(Name) {
 			this.Digits = Digits;
 		}
 

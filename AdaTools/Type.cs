@@ -46,7 +46,6 @@ namespace AdaTools {
 
 		protected Type(String Name) {
 			this.Name = Name;
-			TypesLibrary.Register(this);
 		}
 
 		protected Type(String Name, Boolean? PubliclyVisible, Boolean? PrivateDefinition) : this(Name) {

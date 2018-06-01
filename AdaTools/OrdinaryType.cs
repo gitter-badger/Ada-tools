@@ -43,7 +43,11 @@ namespace AdaTools {
 
 		public override Int32 GetHashCode() => this.Delta.GetHashCode() ^ this.Range.GetHashCode();
 
-		public OrdinaryType(String Name, Double Delta) : base(Name) {
+		public OrdinaryType(String Name) : base(Name) {
+
+		}
+
+		public OrdinaryType(String Name, Double Delta) : this(Name) {
 			this.Delta = Delta;
 		}
 
