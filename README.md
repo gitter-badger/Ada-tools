@@ -14,6 +14,9 @@ We tend to structure projects predictable ways. Tooling should recognize that.
 	* Understanding whether a package is implemented with only a spec, both a spec and body, or has a body but is missing a spec.
 * Runtime representation of programs, to enable things like
 	* Knowing what needs to be built without explicitly telling the project manager
+* Runtime representation of types, to enable things like
+	* Listing all type definitions within a project or unit
+	* Finding a type, including where it is located
 * Automatic configuration of projects
 	* The project is the directory, a convention shared with modern editors.
 	* Upon initialization, the directory is scanned for Ada files, and determines which are packages, initializing the package representations, and so on.
