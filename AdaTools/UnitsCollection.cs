@@ -36,7 +36,7 @@ namespace AdaTools {
 			this.Collection.Clear();
 		}
 
-		public Boolean Contains(Unit Unit) => this.Contains(Unit);
+		public Boolean Contains(Unit Unit) => this.Collection.Contains(Unit);
 
 		void ICollection<Unit>.CopyTo(Unit[] Array, Int32 Index) => this.Collection.CopyTo(Array, Index);
 

@@ -10,7 +10,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// <para>This is, essentially, a priority queue. The exact implementation may change, but it will always semantically be a priority queue.</para>
 	/// </remarks>
-	public sealed class BuildPlan : IEnumerable<Unit> {
+	public sealed class BuildPlan : IEnumerable<Unit>, ICollection<Unit> {
 
 		/// <summary>
 		/// The actual plan itself
@@ -22,6 +22,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Unit">Compilation unit to add</param>
 		public void Add(Unit Unit) {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
 			for (Int32 i = 0; i < this.Plan.Count; i++) {
 				if (this.Plan[i].DependsOn(Unit)) {
 					this.Plan.Insert(i, Unit);
@@ -32,14 +33,34 @@ namespace AdaTools {
 			this.Plan.Add(Unit);
 		}
 
+		void ICollection<Unit>.Clear() {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			this.Plan.Clear();
+		}
+
+		public Boolean Contains(Unit Unit) => this.Plan.Contains(Unit);
+
+		void ICollection<Unit>.CopyTo(Unit[] Array, Int32 Index) => this.Plan.CopyTo(Array, Index);
+
+		Int32 ICollection<Unit>.Count { get => this.Length; }
+
 		/// <summary>
 		/// Get the length of the build plan; the amount of steps to be made
 		/// </summary>
 		public Int32 Length { get => this.Plan.Count; }
 
+		Boolean ICollection<Unit>.Remove(Unit Unit) {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			return this.Plan.Remove(Unit);
+		}
+
 		IEnumerator IEnumerable.GetEnumerator() => new BuildPlanEnumerator(this.Plan);
 
 		IEnumerator<Unit> IEnumerable<Unit>.GetEnumerator() => new BuildPlanEnumerator(this.Plan);
+
+		private readonly Boolean Readonly = false;
+
+		Boolean ICollection<Unit>.IsReadOnly { get => this.Readonly; }
 
 		public BuildPlan() {
 			this.Plan = new List<Unit>();
