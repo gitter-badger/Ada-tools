@@ -5,33 +5,19 @@ using System.Text;
 
 namespace AdaTools {
 	/// <summary>
-	/// Represents a collection of units
+	/// Represents a collection of abstract units
 	/// </summary>
-	/// <remarks>
-	/// <para>This is used to hold all the units found within a project. Collecting them all here provides additional semantics possible upon the collection over just a simple list</para>
-	/// </remarks>
-	public class UnitsCollection : IEnumerable<Unit> {
+	public class UnitsCollection : IEnumerable<Unit>, ICollection<Unit> {
 
-		public readonly PackageUnitsCollection Packages;
-
-		public readonly ProgramUnitsCollection Programs;
+		public readonly List<Unit> Collection;
 
 		/// <summary>
 		/// Add the <paramref name="Unit"/> to the collection
 		/// </summary>
 		/// <param name="Unit">Unit to add</param>
 		public void Add(Unit Unit) {
-			if (Unit is null) return;
-			switch (Unit) {
-				case PackageUnit PackageUnit:
-					this.Packages.Add(PackageUnit);
-					break;
-				case ProgramUnit ProgramUnit:
-					this.Programs.Add(ProgramUnit);
-					break;
-				default:
-					break;
-			}
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			this.Collection.Add(Unit);
 		}
 
 		/// <summary>
@@ -39,26 +25,27 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Units">Array of Units to add</param>
 		public void Add(params Unit[] Units) {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
 			foreach (Unit Unit in Units) {
 				this.Add(Unit);
 			}
 		}
 
-		public Boolean Contains(Unit Unit) {
-			switch (Unit) {
-				case PackageUnit PackageUnit:
-					if (this.Packages.Contains(PackageUnit)) return true;
-					break;
-				case ProgramUnit ProgramUnit:
-					if (this.Programs.Contains(ProgramUnit)) return true;
-					break;
-				default:
-					break;
-			}
-			return false;
+		void ICollection<Unit>.Clear() {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			this.Collection.Clear();
 		}
 
-		public Int32 Count { get => this.Packages.Count + this.Programs.Count; }
+		public Boolean Contains(Unit Unit) => this.Contains(Unit);
+
+		void ICollection<Unit>.CopyTo(Unit[] Array, Int32 Index) => this.Collection.CopyTo(Array, Index);
+
+		public Int32 Count { get => this.Collection.Count; }
+
+		Boolean ICollection<Unit>.Remove(Unit Unit) {
+			if (this.Readonly) throw new NotSupportedException("Collection is readonly");
+			return this.Collection.Remove(Unit);
+		}
 
 		/// <summary>
 		/// Look up the unit by <paramref name="Name"/>
@@ -67,17 +54,23 @@ namespace AdaTools {
 		/// <returns>The unit if found, null otherwise</returns>
 		public Unit this[String Name] {
 			get {
-				return (this.Packages[Name] as Unit) ?? (this.Programs[Name] as Unit) ?? null;
+				foreach (Unit U in this.Collection) {
+					if (U.Name.ToUpper() == Name.ToUpper()) return U;
+				}
+				return null;
 			}
 		}
 
-		IEnumerator IEnumerable.GetEnumerator() => new UnitsEnumerator(this.Packages, this.Programs);
+		IEnumerator IEnumerable.GetEnumerator() => new UnitsEnumerator(this.Collection);
 
-		IEnumerator<Unit> IEnumerable<Unit>.GetEnumerator() => new UnitsEnumerator(this.Packages, this.Programs);
+		IEnumerator<Unit> IEnumerable<Unit>.GetEnumerator() => new UnitsEnumerator(this.Collection);
+
+		private readonly Boolean Readonly = false;
+
+		Boolean ICollection<Unit>.IsReadOnly { get => this.Readonly; }
 
 		public UnitsCollection() {
-			this.Packages = new PackageUnitsCollection();
-			this.Programs = new ProgramUnitsCollection();
+			this.Collection = new List<Unit>();
 		}
 
 		public UnitsCollection(params Unit[] Units) : this() {
