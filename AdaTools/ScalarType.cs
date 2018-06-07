@@ -6,7 +6,7 @@ namespace AdaTools {
 	/// <summary>
 	/// Represents a scalar type
 	/// </summary>
-	public abstract class ScalarType : Type {
+	public abstract class ScalarType : ElementaryType {
 		protected ScalarType(String Name) : base(Name) {
 
 		}

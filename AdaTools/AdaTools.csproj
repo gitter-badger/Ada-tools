@@ -1,8 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Company>Patrick Kelly</Company>
+    <Authors>Patrick Kelly</Authors>
+    <PackageProjectUrl>https://github.com/Entomy/Ada-tools</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Entomy/Ada-tools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

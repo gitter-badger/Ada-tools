@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AdaTools.Type" Collapsed="true">
+    <Position X="11.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAgAgAAAAAQAAAAAAIAAAAAAAIAAAiA=</HashCode>
+      <FileName>Type.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.SignedType" Collapsed="true">
+    <Position X="13.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAgEgAAAAAAAAAAAAIAAAAAAAAAQAAA=</HashCode>
+      <FileName>SignedType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.ScalarType" Collapsed="true">
+    <Position X="12.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ScalarType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.RecordType" Collapsed="true">
+    <Position X="4.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RecordType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.RealType" Collapsed="true">
+    <Position X="9" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RealType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.OrdinaryType" Collapsed="true">
+    <Position X="9" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAACAgEgAAAAAAAAAAAAIAAAAAAAAAQAAA=</HashCode>
+      <FileName>OrdinaryType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.ModularType" Collapsed="true">
+    <Position X="15.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAQAAAAAIAAAAAAAAAQAAA=</HashCode>
+      <FileName>ModularType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.IntegerType" Collapsed="true">
+    <Position X="14.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IntegerType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.FloatType" Collapsed="true">
+    <Position X="6.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAgEgAAAAAEAAAAAAIAAAAAAAAAQAAA=</HashCode>
+      <FileName>FloatType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.FixedType" Collapsed="true">
+    <Position X="10.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FixedType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.EnumerationType" Collapsed="true">
+    <Position X="18" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAAAAAAAAAIAAAAAgAAAQAAA=</HashCode>
+      <FileName>EnumerationType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.ElementaryType" Collapsed="true">
+    <Position X="13.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ElementaryType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.DiscreteType" Collapsed="true">
+    <Position X="15.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DiscreteType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.DecimalType" Collapsed="true">
+    <Position X="11.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAACAgEgAAAAAEAAAAAAIAAAAAAAAAQAAA=</HashCode>
+      <FileName>DecimalType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.CompositeType" Collapsed="true">
+    <Position X="3.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompositeType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.ArrayType" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAEAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ArrayType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.AccessType" Collapsed="true">
+    <Position X="20.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AccessType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

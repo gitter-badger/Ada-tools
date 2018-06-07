@@ -4,24 +4,27 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace AdaTools {
+namespace AdaTools
+{
 	/// <summary>
 	/// Interface wrapping for the GNAT compiler command line arguments
 	/// </summary>
-	public static class Compiler {
+	public static class Compiler
+	{
 
-		public static void Clean(Unit Unit) {
+		public static void Clean(Unit Unit)
+		{
 			Process GnatClean = Process.Start("gnatclean", String.Join(' ', Unit.GetFiles()));
 			GnatClean.WaitForExit(); // We wait only because concurrent processes do terrible things to the command line text. This could be fixed by buffering the output then oneshot printing it.
 			GnatClean.Dispose();
-			foreach (String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
-				switch (Path.GetExtension(FileName).ToUpper()) {
-					case ".APKG":
-						File.Delete(FileName);
-						Console.WriteLine("\"." + Path.DirectorySeparatorChar + Path.GetFileName(FileName) + "\" has been deleted");
-						break;
-					default:
-						continue;
+			foreach(String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
+				switch(Path.GetExtension(FileName).ToUpper()) {
+				case ".APKG":
+					File.Delete(FileName);
+					Console.WriteLine("\"." + Path.DirectorySeparatorChar + Path.GetFileName(FileName) + "\" has been deleted");
+					break;
+				default:
+					continue;
 				}
 			}
 		}
@@ -35,27 +38,28 @@ namespace AdaTools {
 		/// <param name="Unit">Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(PackageUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+		public static void Compile(PackageUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console)
+		{
 			String arch;
-			switch (Architecture) {
-				case Architecture.Generic:
-					arch = "-mtune=generic";
-					break;
-				case Architecture.Native:
-				default:
-					arch = "-march=native";
-					break;
+			switch(Architecture) {
+			case Architecture.Generic:
+				arch = "-mtune=generic";
+				break;
+			case Architecture.Native:
+			default:
+				arch = "-march=native";
+				break;
 			}
 			Process GnatMake;
-			if (Environment.OSVersion.Platform <= (PlatformID)3) {
-				switch (WindowsSubsystem) {
-					case WindowsSubsystem.Windows:
-						GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
-						break;
-					case WindowsSubsystem.Console:
-					default:
-						GnatMake = Process.Start("gnatmake", "-mconsole " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
-						break;
+			if(Environment.OSVersion.Platform <= (PlatformID)3) {
+				switch(WindowsSubsystem) {
+				case WindowsSubsystem.Windows:
+					GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+					break;
+				case WindowsSubsystem.Console:
+				default:
+					GnatMake = Process.Start("gnatmake", "-mconsole " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+					break;
 				}
 			} else {
 				GnatMake = Process.Start("gnatmake", arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
@@ -64,9 +68,9 @@ namespace AdaTools {
 			GnatMake.Dispose();
 			Process CreateLibrary;
 			// Linking is a very different procedure on different systems, so figure out what we're supposed to do
-			if (Environment.OSVersion.Platform <= (PlatformID)3) {
+			if(Environment.OSVersion.Platform <= (PlatformID)3) {
 				CreateLibrary = Process.Start("gnatdll", "-d " + Unit.Name + ".dll " + Unit.Name + ".ali");
-			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+			} else if(Environment.OSVersion.Platform == PlatformID.Unix) {
 				CreateLibrary = Process.Start("ld", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".so");
 			} else {
 				throw new Exception("Unable to determine what the Operating System is");
@@ -81,27 +85,28 @@ namespace AdaTools {
 		/// <param name="Unit">Program Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(ProgramUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
+		public static void Compile(ProgramUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console)
+		{
 			String arch;
-			switch (Architecture) {
-				case Architecture.Generic:
-					arch = "-mtune=generic";
-					break;
-				case Architecture.Native:
-				default:
-					arch = "-march=native";
-					break;
+			switch(Architecture) {
+			case Architecture.Generic:
+				arch = "-mtune=generic";
+				break;
+			case Architecture.Native:
+			default:
+				arch = "-march=native";
+				break;
 			}
 			Process GnatMake;
-			if (Environment.OSVersion.Platform <= (PlatformID)3) {
-				switch (WindowsSubsystem) {
-					case WindowsSubsystem.Windows:
-						GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
-						break;
-					case WindowsSubsystem.Console:
-					default:
-						GnatMake = Process.Start("gnatmake", "-mconsole " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
-						break;
+			if(Environment.OSVersion.Platform <= (PlatformID)3) {
+				switch(WindowsSubsystem) {
+				case WindowsSubsystem.Windows:
+					GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+					break;
+				case WindowsSubsystem.Console:
+				default:
+					GnatMake = Process.Start("gnatmake", "-mconsole " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+					break;
 				}
 			} else {
 				GnatMake = Process.Start("gnatmake", arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
@@ -109,5 +114,24 @@ namespace AdaTools {
 			GnatMake.WaitForExit();
 			GnatMake.Dispose();
 		}
+
+		/// <summary>
+		/// Call gnatkrunch to "krunch" the <paramref name="Name"/> to <paramref name="Length"/>
+		/// </summary>
+		/// <param name="Name">Name to krunch</param>
+		/// <param name="Length">Krunched length, defaults to 8</param>
+		/// <returns>The krunched name</returns>
+		public static String Krunch(String Name, Int32 Length = 8) {
+			Process GnatKrunch = new Process();
+			GnatKrunch.StartInfo.FileName = "gnatkr";
+			GnatKrunch.StartInfo.Arguments = Name + " " + Length;
+			GnatKrunch.StartInfo.RedirectStandardOutput = true;
+			GnatKrunch.Start();
+			GnatKrunch.WaitForExit();
+			String Result = GnatKrunch.StandardOutput.ReadToEnd().Trim();
+			GnatKrunch.Dispose();
+			return Result;
+		}
+
 	}
 }

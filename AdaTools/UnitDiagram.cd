@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AdaTools.Unit" Collapsed="true">
+    <Position X="7" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AiAAAASAAIAAAASAAAAAgAQAABBAAIAABCAAAAgIBAA=</HashCode>
+      <FileName>Unit.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AdaTools.ProgramUnit" Collapsed="true">
+    <Position X="4.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAACAAAAAAAAAAAAAgAAAAABAAQAAASAAAAgABAA=</HashCode>
+      <FileName>ProgramUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.PackageUnit" Collapsed="true">
+    <Position X="7" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAABCAAAQAAAAABAAAgAABAIBAAAAAACAAAAgABAA=</HashCode>
+      <FileName>PackageUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.ConfigurationUnit" Collapsed="true">
+    <Position X="9.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIAAICAAAAAAAEAABAAgBAAAAAAAQCAAiAEgAgADAE=</HashCode>
+      <FileName>ConfigurationUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

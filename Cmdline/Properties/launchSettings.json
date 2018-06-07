@@ -2,7 +2,7 @@
   "profiles": {
     "Cmdline": {
       "commandName": "Project",
-      "commandLineArgs": "types"
+      "commandLineArgs": "build plan"
     }
   }
 }
