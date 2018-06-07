@@ -147,7 +147,7 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						return (String)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("AdaTools").GetValue("PackageDatabase");
+						return (String)Registry.LocalMachine.OpenSubKey("SOFTWARE")?.OpenSubKey("AdaTools")?.GetValue("PackageDatabase") ?? "";
 					case PlatformID.Unix:
 					default:
 						return Environment.GetEnvironmentVariable("ADA_PACKAGEDB_PATH");
@@ -180,7 +180,7 @@ namespace AdaTools {
 					case (PlatformID)1:
 					case (PlatformID)2:
 					case (PlatformID)3:
-						return (String)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("AdaTools").GetValue("PackageRepository");
+						return (String)Registry.LocalMachine.OpenSubKey("SOFTWARE")?.OpenSubKey("AdaTools")?.GetValue("PackageRepository") ?? "";
 					case PlatformID.Unix:
 					default:
 						return Environment.GetEnvironmentVariable("ADA_REPOSITORY_PATH");
