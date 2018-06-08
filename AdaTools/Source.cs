@@ -16,6 +16,8 @@ namespace AdaTools {
 		/// </summary>
 		private readonly String SourceCode = "";
 
+		private readonly FileStream FileStream;
+
 		/// <summary>
 		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
 		/// </summary>
@@ -494,6 +496,10 @@ namespace AdaTools {
 			return null;
 		}
 
+		public override Boolean Equals(Object obj) => (obj is Source) ? this.FileStream == (obj as Source).FileStream : false;
+
+		public override Int32 GetHashCode() => this.FileStream.GetHashCode();
+
 		public String this[Int32 Index] {
 			get => this.SourceCode.Split('\n')[Index];
 		}
@@ -502,8 +508,20 @@ namespace AdaTools {
 
 		public static implicit operator String[] (Source Source) => Source.SourceCode.Split('\n');
 
-		public Source(FileStream File) {
-			using (StreamReader Reader = new StreamReader(File)) {
+		public static Boolean operator ==(Source Left, Source Right) => Left.FileStream == Right.FileStream;
+
+		public static Boolean operator ==(Source Left, FileStream Right) => Left.FileStream == Right;
+
+		public static Boolean operator ==(FileStream Left, Source Right) => Left == Right.FileStream;
+
+		public static Boolean operator !=(Source Left, Source Right) => Left.FileStream != Right.FileStream;
+
+		public static Boolean operator !=(Source Left, FileStream Right) => Left.FileStream != Right;
+
+		public static Boolean operator !=(FileStream Left, Source Right) => Left != Right.FileStream;
+
+		public Source(FileStream FileStream) {
+			using (StreamReader Reader = new StreamReader(FileStream)) {
 				String Line;
 				List<String> Lines = new List<String>();
 				while ((Line = Reader.ReadLine()) != null) {
@@ -511,6 +529,7 @@ namespace AdaTools {
 				}
 				this.SourceCode = String.Join('\n', Lines);
 			}
+			this.FileStream = FileStream;
 		}
 
 		public Source(String FileName) : this(new FileStream(FileName, FileMode.Open)) {

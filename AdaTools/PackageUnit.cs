@@ -220,9 +220,9 @@ namespace AdaTools {
 			}
 
 			// Validate all the names match up
-			//if (SpecName != null && this.Name.ToLower() != SpecName.ToLower()) throw new PackageNameDoesNotMatchException();
-			//if (BodyName != null && this.Name.ToLower() != BodyName.ToLower()) throw new PackageNameDoesNotMatchException();
-			//if ((SpecName != null && BodyName != null && SpecName.ToLower() != BodyName.ToLower())) throw new PackageNameDoesNotMatchException();
+			if (SpecName != null && this.Name.ToLower() != SpecName.ToLower()) throw new PackageNameDoesNotMatchException();
+			if (BodyName != null && this.Name.ToLower() != BodyName.ToLower()) throw new PackageNameDoesNotMatchException();
+			if ((SpecName != null && BodyName != null && SpecName.ToLower() != BodyName.ToLower())) throw new PackageNameDoesNotMatchException();
 		}
 
 		/// <summary>
