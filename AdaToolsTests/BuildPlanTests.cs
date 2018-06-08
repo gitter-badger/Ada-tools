@@ -13,7 +13,7 @@ namespace AdaToolsTests {
 		[TestMethod]
 		public void Length() {
 			BuildPlan BuildPlan = new BuildPlan(new Project());
-			Assert.AreEqual(7, BuildPlan.Length);
+			Assert.AreEqual(8, BuildPlan.Length);
 		}
 
 		[TestMethod]

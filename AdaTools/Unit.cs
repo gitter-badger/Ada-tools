@@ -14,6 +14,12 @@ namespace AdaTools {
 		/// </summary>
 		public readonly String Name;
 
+		/// <summary>
+		/// Whether the unit's file has a krunched name
+		/// </summary>
+		/// <see cref="http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/the_gnat_compilation_model.html#file-name-krunching-with-gnatkr"/>
+		protected Boolean Krunched = false;
+
 		private List<String> dependencies;
 
 

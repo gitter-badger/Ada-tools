@@ -62,11 +62,17 @@ namespace AdaTools {
 			}
 		}
 
-	/// <summary>
-	/// Get all associated files of this program
-	/// </summary>
-	/// <returns>An array of the file names</returns>
-	public override String[] GetFiles() => new String[] { this.Name + Extension };
+		/// <summary>
+		/// Get all associated files of this program
+		/// </summary>
+		/// <returns>An array of the file names</returns>
+		public override String[] GetFiles() {
+			if (!this.Krunched) {
+				return new String[] { this.Name + Extension };
+			} else {
+				return new String[] { Compiler.Krunch(this.Name + Extension) };
+			}
+		}
 
 		/// <summary>
 		/// Initialize a program with the specified <paramref name="Name"/>

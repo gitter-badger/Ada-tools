@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace AdaTools {
@@ -87,11 +88,23 @@ namespace AdaTools {
 		/// <returns>An array of the file names</returns>
 		public override String[] GetFiles() {
 			if (this.HasSpec && this.HasBody) {
-				return new String[] { this.Name + BodyExtension, this.Name + SpecExtension };
+				if (!this.Krunched) {
+					return new String[] { this.Name + BodyExtension, this.Name + SpecExtension };
+				} else {
+					return new String[] { Compiler.Krunch(this.Name + BodyExtension), Compiler.Krunch(this.Name + SpecExtension) };
+				}
 			} else if (this.HasSpec) {
-				return new String[] { this.Name + SpecExtension };
+				if (!this.Krunched) {
+					return new String[] { this.Name + SpecExtension };
+				} else {
+					return new String[] { Compiler.Krunch(this.Name + SpecExtension) };
+				}
 			} else if (this.HasBody) {
-				return new String[] { this.Name + BodyExtension };
+				if (!this.Krunched) {
+					return new String[] { this.Name + BodyExtension };
+				} else {
+					return new String[] { Compiler.Krunch(this.Name + BodyExtension) };
+				}
 			} else {
 				return Array.Empty<String>();
 			}
@@ -101,13 +114,33 @@ namespace AdaTools {
 		/// Get the spec file if it exists
 		/// </summary>
 		/// <returns>The spec file if it exists, or null otherwise</returns>
-		public String GetSpec() => (this.HasSpec) ? this.Name + SpecExtension : null;
+		public String GetSpec() {
+			if (this.HasSpec) {
+				if (!this.Krunched) {
+					return this.Name + SpecExtension;
+				} else {
+					return Compiler.Krunch(this.Name + SpecExtension);
+				}
+			} else {
+				return null;
+			}
+		}
 
 		/// <summary>
 		/// Get the body file if it exists
 		/// </summary>
 		/// <returns>The body file if it exists, or null otherwise</returns>
-		public String GetBody() => (this.HasBody) ? this.Name + BodyExtension : null;
+		public String GetBody() {
+			if (this.HasBody) {
+				if (!this.Krunched) {
+					return this.Name + BodyExtension;
+				} else {
+					return Compiler.Krunch(this.Name + BodyExtension);
+				}
+			} else {
+				return null;
+			}
+		}
 
 		/// <summary>
 		/// Initialize the Standard package
@@ -148,12 +181,20 @@ namespace AdaTools {
 		/// </remarks>
 		/// <param name="Name">The name of the package</param>
 		public PackageUnit(String Name) : base(Name) {
+			Console.WriteLine("new PackageUnit(" + Name + ")");
 
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;
 			String SpecName = null;
 			try {
-				SpecSource = new Source(Name + SpecExtension);
+				if (File.Exists(Name + SpecExtension)) {
+					SpecSource = new Source(Name + SpecExtension);
+				} else if (File.Exists(Compiler.Krunch(Name + SpecExtension))) {
+					this.Krunched = true;
+					SpecSource = new Source(Compiler.Krunch(Name + SpecExtension));
+				} else {
+					throw new FileNotFoundException();
+				}
 				SpecName = SpecSource.ParseName();
 				this.HasSpec = true;
 			} catch {
@@ -163,7 +204,14 @@ namespace AdaTools {
 			Source BodySource;
 			String BodyName = null;
 			try {
-				BodySource = new Source(Name + BodyExtension);
+				if (File.Exists(Name + BodyExtension)) {
+					BodySource = new Source(Name + BodyExtension);
+				} else if (File.Exists(Compiler.Krunch(Name + BodyExtension))) {
+					this.Krunched = true;
+					BodySource = new Source(Compiler.Krunch(Name + BodyExtension));
+				} else {
+					throw new FileNotFoundException();
+				}
 				BodyName = BodySource.ParseName();
 				this.HasBody = true;
 			} catch {
@@ -172,9 +220,9 @@ namespace AdaTools {
 			}
 
 			// Validate all the names match up
-			if (SpecName != null && this.Name.ToLower() != SpecName.ToLower()) throw new PackageNameDoesNotMatchException();
-			if (BodyName != null && this.Name.ToLower() != BodyName.ToLower()) throw new PackageNameDoesNotMatchException();
-			if ((SpecName != null && BodyName != null) && SpecName.ToLower() != BodyName.ToLower()) throw new PackageNameDoesNotMatchException();
+			//if (SpecName != null && this.Name.ToLower() != SpecName.ToLower()) throw new PackageNameDoesNotMatchException();
+			//if (BodyName != null && this.Name.ToLower() != BodyName.ToLower()) throw new PackageNameDoesNotMatchException();
+			//if ((SpecName != null && BodyName != null && SpecName.ToLower() != BodyName.ToLower())) throw new PackageNameDoesNotMatchException();
 		}
 
 		/// <summary>

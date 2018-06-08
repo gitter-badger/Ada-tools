@@ -121,6 +121,7 @@ namespace AdaTools
 		/// <param name="Name">Name to krunch</param>
 		/// <param name="Length">Krunched length, defaults to 8</param>
 		/// <returns>The krunched name</returns>
+		/// <see cref="http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/the_gnat_compilation_model.html#file-name-krunching-with-gnatkr"/>
 		public static String Krunch(String Name, Int32 Length = 8) {
 			Process GnatKrunch = new Process();
 			GnatKrunch.StartInfo.FileName = "gnatkr";
