@@ -16,6 +16,11 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void CheckAllCallsRemote() {
+			Assert.AreEqual(false, new ConfigurationUnit().IsAllCallsRemote);
+		}
+
+		[TestMethod]
 		public void CheckAssertionPolicy() {
 			Assert.AreEqual(PolicyIdentifier.Check, new ConfigurationUnit().AssertionPolicy.GlobalPolicy);
 		}

@@ -19,6 +19,18 @@ namespace AdaTools {
 		private readonly FileStream FileStream;
 
 		/// <summary>
+		/// Regex options to apply to every IsMatch, Match, and Matches method which accepts only a string
+		/// </summary>
+		public const RegexOptions DefaultRegexOptions = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+
+		/// <summary>
+		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// </summary>
+		/// <param name="Pattern">The pattern to try to find</param>
+		/// <returns>True if a match was found, false otherwise</returns>
+		public Boolean IsMatch(String Pattern) => new Regex(Pattern, DefaultRegexOptions).IsMatch(this.SourceCode);
+
+		/// <summary>
 		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
@@ -30,7 +42,27 @@ namespace AdaTools {
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
 		/// <returns>If a match was found, returns the matched source code</returns>
+		public String Match(String Pattern) => new Regex(Pattern, DefaultRegexOptions).Match(this.SourceCode).Value;
+
+		/// <summary>
+		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// </summary>
+		/// <param name="Pattern">The pattern to try to find</param>
+		/// <returns>If a match was found, returns the matched source code</returns>
 		public String Match(Regex Pattern) => Pattern.Match(this.SourceCode).Value;
+
+		/// <summary>
+		/// Attempt to find all of the specified <paramref name="Pattern"/> within the source code
+		/// </summary>
+		/// <param name="Pattern">The pattern to try to find</param>
+		/// <returns>Returns all of the matches in the source code, if any</returns>
+		public String[] Matches(String Pattern) {
+			List<String> Matches = new List<String>();
+			foreach (Match Match in new Regex(Pattern, DefaultRegexOptions).Matches(this.SourceCode)) {
+				Matches.Add(Match.Value);
+			}
+			return Matches.ToArray();
+		}
 
 		/// <summary>
 		/// Attempt to find all of the specified <paramref name="Pattern"/> within the source code
@@ -50,10 +82,10 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>The Ada Version if one was found, null otherwise</returns>
 		public AdaVersion? ParseAdaVersion() {
-			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_83", RegexOptions.IgnoreCase | RegexOptions.Singleline))) return AdaVersion.Ada1983;
-			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_95", RegexOptions.IgnoreCase | RegexOptions.Singleline))) return AdaVersion.Ada1995;
-			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_(20)?05", RegexOptions.IgnoreCase | RegexOptions.Singleline))) return AdaVersion.Ada2005;
-			if (this.IsMatch(new Regex(@"\bpragma\s+Ada_(20)?12", RegexOptions.IgnoreCase | RegexOptions.Singleline))) return AdaVersion.Ada2012;
+			if (this.IsMatch(@"\bpragma\s+Ada_83")) return AdaVersion.Ada1983;
+			if (this.IsMatch(@"\bpragma\s+Ada_95")) return AdaVersion.Ada1995;
+			if (this.IsMatch(@"\bpragma\s+Ada_(20)?05")) return AdaVersion.Ada2005;
+			if (this.IsMatch(@"\bpragma\s+Ada_(20)?12")) return AdaVersion.Ada2012;
 			return null;
 		}
 
@@ -62,7 +94,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public Boolean ParseAllCallsRemote() {
-			if (this.IsMatch(new Regex(@"\bwith\s+.*all_calls_remote.*\s+is", RegexOptions.IgnoreCase | RegexOptions.Singleline))) {
+			if (this.IsMatch(@"\bwith\s+.*all_calls_remote.*\s+is")) {
 				return true;
 			} else {
 				return false;
@@ -74,25 +106,25 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public AssertionPolicy ParseAssertionPolicy() {
-			String Policy = this.Match(new Regex(@"\bpragma\s+Assertion_Policy\s*\((\\.|[^)])*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (new Regex(@"\(\s*check\s*\)", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Policy)) {
+			String Policy = this.Match(@"\bpragma\s+Assertion_Policy\s*\((\\.|[^)])*\);");
+			if (new Regex(@"\(\s*check\s*\)", DefaultRegexOptions).IsMatch(Policy)) {
 				return new AssertionPolicy(PolicyIdentifier.Check);
-			} else if (new Regex(@"\(\s*disable\s*\)", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Policy)) {
+			} else if (new Regex(@"\(\s*disable\s*\)", DefaultRegexOptions).IsMatch(Policy)) {
 				return new AssertionPolicy(PolicyIdentifier.Disable);
-			} else if (new Regex(@"\(\s*ignore\s*\)", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Policy)) {
+			} else if (new Regex(@"\(\s*ignore\s*\)", DefaultRegexOptions).IsMatch(Policy)) {
 				return new AssertionPolicy(PolicyIdentifier.Ignore);
-			} else if (new Regex(@"\(\s*suppressible\s\)", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Policy)) {
+			} else if (new Regex(@"\(\s*suppressible\s\)", DefaultRegexOptions).IsMatch(Policy)) {
 				// This isn't correct, but is done to be recognized non-the-less
 				return new AssertionPolicy(PolicyIdentifier.Suppressible);
 			} else {
 				// The policy isn't global, it's a list, so parse the list
 				Dictionary<String, PolicyIdentifier> Policies = new Dictionary<String, PolicyIdentifier>();
-				foreach (String P in new Regex(@"\(.*\)", RegexOptions.IgnoreCase | RegexOptions.Singleline)
+				foreach (String P in new Regex(@"\(.*\)", DefaultRegexOptions)
 					.Match(Policy).ToString()
 					.TrimStart('(').TrimEnd(')').Trim()
 					.Split(',')) {
-					String AspectMark = new Regex(@"\b(\w|_)+\s*=>", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(P).ToString().Replace("=>", "").Trim();
-					String Identifier = new Regex(@"=>\s*(\w|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(P).ToString().Replace("=>", "").Trim().ToUpper();
+					String AspectMark = new Regex(@"\b(\w|_)+\s*=>", DefaultRegexOptions).Match(P).ToString().Replace("=>", "").Trim();
+					String Identifier = new Regex(@"=>\s*(\w|_)+\b", DefaultRegexOptions).Match(P).ToString().Replace("=>", "").Trim().ToUpper();
 					PolicyIdentifier PolID;
 					switch (Identifier) {
 						case "CHECK":
@@ -121,11 +153,11 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public AssumeNoInvalidValues? ParseAssumeNoInvalidValues() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Assume_No_Invalid_Values\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Config = this.Match(@"\bpragma\s+Assume_No_Invalid_Values\(.*\);");
 			if (Config is null) return null;
-			if (new Regex(@"\bon\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			if (new Regex(@"\bon\b", DefaultRegexOptions).IsMatch(Config)) {
 				return AssumeNoInvalidValues.On;
-			} else if (new Regex(@"\boff\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			} else if (new Regex(@"\boff\b", DefaultRegexOptions).IsMatch(Config)) {
 				return AssumeNoInvalidValues.Off;
 			} else {
 				return null;
@@ -140,9 +172,9 @@ namespace AdaTools {
 		public List<String> ParseDependencies() {
 			List<String> Result = new List<String>();
 			// This seemingly obtuse approach is done to filter out aspects, which share the same syntax. A full blown semantic parser would be able to recognize when a dependency is appropriate versus an aspect, but a simple regex parser can't. So we do this instead.
-			foreach (String Match in this.Matches(new Regex(@"\b((function|procedure).*\s+)?with\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;", RegexOptions.IgnoreCase | RegexOptions.Singleline))) {
+			foreach (String Match in this.Matches(@"\b((function|procedure).*\s+)?with\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;")) {
 				// If the match contains "function" or "procedure" the "with" section is an aspect, so skip this match and move onto the next one
-				if (new Regex(@"\b(function|procedure)\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Match)) {
+				if (new Regex(@"\b(function|procedure)\b", DefaultRegexOptions).IsMatch(Match)) {
 					continue;
 				} else {
 					// We're actually looking at a dependency "with", so do the good stuff
@@ -189,11 +221,11 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public ExtensionsAllowed? ParseExtensionsAllowed() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Extensions_Allowed\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Config = this.Match(@"\bpragma\s+Extensions_Allowed\(.*\);");
 			if (Config is null) return null;
-			if (new Regex(@"\bon\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			if (new Regex(@"\bon\b", DefaultRegexOptions).IsMatch(Config)) {
 				return ExtensionsAllowed.On;
-			} else if (new Regex(@"\boff\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			} else if (new Regex(@"\boff\b", DefaultRegexOptions).IsMatch(Config)) {
 				return ExtensionsAllowed.Off;
 			} else {
 				return null;
@@ -205,7 +237,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public Boolean ParseFastMath() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Fast_Math;", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Config = this.Match(@"\bpragma\s+Fast_Math;");
 			if (Config is null) {
 				return false;
 			} else {
@@ -217,15 +249,15 @@ namespace AdaTools {
 		/// Try to parse the license configuration
 		/// </summary>
 		public License? ParseLicense() {
-			String Config = this.Match(new Regex(@"\bpragma\s+License\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Config = this.Match(@"\bpragma\s+License\(.*\);");
 			if (Config is null) return null;
 			if (new Regex(@"\bgpl\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 				return License.GPL;
-			} else if (new Regex(@"\bmodified_gpl\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			} else if (new Regex(@"\bmodified_gpl\b", DefaultRegexOptions).IsMatch(Config)) {
 				return License.Modified_GPL;
-			} else if (new Regex(@"\brestricted\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			} else if (new Regex(@"\brestricted\b", DefaultRegexOptions).IsMatch(Config)) {
 				return License.Restricted;
-			} else if (new Regex(@"\bunrestricted\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
+			} else if (new Regex(@"\bunrestricted\b", DefaultRegexOptions).IsMatch(Config)) {
 				return License.Unrestricted;
 			} else {
 				return null;
@@ -239,10 +271,10 @@ namespace AdaTools {
 		public String ParseName() {
 			String Candidate = "";
 			// Try getting the name through a variety of means
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+body\s+(\w|\.|_)+\s+(is|with)\b", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bpackage\s+(\w|\.|_)+\s+(is|with)\b", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bfunction\s+(\w|_)+\s+return\b", RegexOptions.IgnoreCase | RegexOptions.Singleline));
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(new Regex(@"\bprocedure\s+(\w|_)+\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bpackage\s+body\s+(\w|\.|_)+\s+(is|with)\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bpackage\s+(\w|\.|_)+\s+(is|with)\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bfunction\s+(\w|_)+\s+return\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bprocedure\s+(\w|_)+\s+is\b");
 			// If no name was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			String[] Split = Candidate.Split();
@@ -261,7 +293,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>The type of program</returns>
 		public ProgramType ParseProgramType() {
-			String Candidate = this.Match(new Regex(@"\b(function|procedure)\s(\w|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Candidate = this.Match(@"\b(function|procedure)\s(\w|_)+\b");
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaProgramException();
 			if (new Regex(@"\bfunction\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				return ProgramType.Function;
@@ -278,9 +310,9 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>True if pure, false otherwise</returns>
 		public Boolean ParsePurity() {
-			if (this.IsMatch(new Regex(@"\bpragma\s+pure\s*\(\s*(\w|\.|_)+\s*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline))) {
+			if (this.IsMatch(@"\bpragma\s+pure\s*\(\s*(\w|\.|_)+\s*\);")) {
 				return true;
-			} else if (this.IsMatch(new Regex(@"\bwith\s+.*pure.*\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Singleline))) {
+			} else if (this.IsMatch(@"\bwith\s+.*pure.*\s+is\b")) {
 				return true;
 			} else {
 				return false;
@@ -292,7 +324,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>True if RCI, false otherwise</returns>
 		public Boolean ParseRemoteCallInterface() {
-			if (this.IsMatch(new Regex(@"\bwith\s+.*remote_call_interface.*\s+is\b", RegexOptions.IgnoreCase | RegexOptions.Singleline))) {
+			if (this.IsMatch(@"\bwith\s+.*remote_call_interface.*\s+is\b")) {
 				return true;
 			} else {
 				return false;
@@ -306,7 +338,7 @@ namespace AdaTools {
 		public SourceFileNames ParseSourceFileNames() {
 			SourceFileNames SourceFileNames = new SourceFileNames();
 			String[] Configs;
-			Configs = this.Matches(new Regex(@"\bpragma\s+Source_File_Name\s*\((\\.|[^\)])*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			Configs = this.Matches(@"\bpragma\s+Source_File_Name\s*\((\\.|[^\)])*\);");
 			String FileName;
 			Casing Casing;
 			String DotReplacement;
@@ -351,7 +383,7 @@ namespace AdaTools {
 		/// </remarks>
 		/// <returns>The type of source</returns>
 		public SourceType ParseSourceType() {
-			String Candidate = this.Match(new Regex(@"\b(package|function|procedure)\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Candidate = this.Match(@"\b(package|function|procedure)\s+(\w|\.|_)+\b");
 			// If no matche was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			if (new Regex(@"\bpackage\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
@@ -370,12 +402,12 @@ namespace AdaTools {
 		/// <returns>The types found</returns>
 		public TypesCollection ParseTypes() {
 			TypesCollection Types = new TypesCollection();
-			String[] Candidates = this.Matches(new Regex(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String[] Candidates = this.Matches(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;");
 			Stack<String> Split;
 			String TypeName;
 			String TypeRange;
 			foreach (String Candidate in Candidates) {
-				if (new Regex(@"\btype\s+(\w|_)+\s+is\s+range\s+\d+\s*\.\.\s*\d+\s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+				if (new Regex(@"\btype\s+(\w|_)+\s+is\s+range\s+\d+\s*\.\.\s*\d+\s*;", DefaultRegexOptions).IsMatch(Candidate)) {
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
@@ -385,7 +417,7 @@ namespace AdaTools {
 					Int64 Lower = Int64.Parse(TypeRange.Split("..")[0]);
 					Int64 Upper = Int64.Parse(TypeRange.Split("..")[1]);
 					Types.Add(new SignedType(TypeName, new Range<Int64>(Lower, Upper)));
-				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+mod\s+\d+\s*;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+mod\s+\d+\s*;", DefaultRegexOptions).IsMatch(Candidate)) {
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
@@ -393,7 +425,7 @@ namespace AdaTools {
 					Split.Pop(); // "mod"
 					UInt32 Mod = UInt32.Parse(Split.Pop());
 					Types.Add(new ModularType(TypeName, Mod));
-				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+digits\s+\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+digits\s+\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", DefaultRegexOptions).IsMatch(Candidate)) {
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
@@ -410,7 +442,7 @@ namespace AdaTools {
 					} else {
 						Types.Add(new FloatType(TypeName, Digits));
 					}
-				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+delta\s+\d+\.\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+delta\s+\d+\.\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", DefaultRegexOptions).IsMatch(Candidate)) {
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
@@ -427,7 +459,7 @@ namespace AdaTools {
 					} else {
 						Types.Add(new OrdinaryType(TypeName, Delta));
 					}
-				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+delta\s+\d+\.\d+\s+digits\s+\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Candidate)) {
+				} else if (new Regex(@"\btype\s+(\w|_)+\s+is\s+delta\s+\d+\.\d+\s+digits\s+\d+(\s+range\s+\d+\.\d+\s*\.\.\s*\d+\.\d+\s*)?;", DefaultRegexOptions).IsMatch(Candidate)) {
 					Split = new Stack<String>(Candidate.TrimEnd(';').Split().Reverse());
 					Split.Pop(); // "type"
 					TypeName = Split.Pop();
@@ -473,25 +505,25 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>Returns the encoding type if found, or null if not specified</returns>
 		public WideCharacterEncoding? ParseWideCharacterEncoding() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Wide_Character_Encoding\s*\((\\.|[^)])*\)", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Config = this.Match(@"\bpragma\s+Wide_Character_Encoding\s*\((\\.|[^)])*\)");
 
-			if (new Regex(@"\bbrackets\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Brackets;
-			if (new Regex(@"'b'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Brackets;
+			if (new Regex(@"\bbrackets\b", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Brackets;
+			if (new Regex(@"'b'", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Brackets;
 
-			if (new Regex(@"\beuc\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.EUC;
-			if (new Regex(@"'e'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.EUC;
+			if (new Regex(@"\beuc\b", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.EUC;
+			if (new Regex(@"'e'", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.EUC;
 
-			if (new Regex(@"\bhex\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Hex;
-			if (new Regex(@"'h'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Hex;
+			if (new Regex(@"\bhex\b", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Hex;
+			if (new Regex(@"'h'", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Hex;
 
-			if (new Regex(@"\bshift_jis\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Shift_JIS;
-			if (new Regex(@"'s'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Shift_JIS;
+			if (new Regex(@"\bshift_jis\b", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Shift_JIS;
+			if (new Regex(@"'s'", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Shift_JIS;
 
-			if (new Regex(@"\bupper\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Upper;
-			if (new Regex(@"'u'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.Upper;
+			if (new Regex(@"\bupper\b", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Upper;
+			if (new Regex(@"'u'", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.Upper;
 
-			if (new Regex(@"\butf8\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.UTF8;
-			if (new Regex(@"'8'", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) return WideCharacterEncoding.UTF8;
+			if (new Regex(@"\butf8\b", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.UTF8;
+			if (new Regex(@"'8'", DefaultRegexOptions).IsMatch(Config)) return WideCharacterEncoding.UTF8;
 
 			return null;
 		}

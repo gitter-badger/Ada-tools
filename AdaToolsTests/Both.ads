@@ -1,7 +1,7 @@
 ﻿with Ada.Text_IO, Spec;
 use Ada.Text_IO, Spec;
 
-package Both is
+package Both with Ada_2012 is
 --@description Just a simple test package
 --@version 1.0
 

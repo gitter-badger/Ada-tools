@@ -42,6 +42,17 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void ParseAdaVersion() {
+			Assert.AreEqual(AdaVersion.Ada2012, new Source("gnat.adc").ParseAdaVersion());
+		}
+
+		[TestMethod]
+		public void ParseAllCallsRemote() {
+			Assert.AreEqual(false, new Source("Both.ads").ParseAllCallsRemote());
+			Assert.AreEqual(true, new Source("Intr.ads").ParseAllCallsRemote());
+		}
+
+		[TestMethod]
 		public void ParsePurity() {
 			Assert.IsFalse(new Source("Both.ads").ParsePurity());
 			Assert.IsTrue(new Source("Pure.ads").ParsePurity());
