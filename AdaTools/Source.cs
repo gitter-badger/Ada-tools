@@ -850,16 +850,22 @@ namespace AdaTools {
 				String Line;
 				List<String> Lines = new List<String>();
 
+				Boolean HasImports = false;
+				Boolean HasGeneric = false;
 				Boolean HasPrivate = false;
 
-				// Read Imports
+				// Read line by line
 				while ((Line = Reader.ReadLine()) != null) {
-					if (new Regex(@"^\s*(function|generic|package|procedure)\b").IsMatch(Line)) {
+					// If the line looks like the start of either a generic, package, or program, store everything read into the imports section
+					if (!HasImports && new Regex(@"^\s*(function|generic|package|procedure)\b").IsMatch(Line)) {
 						this.Imports = String.Join('\n', Lines);
 						Lines.Clear();
-					} else if (new Regex(@"^\s*(function|package|procedure)\b").IsMatch(Line)) {
+						HasImports = true;
+					// If the line looks like the start of either a package or program, store everything read into the generics section
+					} else if (!HasGeneric && new Regex(@"^\s*(function|package|procedure)\b").IsMatch(Line)) {
 						this.Generic = String.Join('\n', Lines);
 						Lines.Clear();
+						HasGeneric = true;
 					} else if (new Regex(@"^\s*(private)\b").IsMatch(Line)) {
 						this.Public = String.Join('\n', Lines);
 						Lines.Clear();
