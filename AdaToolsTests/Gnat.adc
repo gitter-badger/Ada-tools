@@ -1,2 +1,3 @@
 ﻿pragma Ada_2012;
 pragma Assertion_Policy(Check);
+pragma Assume_No_Invalid_Values(Off);

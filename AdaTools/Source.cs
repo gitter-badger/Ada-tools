@@ -473,7 +473,7 @@ namespace AdaTools {
 		public List<String> ParseDependencies() {
 			List<String> Result = new List<String>();
 			// This seemingly obtuse approach is done to filter out aspects, which share the same syntax. A full blown semantic parser would be able to recognize when a dependency is appropriate versus an aspect, but a simple regex parser can't. So we do this instead.
-			foreach (String Match in this.Matches(@"\b((function|procedure).*\s+)?with\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;")) {
+			foreach (String Match in this.Matches(@"\b((function|procedure).*\s+)?with\s+(\w|\.|_)+(\s*,\s*(\w|\.|_)+)*;", SourceSection.Imports)) {
 				// If the match contains "function" or "procedure" the "with" section is an aspect, so skip this match and move onto the next one
 				if (new Regex(@"\b(function|procedure)\b", DefaultRegexOptions).IsMatch(Match)) {
 					continue;
@@ -703,7 +703,7 @@ namespace AdaTools {
 		/// <returns>The types found</returns>
 		public TypesCollection ParseTypes() {
 			TypesCollection Types = new TypesCollection();
-			String[] Candidates = this.Matches(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;");
+			String[] Candidates = this.Matches(@"\btype\s+(\w|_)+\s+is(\\.|[^;])*;", SourceSection.Public | SourceSection.Private);
 			Stack<String> Split;
 			String TypeName;
 			String TypeRange;

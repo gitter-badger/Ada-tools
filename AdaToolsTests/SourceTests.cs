@@ -53,6 +53,16 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
+		public void ParseAssertionPolicy() {
+			Assert.AreEqual(PolicyIdentifier.Check, new Source("gnat.adc").ParseAssertionPolicy());
+		}
+
+		[TestMethod]
+		public void ParseAssumeNoInvalidValues() {
+			Assert.AreEqual(AssumeNoInvalidValues.Off, new Source("gnat.adc").ParseAssumeNoInvalidValues());
+		}
+
+		[TestMethod]
 		public void ParsePurity() {
 			Assert.IsFalse(new Source("Both.ads").ParsePurity());
 			Assert.IsTrue(new Source("Pure.ads").ParsePurity());

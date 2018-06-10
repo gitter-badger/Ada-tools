@@ -38,6 +38,42 @@ namespace AdaTools {
 			}
 		}
 
+		public override Boolean Equals(Object obj) {
+			if (obj is AssertionPolicy) {
+				if (this.Policies is null) {
+					return this.GlobalPolicy == (obj as AssertionPolicy).GlobalPolicy;
+				} else {
+					return this.Policies == (obj as AssertionPolicy).Policies;
+				}
+			} else if (obj is PolicyIdentifier) {
+				return this.GlobalPolicy == (PolicyIdentifier)obj;
+			} else {
+				return false;
+			}
+		}
+
+		public override Int32 GetHashCode() => this.GlobalPolicy?.GetHashCode() ?? this.Policies.GetHashCode();
+
+		public static Boolean operator ==(AssertionPolicy Left, AssertionPolicy Right) {
+			if (Left.Policies is null && Right.Policies is null) {
+				return Left.GlobalPolicy == Right.GlobalPolicy;
+			} else if (Left.GlobalPolicy is null && Right.GlobalPolicy is null) {
+				return Left.Policies == Right.Policies;
+			} else {
+				return false;
+			}
+		}
+
+		public static Boolean operator !=(AssertionPolicy Left, AssertionPolicy Right) {
+			if (Left.Policies is null && Right.Policies is null) {
+				return Left.GlobalPolicy != Right.GlobalPolicy;
+			} else if (Left.GlobalPolicy is null && Right.GlobalPolicy is null) {
+				return Left.Policies != Right.Policies;
+			} else {
+				return true;
+			}
+		}
+
 		public AssertionPolicy(PolicyIdentifier GlobalPolicy) {
 			this.GlobalPolicy = GlobalPolicy;
 			this.Policies = null;
