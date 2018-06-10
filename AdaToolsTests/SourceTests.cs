@@ -17,8 +17,8 @@ namespace AdaToolsTests {
 		[TestMethod]
 		public void Match() {
 			Source Spec = new Source("Both.ads");
-			Assert.AreEqual("with Ada.Text_IO, Spec;", Spec.Match(new Regex(@"with.*;", RegexOptions.IgnoreCase)));
-			Assert.AreEqual("package Both", Spec.Match(new Regex(@"package\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase)));
+			Assert.AreEqual("with Ada.Text_IO, Spec;", Spec.Match(@"with\s+(\\.|[^;])*;"));
+			Assert.AreEqual("package Both", Spec.Match(@"package\s+(\w|\.|_)+\b"));
 		}
 
 		[TestMethod]

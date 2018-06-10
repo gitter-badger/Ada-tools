@@ -9,12 +9,18 @@ namespace AdaTools {
 	/// <summary>
 	/// Represents Ada source code
 	/// </summary>
+	/// <remarks>
+	/// The source code is broken up into sections which can be referenced with <see cref="SourceSection"/>
+	/// </remarks>
 	public sealed class Source {
 
-		/// <summary>
-		/// Holds the actual source code
-		/// </summary>
-		private readonly String SourceCode = "";
+		private readonly String Imports = "";
+
+		private readonly String Generic = "";
+
+		private readonly String Public = "";
+
+		private readonly String Private = "";
 
 		private readonly FileStream FileStream;
 
@@ -24,55 +30,350 @@ namespace AdaTools {
 		public const RegexOptions DefaultRegexOptions = RegexOptions.IgnoreCase | RegexOptions.Singleline;
 
 		/// <summary>
-		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// Attempt to find the specified <paramref name="Pattern"/> within the entire source code
 		/// </summary>
-		/// <param name="Pattern">The pattern to try to find</param>
-		/// <returns>True if a match was found, false otherwise</returns>
-		public Boolean IsMatch(String Pattern) => new Regex(Pattern, DefaultRegexOptions).IsMatch(this.SourceCode);
+		/// <param name="Pattern"></param>
+		/// <returns></returns>
+		public Boolean IsMatch(String Pattern, RegexOptions RegexOptions = DefaultRegexOptions) {
+			Regex Regex = new Regex(Pattern, RegexOptions);
+			if (Regex.IsMatch(this.Imports)) return true;
+			if (Regex.IsMatch(this.Generic)) return true;
+			if (Regex.IsMatch(this.Private)) return true;
+			if (Regex.IsMatch(this.Public)) return true;
+			return false;
+		}
 
 		/// <summary>
-		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// Attempt to find the specified <paramref name="Pattern"/> within the specified <paramref name="Sections"/>
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
+		/// <param name="Sections">The sections to search</param>
 		/// <returns>True if a match was found, false otherwise</returns>
-		public Boolean IsMatch(Regex Pattern) => Pattern.IsMatch(this.SourceCode);
+		public Boolean IsMatch(String Pattern, SourceSection Sections, RegexOptions RegexOptions = DefaultRegexOptions) {
+			Regex Regex = new Regex(Pattern, RegexOptions);
+			switch (Sections) {
+			case SourceSection.Generic:
+				return Regex.IsMatch(this.Generic);
+			case SourceSection.Imports:
+				return Regex.IsMatch(this.Imports);
+			case SourceSection.Private:
+				return Regex.IsMatch(this.Private);
+			case SourceSection.Public:
+				return Regex.IsMatch(this.Public);
+			case SourceSection.Generic | SourceSection.Imports:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Imports)) return true;
+				return false;
+			case SourceSection.Generic | SourceSection.Private:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
+				return false;
+			case SourceSection.Generic | SourceSection.Public:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			case SourceSection.Imports | SourceSection.Private:
+				if (Regex.IsMatch(this.Imports)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
+				return false;
+			case SourceSection.Imports | SourceSection.Public:
+				if (Regex.IsMatch(this.Imports)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			case SourceSection.Private | SourceSection.Public:
+				if (Regex.IsMatch(this.Private)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Imports)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
+				return false;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Public:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Imports)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			case SourceSection.Generic | SourceSection.Private | SourceSection.Public:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			case SourceSection.Imports | SourceSection.Private | SourceSection.Public:
+				if (Regex.IsMatch(this.Imports)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private | SourceSection.Public:
+				if (Regex.IsMatch(this.Generic)) return true;
+				if (Regex.IsMatch(this.Imports)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
+				if (Regex.IsMatch(this.Public)) return true;
+				return false;
+			default:
+				throw new InvalidSourceSectionException();
+			}
+		}
 
 		/// <summary>
-		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// Attempt to find the specified <paramref name="Pattern"/> within the entire source code
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
 		/// <returns>If a match was found, returns the matched source code</returns>
-		public String Match(String Pattern) => new Regex(Pattern, DefaultRegexOptions).Match(this.SourceCode).Value;
+		public String Match(String Pattern, RegexOptions RegexOptions = DefaultRegexOptions) {
+			Regex Regex = new Regex(Pattern, RegexOptions);
+			Match Match;
+			Match = Regex.Match(this.Generic);
+			if (Match.Success) return Match.Value;
+			Match = Regex.Match(this.Imports);
+			if (Match.Success) return Match.Value;
+			Match = Regex.Match(this.Private);
+			if (Match.Success) return Match.Value;
+			Match = Regex.Match(this.Public);
+			if (Match.Success) return Match.Value;
+			return "";
+		}
 
 		/// <summary>
-		/// Attempt to find the specified <paramref name="Pattern"/> within the source code
+		/// Attempt to find the specified <paramref name="Pattern"/> within the specified <paramref name="Sections"/>
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
+		/// <param name="Sections">The sections to search</param>
 		/// <returns>If a match was found, returns the matched source code</returns>
-		public String Match(Regex Pattern) => Pattern.Match(this.SourceCode).Value;
+		public String Match(String Pattern, SourceSection Sections, RegexOptions RegexOptions = DefaultRegexOptions) {
+			Regex Regex = new Regex(Pattern, RegexOptions);
+			Match Match;
+			switch (Sections) {
+			case SourceSection.Generic:
+				return Regex.Match(this.Generic).Value;
+			case SourceSection.Imports:
+				return Regex.Match(this.Imports).Value;
+			case SourceSection.Private:
+				return Regex.Match(this.Private).Value;
+			case SourceSection.Public:
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Generic | SourceSection.Imports:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Imports).Value;
+			case SourceSection.Generic | SourceSection.Private:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Private).Value;
+			case SourceSection.Generic | SourceSection.Public:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Imports | SourceSection.Private:
+				Match = Regex.Match(this.Imports);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Private).Value;
+			case SourceSection.Imports | SourceSection.Public:
+				Match = Regex.Match(this.Imports);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Private | SourceSection.Public:
+				Match = Regex.Match(this.Private);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				Match = Regex.Match(this.Imports);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Private).Value;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Public:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				Match = Regex.Match(this.Imports);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Generic | SourceSection.Private | SourceSection.Public:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				Match = Regex.Match(this.Private);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Imports | SourceSection.Private | SourceSection.Public:
+				Match = Regex.Match(this.Imports);
+				if (Match.Success) return Match.Value;
+				Match = Regex.Match(this.Private);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private | SourceSection.Public:
+				Match = Regex.Match(this.Generic);
+				if (Match.Success) return Match.Value;
+				Match = Regex.Match(this.Imports);
+				if (Match.Success) return Match.Value;
+				Match = Regex.Match(this.Private);
+				if (Match.Success) return Match.Value;
+				return Regex.Match(this.Public).Value;
+			default:
+				throw new InvalidSourceSectionException();
+			}
+		}
 
 		/// <summary>
-		/// Attempt to find all of the specified <paramref name="Pattern"/> within the source code
+		/// Attempt to find all of the specified <paramref name="Pattern"/> within the entire source code
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
 		/// <returns>Returns all of the matches in the source code, if any</returns>
-		public String[] Matches(String Pattern) {
+		public String[] Matches(String Pattern, RegexOptions RegexOptions = DefaultRegexOptions) {
+			Regex Regex = new Regex(Pattern, RegexOptions);
 			List<String> Matches = new List<String>();
-			foreach (Match Match in new Regex(Pattern, DefaultRegexOptions).Matches(this.SourceCode)) {
+			foreach (Match Match in Regex.Matches(this.Generic)) {
+				Matches.Add(Match.Value);
+			}
+			foreach (Match Match in Regex.Matches(this.Imports)) {
+				Matches.Add(Match.Value);
+			}
+			foreach (Match Match in Regex.Matches(this.Private)) {
+				Matches.Add(Match.Value);
+			}
+			foreach (Match Match in Regex.Matches(this.Public)) {
 				Matches.Add(Match.Value);
 			}
 			return Matches.ToArray();
 		}
 
 		/// <summary>
-		/// Attempt to find all of the specified <paramref name="Pattern"/> within the source code
+		/// Attempt to find all of the specified <paramref name="Pattern"/> within the specified <paramref name="Sections"/>
 		/// </summary>
 		/// <param name="Pattern">The pattern to try to find</param>
-		/// <returns>Returns all of the matches in the source code, if any</returns>
-		public String[] Matches(Regex Pattern) {
+		/// <param name="Sections">The sections to search</param>
+		/// <returns>Returns all of the matches in the specified sections, if any</returns>
+		public String[] Matches(String Pattern, SourceSection Sections, RegexOptions RegexOptions = DefaultRegexOptions) {
+			Regex Regex = new Regex(Pattern, RegexOptions);
 			List<String> Matches = new List<String>();
-			foreach (Match Match in Pattern.Matches(this.SourceCode)) {
-				Matches.Add(Match.Value);
+			switch (Sections) {
+			case SourceSection.Generic:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Imports:
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Private:
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Imports:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Private:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Imports | SourceSection.Private:
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Imports | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Private | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Private | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Imports | SourceSection.Private | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private | SourceSection.Public:
+				foreach (Match Match in Regex.Matches(this.Generic)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Imports)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Private)) {
+					Matches.Add(Match.Value);
+				}
+				foreach (Match Match in Regex.Matches(this.Public)) {
+					Matches.Add(Match.Value);
+				}
+				break;
+			default:
+				throw new InvalidSourceSectionException();
 			}
 			return Matches.ToArray();
 		}
@@ -127,20 +428,20 @@ namespace AdaTools {
 					String Identifier = new Regex(@"=>\s*(\w|_)+\b", DefaultRegexOptions).Match(P).ToString().Replace("=>", "").Trim().ToUpper();
 					PolicyIdentifier PolID;
 					switch (Identifier) {
-						case "CHECK":
-							PolID = PolicyIdentifier.Check;
-							break;
-						case "DISABLE":
-							PolID = PolicyIdentifier.Disable;
-							break;
-						case "IGNORE":
-							PolID = PolicyIdentifier.Ignore;
-							break;
-						case "SUPPRESSIBLE":
-							PolID = PolicyIdentifier.Suppressible;
-							break;
-						default:
-							continue;
+					case "CHECK":
+						PolID = PolicyIdentifier.Check;
+						break;
+					case "DISABLE":
+						PolID = PolicyIdentifier.Disable;
+						break;
+					case "IGNORE":
+						PolID = PolicyIdentifier.Ignore;
+						break;
+					case "SUPPRESSIBLE":
+						PolID = PolicyIdentifier.Suppressible;
+						break;
+					default:
+						continue;
 					}
 					Policies.Add(AspectMark, PolID);
 				}
@@ -193,11 +494,11 @@ namespace AdaTools {
 		public String ParseDescription() {
 			String Candidate;
 			// This is correctly in multiline mode, as Ada comments only exist over single lines
-			Candidate = this.Match(new Regex(@"--@description.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline))
+			Candidate = this.Match(@"--@description.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline)
 			?? "--@description  "; // This last part ensures the parse does not fail, but rather, simply finds an empty description.
 			Console.WriteLine("Candidate: " + Candidate);
 			String[] Split = Candidate.Split();
-			return String.Join(' ', Split.Skip(1).Take(Split.Length-1));
+			return String.Join(' ', Split.Skip(1).Take(Split.Length - 1));
 		}
 
 		/// <summary>
@@ -205,7 +506,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public ElaborationChecks? ParseElaborationChecks() {
-			String Config = this.Match(new Regex(@"\bpragma\s+Elaboration_Checks\(.*\);", RegexOptions.IgnoreCase | RegexOptions.Singleline));
+			String Config = this.Match(@"\bpragma\s+Elaboration_Checks\(.*\);");
 			if (Config is null) return null;
 			if (new Regex(@"\bdynamic\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 				return ElaborationChecks.Dynamic;
@@ -344,16 +645,16 @@ namespace AdaTools {
 			String DotReplacement;
 			foreach (String Config in Configs) {
 				switch (new Regex(@"\bcasing => \w+\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(Config).ToString().Split()[2].Trim('"')) {
-					case "uppercase":
-						Casing = Casing.Uppercase;
-						break;
-					case "lowercase":
-						Casing = Casing.Lowercase;
-						break;
-					case "mixedcase":
-					default: // This shuts up the compiler, and is a reasonably default
-						Casing = Casing.Mixedcase;
-						break;
+				case "uppercase":
+					Casing = Casing.Uppercase;
+					break;
+				case "lowercase":
+					Casing = Casing.Lowercase;
+					break;
+				case "mixedcase":
+				default: // This shuts up the compiler, and is a reasonably default
+					Casing = Casing.Mixedcase;
+					break;
 				}
 				if (new Regex(@"\bdot_replacement\b", RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(Config)) {
 					// I think this regex has to be a normal escaped string because of the quotes inside of it. Unfortunantly this makes it really awkward to read.
@@ -492,9 +793,9 @@ namespace AdaTools {
 		public Version ParseVersion() {
 			// Try to match the psuedo gnatdoc convention for version comments. Gnatdoc doesn't actually have this, but it's the same style
 			// This is correctly in multiline mode, as Ada comments only exist over single lines
-			String Candidate = this.Match(new Regex(@"--@version.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline));
+			String Candidate = this.Match(@"--@version.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 			if (Candidate is null || Candidate == "") return new Version(1, 0, 0);
-			
+
 			String[] Split = Candidate.Split();
 
 			return new Version(Split[1]);
@@ -532,14 +833,6 @@ namespace AdaTools {
 
 		public override Int32 GetHashCode() => this.FileStream.GetHashCode();
 
-		public String this[Int32 Index] {
-			get => this.SourceCode.Split('\n')[Index];
-		}
-
-		public static implicit operator String(Source Source) => Source.SourceCode;
-
-		public static implicit operator String[] (Source Source) => Source.SourceCode.Split('\n');
-
 		public static Boolean operator ==(Source Left, Source Right) => Left.FileStream == Right.FileStream;
 
 		public static Boolean operator ==(Source Left, FileStream Right) => Left.FileStream == Right;
@@ -556,10 +849,29 @@ namespace AdaTools {
 			using (StreamReader Reader = new StreamReader(FileStream)) {
 				String Line;
 				List<String> Lines = new List<String>();
+
+				Boolean HasPrivate = false;
+
+				// Read Imports
 				while ((Line = Reader.ReadLine()) != null) {
+					if (new Regex(@"^\s*(function|generic|package|procedure)\b").IsMatch(Line)) {
+						this.Imports = String.Join('\n', Lines);
+						Lines.Clear();
+					} else if (new Regex(@"^\s*(function|package|procedure)\b").IsMatch(Line)) {
+						this.Generic = String.Join('\n', Lines);
+						Lines.Clear();
+					} else if (new Regex(@"^\s*(private)\b").IsMatch(Line)) {
+						this.Public = String.Join('\n', Lines);
+						Lines.Clear();
+						HasPrivate = true;
+					}
 					Lines.Add(Line);
 				}
-				this.SourceCode = String.Join('\n', Lines);
+				if (HasPrivate) {
+					this.Private = String.Join('\n', Lines);
+				} else {
+					this.Public = String.Join('\n', Lines);
+				}
 			}
 			this.FileStream = FileStream;
 		}
