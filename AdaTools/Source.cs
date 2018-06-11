@@ -38,8 +38,8 @@ namespace AdaTools {
 			Regex Regex = new Regex(Pattern, RegexOptions);
 			if (Regex.IsMatch(this.Imports)) return true;
 			if (Regex.IsMatch(this.Generic)) return true;
-			if (Regex.IsMatch(this.Private)) return true;
 			if (Regex.IsMatch(this.Public)) return true;
+			if (Regex.IsMatch(this.Private)) return true;
 			return false;
 		}
 
@@ -81,8 +81,8 @@ namespace AdaTools {
 				if (Regex.IsMatch(this.Public)) return true;
 				return false;
 			case SourceSection.Private | SourceSection.Public:
-				if (Regex.IsMatch(this.Private)) return true;
 				if (Regex.IsMatch(this.Public)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
 				return false;
 			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private:
 				if (Regex.IsMatch(this.Generic)) return true;
@@ -96,19 +96,19 @@ namespace AdaTools {
 				return false;
 			case SourceSection.Generic | SourceSection.Private | SourceSection.Public:
 				if (Regex.IsMatch(this.Generic)) return true;
-				if (Regex.IsMatch(this.Private)) return true;
 				if (Regex.IsMatch(this.Public)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
 				return false;
 			case SourceSection.Imports | SourceSection.Private | SourceSection.Public:
 				if (Regex.IsMatch(this.Imports)) return true;
-				if (Regex.IsMatch(this.Private)) return true;
 				if (Regex.IsMatch(this.Public)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
 				return false;
 			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private | SourceSection.Public:
 				if (Regex.IsMatch(this.Generic)) return true;
 				if (Regex.IsMatch(this.Imports)) return true;
-				if (Regex.IsMatch(this.Private)) return true;
 				if (Regex.IsMatch(this.Public)) return true;
+				if (Regex.IsMatch(this.Private)) return true;
 				return false;
 			default:
 				throw new InvalidSourceSectionException();
@@ -127,9 +127,9 @@ namespace AdaTools {
 			if (Match.Success) return Match.Value;
 			Match = Regex.Match(this.Imports);
 			if (Match.Success) return Match.Value;
-			Match = Regex.Match(this.Private);
-			if (Match.Success) return Match.Value;
 			Match = Regex.Match(this.Public);
+			if (Match.Success) return Match.Value;
+			Match = Regex.Match(this.Private);
 			if (Match.Success) return Match.Value;
 			return "";
 		}
@@ -173,9 +173,9 @@ namespace AdaTools {
 				if (Match.Success) return Match.Value;
 				return Regex.Match(this.Public).Value;
 			case SourceSection.Private | SourceSection.Public:
-				Match = Regex.Match(this.Private);
+				Match = Regex.Match(this.Public);
 				if (Match.Success) return Match.Value;
-				return Regex.Match(this.Public).Value;
+				return Regex.Match(this.Private).Value;
 			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private:
 				Match = Regex.Match(this.Generic);
 				if (Match.Success) return Match.Value;
@@ -191,23 +191,23 @@ namespace AdaTools {
 			case SourceSection.Generic | SourceSection.Private | SourceSection.Public:
 				Match = Regex.Match(this.Generic);
 				if (Match.Success) return Match.Value;
-				Match = Regex.Match(this.Private);
+				Match = Regex.Match(this.Public);
 				if (Match.Success) return Match.Value;
-				return Regex.Match(this.Public).Value;
+				return Regex.Match(this.Private).Value;
 			case SourceSection.Imports | SourceSection.Private | SourceSection.Public:
 				Match = Regex.Match(this.Imports);
 				if (Match.Success) return Match.Value;
-				Match = Regex.Match(this.Private);
+				Match = Regex.Match(this.Public);
 				if (Match.Success) return Match.Value;
-				return Regex.Match(this.Public).Value;
+				return Regex.Match(this.Private).Value;
 			case SourceSection.Generic | SourceSection.Imports | SourceSection.Private | SourceSection.Public:
 				Match = Regex.Match(this.Generic);
 				if (Match.Success) return Match.Value;
 				Match = Regex.Match(this.Imports);
 				if (Match.Success) return Match.Value;
-				Match = Regex.Match(this.Private);
+				Match = Regex.Match(this.Public);
 				if (Match.Success) return Match.Value;
-				return Regex.Match(this.Public).Value;
+				return Regex.Match(this.Private).Value;
 			default:
 				throw new InvalidSourceSectionException();
 			}
@@ -227,10 +227,10 @@ namespace AdaTools {
 			foreach (Match Match in Regex.Matches(this.Imports)) {
 				Matches.Add(Match.Value);
 			}
-			foreach (Match Match in Regex.Matches(this.Private)) {
+			foreach (Match Match in Regex.Matches(this.Public)) {
 				Matches.Add(Match.Value);
 			}
-			foreach (Match Match in Regex.Matches(this.Public)) {
+			foreach (Match Match in Regex.Matches(this.Private)) {
 				Matches.Add(Match.Value);
 			}
 			return Matches.ToArray();
@@ -307,10 +307,10 @@ namespace AdaTools {
 				}
 				break;
 			case SourceSection.Private | SourceSection.Public:
-				foreach (Match Match in Regex.Matches(this.Private)) {
+				foreach (Match Match in Regex.Matches(this.Public)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Public)) {
+				foreach (Match Match in Regex.Matches(this.Private)) {
 					Matches.Add(Match.Value);
 				}
 				break;
@@ -340,10 +340,10 @@ namespace AdaTools {
 				foreach (Match Match in Regex.Matches(this.Generic)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Private)) {
+				foreach (Match Match in Regex.Matches(this.Public)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Public)) {
+				foreach (Match Match in Regex.Matches(this.Private)) {
 					Matches.Add(Match.Value);
 				}
 				break;
@@ -351,10 +351,10 @@ namespace AdaTools {
 				foreach (Match Match in Regex.Matches(this.Imports)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Private)) {
+				foreach (Match Match in Regex.Matches(this.Public)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Public)) {
+				foreach (Match Match in Regex.Matches(this.Private)) {
 					Matches.Add(Match.Value);
 				}
 				break;
@@ -365,10 +365,10 @@ namespace AdaTools {
 				foreach (Match Match in Regex.Matches(this.Imports)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Private)) {
+				foreach (Match Match in Regex.Matches(this.Public)) {
 					Matches.Add(Match.Value);
 				}
-				foreach (Match Match in Regex.Matches(this.Public)) {
+				foreach (Match Match in Regex.Matches(this.Private)) {
 					Matches.Add(Match.Value);
 				}
 				break;
@@ -572,10 +572,10 @@ namespace AdaTools {
 		public String ParseName() {
 			String Candidate = "";
 			// Try getting the name through a variety of means
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bpackage\s+body\s+(\w|\.|_)+\s+(is|with)\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bpackage\s+(\w|\.|_)+\s+(is|with)\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bfunction\s+(\w|_)+\s+return\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bprocedure\s+(\w|_)+\s+is\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)package\s+body\s+(\w|\.|_)+\s+(is|with)\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)package\s+(\w|\.|_)+\s+(is|with)\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)function\s+(\w|_)+\s+return\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)procedure\s+(\w|_)+\s+is\b");
 			// If no name was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			String[] Split = Candidate.Split();
@@ -846,40 +846,78 @@ namespace AdaTools {
 		public static Boolean operator !=(FileStream Left, Source Right) => Left != Right.FileStream;
 
 		public Source(FileStream FileStream) {
+			Console.WriteLine("new Source(" + FileStream.Name + ")");
 			using (StreamReader Reader = new StreamReader(FileStream)) {
 				String Line;
 				List<String> Lines = new List<String>();
 
-				Boolean HasImports = false;
-				Boolean HasGeneric = false;
-				Boolean HasPrivate = false;
+				// This uses a simple state machine approach. Imports are always at the begining of the source file, then a possible Generic preamble, then the Public part, followed by a possible Private part
+				// The general approach is to loop over each line. The following variables control where the line is placed, as this source object is split into sections. Furthermore, each state has checks for moving into the next state.
+				// It is not an error that the loop is organized as a series of if statements, rather than if-elseif. This is because when we switch state, the line needs to be put into the next section. If an if-elseif approach was taken, the lines where state was switched would be consumed and not in the source at all.
+
+				Boolean ReadingImports = true;
+				Boolean ReadingGeneric = false;
+				Boolean ReadingPublic = false;
+				Boolean ReadingPrivate = false;
+
 
 				// Read line by line
 				while ((Line = Reader.ReadLine()) != null) {
-					// If the line looks like the start of either a generic, package, or program, store everything read into the imports section
-					if (!HasImports && new Regex(@"^\s*(function|generic|package|procedure)\b").IsMatch(Line)) {
-						this.Imports = String.Join('\n', Lines);
-						Lines.Clear();
-						HasImports = true;
-					// If the line looks like the start of either a package or program, store everything read into the generics section
-					} else if (!HasGeneric && new Regex(@"^\s*(function|package|procedure)\b").IsMatch(Line)) {
-						this.Generic = String.Join('\n', Lines);
-						Lines.Clear();
-						HasGeneric = true;
-					} else if (new Regex(@"^\s*(private)\b").IsMatch(Line)) {
-						this.Public = String.Join('\n', Lines);
-						Lines.Clear();
-						HasPrivate = true;
+					if (ReadingImports) {
+						if (new Regex(@"(^|;)\s*(generic)\b").IsMatch(Line)) {
+							this.Imports = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingImports = false;
+							ReadingGeneric = true;
+						} else if (new Regex(@"(^|;)\s*(function|package|procedure)\b").IsMatch(Line)) {
+							this.Imports = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingImports = false;
+							ReadingPublic = true;
+						}
+						Lines.Add(Line);
 					}
-					Lines.Add(Line);
+					if (ReadingGeneric) {
+						if (new Regex(@"(^|;)\s*(function|package|procedure)\b").IsMatch(Line)) {
+							this.Generic = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingGeneric = false;
+							ReadingPublic = true;
+						}
+						Lines.Add(Line);
+					}
+					if (ReadingPublic) {
+						if (new Regex(@"(^|;)\s*(private)\b").IsMatch(Line)) {
+							this.Public = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingPublic = false;
+							ReadingPrivate = true;
+						}
+						Lines.Add(Line);
+					}
+					if (ReadingPrivate) {
+						Lines.Add(Line);
+					}
 				}
-				if (HasPrivate) {
-					this.Private = String.Join('\n', Lines);
-				} else {
+
+				// An end of file was reached, but there's still lines in the List<String>. This decides where to put them.
+				if (ReadingImports) {
+					// The reason for ReadingImports placing the lines in the public part is that the source file being read doesn't seem to be a spec or body, and is probably something like a gnat.adc file, which is entirely "public".
 					this.Public = String.Join('\n', Lines);
+				} else if (ReadingPublic) {
+					// A private part was never found, so the entire unit is publicly visable.
+					this.Public = String.Join('\n', Lines);
+				} else if (ReadingPrivate) {
+					this.Private = String.Join('\n', Lines);
 				}
 			}
 			this.FileStream = FileStream;
+
+			// These are for debugging purposes. Uncomment if necessary. Sometimes writing to the console is the only reasonable way to debug. Fight me.
+			//Console.WriteLine("Imports:\n" + this.Imports);
+			//Console.WriteLine("Generic:\n" + this.Generic);
+			//Console.WriteLine("Public:\n" + this.Public);
+			//Console.WriteLine("Private:\n" + this.Private);
 		}
 
 		public Source(String FileName) : this(new FileStream(FileName, FileMode.Open)) {
