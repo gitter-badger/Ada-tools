@@ -171,6 +171,7 @@ namespace AdaTools {
 		}
 
 		protected Unit(String Name) : this() {
+			Console.WriteLine("new Unit(" + Name + ")");
 			this.Name = Name;
 		}
 

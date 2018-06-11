@@ -571,17 +571,16 @@ namespace AdaTools {
 		/// <returns>The internal name, if any was found</returns>
 		public String ParseName() {
 			String Candidate = "";
-			// Try getting the name through a variety of means
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)package\s+body\s+(\w|\.|_)+\s+(is|with)\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)package\s+(\w|\.|_)+\s+(is|with)\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)function\s+(\w|\.|_)+\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)procedure\s+(\w|\.|_)+\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bpackage\s+body\s+(\w|\.|_)+\b", SourceSection.Public | SourceSection.Private);
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\b(private\s*)?package\s+(\w|\.|_)+\b", SourceSection.Public | SourceSection.Private);
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bfunction\s+(\w|\.|_)+\b", SourceSection.Public | SourceSection.Private);
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"\bprocedure\s+(\w|\.|_)+\b", SourceSection.Public | SourceSection.Private);
 			// If no name was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			String[] Split = Candidate.Split();
-			if (Split.Length == 4) {
+			if (Split.Length == 3) {
 				return Split[2];
-			} else if (Split.Length >= 2) {
+			} else if (Split.Length == 2) {
 				return Split[1];
 			} else {
 				// This should never happen because a match wouldn't happen, but still raise an exception
@@ -883,6 +882,11 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingImports = false;
 							ReadingPublic = true;
+						} else if (new Regex(@"(^|;)\s*private\s+package\b").IsMatch(Line)) {
+							this.Imports = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingImports = false;
+							ReadingPrivate = true;
 						} else {
 							Lines.Add(Line);
 						}
@@ -893,6 +897,11 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingGeneric = false;
 							ReadingPublic = true;
+						} else if (new Regex(@"(^|;)\s*private\s+package\b").IsMatch(Line)) {
+							this.Generic = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingGeneric = false;
+							ReadingPrivate = true;
 						} else {
 							Lines.Add(Line);
 						}
