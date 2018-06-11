@@ -1,0 +1,1 @@
+﻿function Func return Integer;

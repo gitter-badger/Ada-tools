@@ -181,7 +181,6 @@ namespace AdaTools {
 		/// </remarks>
 		/// <param name="Name">The name of the package</param>
 		public PackageUnit(String Name) : base(Name) {
-			Console.WriteLine("new PackageUnit(" + Name + ")");
 
 			// We need to tollerate missing specs or bodies, as long as at least one is found.
 			Source SpecSource;

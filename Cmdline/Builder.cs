@@ -15,14 +15,17 @@ namespace Cmdline {
 		internal static void Simple() {
 			foreach (Unit Unit in new BuildPlan(new Project())) {
 				switch (Unit) {
-					case PackageUnit PackageUnit:
-						Compiler.Compile(PackageUnit);
-						break;
-					case ProgramUnit ProgramUnit:
-						Compiler.Compile(ProgramUnit);
-						break;
-					default:
-						break;
+				case PackageUnit PackageUnit:
+					Compiler.Compile(PackageUnit);
+					break;
+				case SubroutineUnit SubroutineUnit:
+					Compiler.Compile(SubroutineUnit);
+					break;
+				case ProgramUnit ProgramUnit:
+					Compiler.Compile(ProgramUnit);
+					break;
+				default:
+					break;
 				}
 			}
 		}
