@@ -55,6 +55,9 @@
     <None Update="Func.adb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Func.ads">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Gnat.adc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

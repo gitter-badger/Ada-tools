@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AdaTools {
+﻿namespace AdaTools {
 	/// <summary>
 	/// Represents the different types of Ada program representations
 	/// </summary>

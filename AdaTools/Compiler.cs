@@ -4,21 +4,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace AdaTools
-{
+namespace AdaTools {
 	/// <summary>
 	/// Interface wrapping for the GNAT compiler command line arguments
 	/// </summary>
-	public static class Compiler
-	{
+	public static class Compiler {
 
-		public static void Clean(Unit Unit)
-		{
+		public static void Clean(Unit Unit) {
 			Process GnatClean = Process.Start("gnatclean", String.Join(' ', Unit.GetFiles()));
 			GnatClean.WaitForExit(); // We wait only because concurrent processes do terrible things to the command line text. This could be fixed by buffering the output then oneshot printing it.
 			GnatClean.Dispose();
-			foreach(String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
-				switch(Path.GetExtension(FileName).ToUpper()) {
+			foreach (String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
+				switch (Path.GetExtension(FileName).ToUpper()) {
 				case ".APKG":
 					File.Delete(FileName);
 					Console.WriteLine("\"." + Path.DirectorySeparatorChar + Path.GetFileName(FileName) + "\" has been deleted");
@@ -38,10 +35,9 @@ namespace AdaTools
 		/// <param name="Unit">Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(PackageUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console)
-		{
+		public static void Compile(PackageUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
 			String arch;
-			switch(Architecture) {
+			switch (Architecture) {
 			case Architecture.Generic:
 				arch = "-mtune=generic";
 				break;
@@ -51,8 +47,8 @@ namespace AdaTools
 				break;
 			}
 			Process GnatMake;
-			if(Environment.OSVersion.Platform <= (PlatformID)3) {
-				switch(WindowsSubsystem) {
+			if (Environment.OSVersion.Platform <= (PlatformID)3) {
+				switch (WindowsSubsystem) {
 				case WindowsSubsystem.Windows:
 					GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 					break;
@@ -68,9 +64,9 @@ namespace AdaTools
 			GnatMake.Dispose();
 			Process CreateLibrary;
 			// Linking is a very different procedure on different systems, so figure out what we're supposed to do
-			if(Environment.OSVersion.Platform <= (PlatformID)3) {
+			if (Environment.OSVersion.Platform <= (PlatformID)3) {
 				CreateLibrary = Process.Start("gnatdll", "-d " + Unit.Name + ".dll " + Unit.Name + ".ali");
-			} else if(Environment.OSVersion.Platform == PlatformID.Unix) {
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				CreateLibrary = Process.Start("ld", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".so");
 			} else {
 				throw new Exception("Unable to determine what the Operating System is");
@@ -85,10 +81,9 @@ namespace AdaTools
 		/// <param name="Unit">Program Unit to compile</param>
 		/// <param name="march">-march flag setting</param>
 		/// <param name="WindowsSubsystem">Windows Subsystem to build for</param>
-		public static void Compile(ProgramUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console)
-		{
+		public static void Compile(ProgramUnit Unit, Architecture Architecture = Architecture.Generic, WindowsSubsystem WindowsSubsystem = WindowsSubsystem.Console) {
 			String arch;
-			switch(Architecture) {
+			switch (Architecture) {
 			case Architecture.Generic:
 				arch = "-mtune=generic";
 				break;
@@ -98,8 +93,8 @@ namespace AdaTools
 				break;
 			}
 			Process GnatMake;
-			if(Environment.OSVersion.Platform <= (PlatformID)3) {
-				switch(WindowsSubsystem) {
+			if (Environment.OSVersion.Platform <= (PlatformID)3) {
+				switch (WindowsSubsystem) {
 				case WindowsSubsystem.Windows:
 					GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 					break;

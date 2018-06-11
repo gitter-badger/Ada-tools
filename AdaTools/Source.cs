@@ -685,12 +685,22 @@ namespace AdaTools {
 		/// <returns>The type of source</returns>
 		public SourceType ParseSourceType() {
 			String Candidate = this.Match(@"\b(package|function|procedure)\s+(\w|\.|_)+\b");
-			// If no matche was found, it's not an Ada source file
+			// If no match was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			if (new Regex(@"\bpackage\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				return SourceType.Package;
-			} else if (new Regex(@"\b(function|procedure)\b").IsMatch(Candidate)) {
-				return SourceType.Program;
+			} else if (new Regex(@"\b(function|procedure)\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
+				// We need to do some trickery to guess which this is
+				if (Path.GetExtension(this.FileStream.Name) == SubroutineUnit.SpecExtension) {
+					// If we're currently looking at a specification, this is definately a reusable subroutine
+					return SourceType.Subroutine;
+				} else if (File.Exists(Path.GetFileNameWithoutExtension(this.FileStream.Name) + SubroutineUnit.SpecExtension)) {
+					// If a spec file exists with the same name as the file we're looking at, this is definately a reusable subroutine
+					return SourceType.Subroutine;
+				} else {
+					// Barring all of the above, it's probably a program
+					return SourceType.Program;
+				}
 			} else {
 				// This should never happen because a match wouldn't happen, but still raise an exception
 				throw new Exception("A critical error has occured");

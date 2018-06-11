@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="AdaTools.Unit" Collapsed="true">
-    <Position X="7" Y="6.75" Width="1.5" />
+    <Position X="8" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AiAAAASAAIAAAASAAAAAgAQAABBAAIAABCAAAAgIBAA=</HashCode>
+      <HashCode>AiAAAASAAIAAAASAAAAAgAQAIBBAAIAABCAAAAgIBAA=</HashCode>
       <FileName>Unit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -23,10 +23,17 @@
     </TypeIdentifier>
   </Class>
   <Class Name="AdaTools.ConfigurationUnit" Collapsed="true">
-    <Position X="9.25" Y="8" Width="1.5" />
+    <Position X="11.5" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACIAAICAAAAAAAEAABAAgBAAAAAAAQCAAiAEgAgADAE=</HashCode>
       <FileName>ConfigurationUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AdaTools.SubroutineUnit" Collapsed="true">
+    <Position X="9.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAABCAAAQAAAAABAAAgAABAABAAAAAACAAAAgABAA=</HashCode>
+      <FileName>SubroutineUnit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

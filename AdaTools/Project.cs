@@ -17,7 +17,7 @@ namespace AdaTools {
 		/// In most cases, this is the current working directory
 		/// </remarks>
 		public readonly String Name;
-		
+
 		/// <summary>
 		/// The projects configuration unit if one was found, null if no configuration exists
 		/// </summary>
@@ -49,6 +49,19 @@ namespace AdaTools {
 				List<PackageUnit> Result = new List<PackageUnit>();
 				foreach (Unit U in this.Units) {
 					if (U is PackageUnit) Result.Add(U as PackageUnit);
+				}
+				return Result;
+			}
+		}
+
+		/// <summary>
+		/// All the reusable subroutines in this project
+		/// </summary>
+		public List<SubroutineUnit> Subroutines {
+			get {
+				List<SubroutineUnit> Result = new List<SubroutineUnit>();
+				foreach (Unit U in this.Units) {
+					if (U is SubroutineUnit) Result.Add(U as SubroutineUnit);
 				}
 				return Result;
 			}
@@ -105,21 +118,24 @@ namespace AdaTools {
 			// Iterate through the files, adding the names of Ada source files to a list
 			foreach (String FileName in Directory.GetFiles(Location)) {
 				String Extension = Path.GetExtension(FileName).ToLower();
-				if (Extension == PackageUnit.SpecExtension || Extension == PackageUnit.BodyExtension || Extension == ProgramUnit.Extension) {
+				if (Extension == PackageUnit.SpecExtension || Extension == PackageUnit.BodyExtension || Extension == SubroutineUnit.SpecExtension || Extension == SubroutineUnit.BodyExtension || Extension == ProgramUnit.Extension) {
 					Source Source = new Source(FileName);
 					if (AdaSources.Contains(Path.GetFileNameWithoutExtension(FileName))) continue; // Already exists, so don't add it again
 					String SourceName = Source.ParseName();
 					AdaSources.Add(Path.GetFileNameWithoutExtension(FileName));
 					SourceType SourceType = Source.ParseSourceType();
 					switch (SourceType) {
-						case SourceType.Package:
-							this.Units.Add(new PackageUnit(SourceName));
-							break;
-						case SourceType.Program:
-							this.Units.Add(new ProgramUnit(SourceName));
-							break;
-						default:
-							break;
+					case SourceType.Package:
+						this.Units.Add(new PackageUnit(SourceName));
+						break;
+					case SourceType.Subroutine:
+						this.Units.Add(new SubroutineUnit(SourceName));
+						break;
+					case SourceType.Program:
+						this.Units.Add(new ProgramUnit(SourceName));
+						break;
+					default:
+						break;
 					}
 				} else if (Extension == ConfigurationUnit.Extension) {
 					this.Configuration = new ConfigurationUnit();
