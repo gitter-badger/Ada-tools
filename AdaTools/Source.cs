@@ -574,14 +574,14 @@ namespace AdaTools {
 			// Try getting the name through a variety of means
 			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)package\s+body\s+(\w|\.|_)+\s+(is|with)\b");
 			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)package\s+(\w|\.|_)+\s+(is|with)\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)function\s+(\w|_)+\s+return\b");
-			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)procedure\s+(\w|_)+\s+is\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)function\s+(\w|\.|_)+\b");
+			if (String.IsNullOrEmpty(Candidate)) Candidate = this.Match(@"(?<!with\s*)procedure\s+(\w|\.|_)+\b");
 			// If no name was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			String[] Split = Candidate.Split();
 			if (Split.Length == 4) {
 				return Split[2];
-			} else if (Split.Length == 3) {
+			} else if (Split.Length >= 2) {
 				return Split[1];
 			} else {
 				// This should never happen because a match wouldn't happen, but still raise an exception
@@ -846,6 +846,7 @@ namespace AdaTools {
 		public static Boolean operator !=(FileStream Left, Source Right) => Left != Right.FileStream;
 
 		public Source(FileStream FileStream) {
+			Console.WriteLine("new Source(" + FileStream.Name + ")");
 			using (StreamReader Reader = new StreamReader(FileStream)) {
 				String Line;
 				List<String> Lines = new List<String>();
@@ -873,8 +874,9 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingImports = false;
 							ReadingPublic = true;
+						} else {
+							Lines.Add(Line);
 						}
-						Lines.Add(Line);
 					}
 					if (ReadingGeneric) {
 						if (new Regex(@"(^|;)\s*(function|package|procedure)\b").IsMatch(Line)) {
@@ -882,8 +884,9 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingGeneric = false;
 							ReadingPublic = true;
+						} else {
+							Lines.Add(Line);
 						}
-						Lines.Add(Line);
 					}
 					if (ReadingPublic) {
 						if (new Regex(@"(^|;)\s*(private)\b").IsMatch(Line)) {
@@ -891,8 +894,9 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingPublic = false;
 							ReadingPrivate = true;
+						} else {
+							Lines.Add(Line);
 						}
-						Lines.Add(Line);
 					}
 					if (ReadingPrivate) {
 						Lines.Add(Line);
