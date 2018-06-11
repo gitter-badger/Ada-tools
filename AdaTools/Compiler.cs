@@ -9,10 +9,20 @@ namespace AdaTools {
 	/// Interface wrapping for the GNAT compiler command line arguments
 	/// </summary>
 	public static class Compiler {
-		
+
+		/// <summary>
+		/// Clean the entire current directory
+		/// </summary>
+		/// <remarks>
+		/// This formerly called  gnatclean to do the work. As explained with Issue #3 <see cref="https://github.com/Entomy/Ada-tools/issues/3"/> the tool experiences some extremely serious bugs. So like quite a few other things, we're doing this ourselves.
+		/// </remarks>
 		public static void Clean() {
+			// Only look through the current directory
+			// This avoids the problem gnatclean had where it deleted its own libgnat
 			foreach (String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
 				switch (Path.GetExtension(FileName).ToUpper()) {
+				// Only delete files with specific extensions
+				// This avoids the problem gnatclean had where it deleted project source files
 				case ".ALI":
 				case ".APKG":
 				case ".DLL":
