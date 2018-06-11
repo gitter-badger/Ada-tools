@@ -10,13 +10,15 @@ namespace AdaTools {
 	/// </summary>
 	public static class Compiler {
 		
-		public static void Clean(Unit Unit) {
-			Process GnatClean = Process.Start("gnatclean", String.Join(' ', Unit.GetFiles()));
-			GnatClean.WaitForExit(); // We wait only because concurrent processes do terrible things to the command line text. This could be fixed by buffering the output then oneshot printing it.
-			GnatClean.Dispose();
+		public static void Clean() {
 			foreach (String FileName in Directory.EnumerateFiles(Environment.CurrentDirectory)) {
 				switch (Path.GetExtension(FileName).ToUpper()) {
+				case ".ALI":
 				case ".APKG":
+				case ".DLL":
+				case ".EXE":
+				case ".O":
+				case ".SO":
 					File.Delete(FileName);
 					Console.WriteLine("\"." + Path.DirectorySeparatorChar + Path.GetFileName(FileName) + "\" has been deleted");
 					break;
