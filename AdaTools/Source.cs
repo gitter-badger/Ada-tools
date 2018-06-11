@@ -846,7 +846,6 @@ namespace AdaTools {
 		public static Boolean operator !=(FileStream Left, Source Right) => Left != Right.FileStream;
 
 		public Source(FileStream FileStream) {
-			Console.WriteLine("new Source(" + FileStream.Name + ")");
 			using (StreamReader Reader = new StreamReader(FileStream)) {
 				String Line;
 				List<String> Lines = new List<String>();
