@@ -8,7 +8,7 @@ namespace AdaTools {
 	/// <remarks>
 	/// Holds traits about the subroutine for easy analysis
 	/// </remarks>
-	public sealed class SubroutineUnit : Unit {
+	public class SubroutineUnit : Unit {
 
 		/// <summary>
 		/// Whether a spec file for this subroutine was found

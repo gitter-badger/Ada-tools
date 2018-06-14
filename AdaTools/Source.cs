@@ -688,6 +688,8 @@ namespace AdaTools {
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			if (new Regex(@"\bpackage\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				return SourceType.Package;
+			} else if (new Regex(@"\bseparate\s*\((\\.|[^)])*\)\s*(function|procedure)\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
+				return SourceType.Separate;
 			} else if (new Regex(@"\b(function|procedure)\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				// We need to do some trickery to guess which this is
 				if (Path.GetExtension(this.FileStream.Name) == SubroutineUnit.SpecExtension) {
@@ -887,6 +889,11 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingImports = false;
 							ReadingPrivate = true;
+						} else if (new Regex(@"(^|;)\s*separate\b").IsMatch(Line)) {
+							this.Imports = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingImports = false;
+							ReadingPublic = true;
 						} else {
 							Lines.Add(Line);
 						}
@@ -902,6 +909,11 @@ namespace AdaTools {
 							Lines.Clear();
 							ReadingGeneric = false;
 							ReadingPrivate = true;
+						} else if (new Regex(@"(^|;)\s*separate\b").IsMatch(Line)) {
+							this.Generic = String.Join('\n', Lines);
+							Lines.Clear();
+							ReadingGeneric = false;
+							ReadingPublic = true;
 						} else {
 							Lines.Add(Line);
 						}

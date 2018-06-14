@@ -12,6 +12,10 @@ namespace AdaTools {
 		/// </summary>
 		Package,
 		/// <summary>
+		/// Signifies a separate part of another unit
+		/// </summary>
+		Separate,
+		/// <summary>
 		/// Signifies a reusable Ada subroutine
 		/// </summary>
 		Subroutine,

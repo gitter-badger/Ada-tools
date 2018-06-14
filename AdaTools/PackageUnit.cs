@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -10,6 +11,11 @@ namespace AdaTools {
 	/// Holds traits about the package for easy analysis
 	/// </remarks>
 	public sealed class PackageUnit : Unit {
+
+		/// <summary>
+		/// Separate units associated with this package unit
+		/// </summary>
+		private readonly List<SeparateUnit> SeparateUnits = new List<SeparateUnit>();
 
 		/// <summary>
 		/// Whether a spec file for this package was found
@@ -87,27 +93,32 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>An array of the file names</returns>
 		public override String[] GetFiles() {
+			List<String> Result = new List<String>();
 			if (this.HasSpec && this.HasBody) {
 				if (!this.Krunched) {
-					return new String[] { this.Name + BodyExtension, this.Name + SpecExtension };
+					Result.Add(this.Name + BodyExtension);
+					Result.Add(this.Name + SpecExtension);
 				} else {
-					return new String[] { Compiler.Krunch(this.Name + BodyExtension), Compiler.Krunch(this.Name + SpecExtension) };
+					Result.Add(Compiler.Krunch(this.Name + BodyExtension));
+					Result.Add(Compiler.Krunch(this.Name + SpecExtension));
 				}
 			} else if (this.HasSpec) {
 				if (!this.Krunched) {
-					return new String[] { this.Name + SpecExtension };
+					Result.Add(this.Name + SpecExtension);
 				} else {
-					return new String[] { Compiler.Krunch(this.Name + SpecExtension) };
+					Result.Add(Compiler.Krunch(this.Name + SpecExtension));
 				}
 			} else if (this.HasBody) {
 				if (!this.Krunched) {
-					return new String[] { this.Name + BodyExtension };
+					Result.Add(this.Name + BodyExtension);
 				} else {
-					return new String[] { Compiler.Krunch(this.Name + BodyExtension) };
+					Result.Add(Compiler.Krunch(this.Name + BodyExtension));
 				}
-			} else {
-				return Array.Empty<String>();
 			}
+			foreach (SeparateUnit Separate in this.SeparateUnits) {
+				Result.AddRange(Separate.GetFiles());
+			}
+			return Result.ToArray();
 		}
 
 		/// <summary>
