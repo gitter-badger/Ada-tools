@@ -25,10 +25,10 @@ namespace Cmdline {
 			}
 		}
 
-		internal static void Each() {
+		internal static void Each(Boolean IncludeBody = true) {
 			foreach (PackageUnit PackageUnit in new Project().Packages) {
 				try {
-					new Package(PackageUnit).Create();
+					new Package(PackageUnit).Create(IncludeBody);
 				} catch (PackageNotBuildException) {
 					Console.WriteLine(PackageUnit.Name + ": Has not been built, so it cannot be packaged");
 				}

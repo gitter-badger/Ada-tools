@@ -6,11 +6,10 @@ namespace Cmdline {
 	static class Installer {
 
 		/// <summary>
-		/// 
+		/// Install the specified package
 		/// </summary>
-		/// <param name="Unit"></param>
-		public static void Global(Unit Unit) {
-
+		/// <param name="Package">Package to install</param>
+		public static void Global(Package Package) {
 		}
 
 	}

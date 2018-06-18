@@ -69,7 +69,9 @@ namespace AdaTools {
 						Archive.CreateEntryFromFile(this.Name + ".ali", this.Name + ".ali");
 						Archive.CreateEntryFromFile(this.Name + ".ads", this.Name + ".ads");
 						if (IncludeBody) {
-							Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
+							if (System.IO.File.Exists(this.Name + ".adb")) {
+								Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
+							}
 						}
 						if (Environment.OSVersion.Platform <= (PlatformID)3) {
 							Archive.CreateEntryFromFile(this.Name + ".dll", this.Name + ".dll");

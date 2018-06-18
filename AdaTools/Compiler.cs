@@ -62,22 +62,22 @@ namespace AdaTools {
 			if (Environment.OSVersion.Platform <= (PlatformID)3) {
 				switch (WindowsSubsystem) {
 				case WindowsSubsystem.Windows:
-					GnatMake = Process.Start("gnatmake", "-mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+					GnatMake = Process.Start("gnatmake", "-shared -fPIC -mwindows " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 					break;
 				case WindowsSubsystem.Console:
 				default:
-					GnatMake = Process.Start("gnatmake", "-mconsole " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+					GnatMake = Process.Start("gnatmake", "-shared -fPIC -mconsole " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 					break;
 				}
 			} else {
-				GnatMake = Process.Start("gnatmake", arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
+				GnatMake = Process.Start("gnatmake", "-shared -fPIC " + arch + " " + String.Join(' ', Unit.GetFiles()) + Unit.LinkerArguments);
 			}
 			GnatMake.WaitForExit(); // We need to wait here, because otherwise units will be compiled before their dependencies are finished compiling. That's bad.
 			GnatMake.Dispose();
 			Process CreateLibrary;
 			// Linking is a very different procedure on different systems, so figure out what we're supposed to do
 			if (Environment.OSVersion.Platform <= (PlatformID)3) {
-				CreateLibrary = Process.Start("gnatdll", "-d " + Unit.Name + ".dll " + Unit.Name + ".ali");
+				CreateLibrary = Process.Start("gcc", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".dll -Wl,--export-all-symbols");
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				CreateLibrary = Process.Start("ld", "-shared " + Unit.Name + ".o " + Unit.LinkerArguments + " -o " + Unit.Name + ".so");
 			} else {
