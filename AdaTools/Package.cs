@@ -50,6 +50,20 @@ namespace AdaTools {
 		/// </remarks>
 		public readonly List<String> Dependencies;
 
+		private ZipArchive archive;
+
+		/// <summary>
+		/// The archive of the package
+		/// </summary>
+		public ZipArchive Archive {
+			get {
+				if (this.archive is null) {
+					this.archive = new ZipArchive(new FileStream(this.Name + ".apkg", FileMode.Open));
+				}
+				return this.archive;
+			}
+		}
+
 		/// <summary>
 		/// Create the package in the filesystem
 		/// </summary>
@@ -73,23 +87,27 @@ namespace AdaTools {
 								Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
 							}
 						}
-						if (Environment.OSVersion.Platform <= (PlatformID)3) {
+						switch (Environment.OSVersion.Platform) {
+						case (PlatformID)1:
+						case (PlatformID)2:
+						case (PlatformID)3:
 							Archive.CreateEntryFromFile(this.Name + ".dll", this.Name + ".dll");
-						} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+							break;
+						case PlatformID.Unix:
+						default:
 							Archive.CreateEntryFromFile(this.Name + ".so", this.Name + ".so");
+							break;
 						}
 					} catch (FileNotFoundException) {
 						goto Cleanup; // This goto is so that we can move outside of the `using` block, where File has been properly closed and disposed of, so that we can delete it.
 					}
 					// Create the package info file and write everything to it
 					ZipArchiveEntry InfoEntry = Archive.CreateEntry("info");
-					using (StreamWriter InfoFile = new StreamWriter(InfoEntry.Open())) {
-						this.WriteInfo(InfoFile);
-					}
+					this.WriteInfo(InfoEntry.Open());
 				}
 			}
 			return; // Proper execution stops here
-Cleanup:
+			Cleanup:
 			// Delete the archive, since we can't properly create it
 			System.IO.File.Delete(ArchiveName);
 			// A file to be packaged was not found, so we can assume the package has not been built
@@ -111,12 +129,44 @@ Cleanup:
 		/// Write the info of this package out to the specified <paramref name="Output"/> Stream
 		/// </summary>
 		/// <param name="Output">Output Stream to write to</param>
-		public void WriteInfo(StreamWriter Output) {
-			Output.WriteLine(this.Name);
-			Output.WriteLine(this.Variant);
-			Output.WriteLine(this.Version);
-			Output.WriteLine(this.Description);
-			Output.WriteLine(String.Join(',', this.Dependencies));
+		public void WriteInfo(Stream Output) {
+			using (StreamWriter Writer = new StreamWriter(Output)) {
+				Writer.WriteLine(this.Name);
+				Writer.WriteLine(this.Variant);
+				Writer.WriteLine(this.Version);
+				Writer.WriteLine(this.Description);
+				Writer.WriteLine(String.Join(',', this.Dependencies));
+			}
+		}
+
+		/// <summary>
+		/// Write the validation of this package to the console
+		/// </summary>
+		public void WriteValidation() {
+			Boolean NoIssues = true;
+			if (this.Archive.GetEntry(this.Name + ".ads") is null) {
+				Console.WriteLine("Missing Spec");
+				NoIssues = false;
+			}
+			if (this.Archive.GetEntry(this.Name + ".adb") is null) {
+				// A body is not required, so just report this and move on
+				Console.WriteLine("No Body");
+			}
+			if (this.Archive.GetEntry(this.Name + ".dll") is null && this.Archive.GetEntry(this.Name + ".so") is null) {
+				Console.WriteLine("Missing Libraries");
+				NoIssues = false;
+			} else if (this.Archive.GetEntry(this.Name + ".dll") is null) {
+				Console.WriteLine("Missing Library (Windows)");
+			} else if (this.Archive.GetEntry(this.Name + ".so") is null) {
+				Console.WriteLine("Missing Library (UNIX)");
+			}
+			if (this.Archive.GetEntry(this.Name + ".ali") is null) {
+				Console.WriteLine("Missing ALI");
+				NoIssues = false;
+			}
+			if (NoIssues) {
+				Console.WriteLine("Package Valid");
+			}
 		}
 
 		public override Int32 GetHashCode() => this.Name.GetHashCode() ^ this.Variant.GetHashCode() ^ this.Version.GetHashCode();

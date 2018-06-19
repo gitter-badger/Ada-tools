@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AdaTools;
 
 namespace Cmdline {
@@ -25,209 +26,183 @@ namespace Cmdline {
 			}
 			// Do whatever the operation is
 			switch (Operation.ToUpper()) {
-				case "HELP":
-					Program.Help();
-					break;
-				case "BUILD":
-				case "COMPILE":
-				case "MAKE":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "FLAGS":
-								Builder.Flags();
-								return;
-							case "HELP":
-								Builder.FullHelp();
-								return;
-							case "PLAN":
-								Builder.Plan();
-								return;
-							default:
-								throw new NotImplementedException();
-						}
-					} else {
-						Builder.Simple();
+			case "HELP":
+				Program.Help();
+				break;
+			case "BUILD":
+			case "COMPILE":
+			case "MAKE":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "FLAGS":
+						Builder.Flags();
 						return;
+					case "HELP":
+						Builder.FullHelp();
+						return;
+					case "PLAN":
+						Builder.Plan();
+						return;
+					default:
+						throw new NotImplementedException();
 					}
-				case "CLEAN":
-					Cleaner.Clean();
+				} else {
+					Builder.Simple();
 					return;
-				case "CONFIG":
-				case "CONFIGURE":
-				case "CONFIGURATION":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "HELP":
-								Config.FullHelp();
-								return;
-							default:
-								throw new NotImplementedException();
-						}
-					} else {
-						Config.Interactive();
+				}
+			case "CLEAN":
+				Cleaner.Clean();
+				return;
+			case "CONFIG":
+			case "CONFIGURE":
+			case "CONFIGURATION":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						Config.FullHelp();
 						return;
+					default:
+						throw new NotImplementedException();
 					}
-				case "DEP":
-				case "DEPS":
-				case "DEPEND":
-				case "DEPENDS":
-				case "DEPENDENCY":
-				case "DEPENDENCIES":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "ALL":
-							case "PROJECT":
-								Dependencies.Project();
-								return;
-							case "HELP":
-								Dependencies.FullHelp();
-								return;
-							default:
-								Arguments.Push(Mode);
-								throw new NotImplementedException();
-						}
-					} else {
-						Dependencies.Each();
-						return;
-					}
-				case "FILE":
-				case "FILES":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "HELP":
-								Files.FullHelp();
-								return;
-							default:
-								Arguments.Push(Mode);
-								Files.Each(Arguments);
-								return;
-						}
-					} else {
-						Files.Each();
-						return;
-					}
-				case "LIST":
-				case "UNITS":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "HELP":
-								List.FullHelp();
-								return;
-							case "TABLE":
-								List.Table();
-								return;
-							default:
-								throw new NotImplementedException();
-						}
-					} else {
-						List.Each();
-						return;
-					}
-				case "PKG":
-				case "PACKAGE":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "HELP":
-								Packager.FullHelp();
-								return;
-							case "INFO":
-								Packager.Info(Arguments);
-								return;
-							default:
-								throw new NotImplementedException();
-						}
-					} else {
-						Packager.Each();
-						return;
-					}
-				case "SETTING":
-				case "SETTINGS":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "OBJ":
-							case "OBJS":
-							case "OBJECT":
-							case "OBJECTS":
-								if (Arguments.Count >= 1) {
-									Settings.ObjectSearchPath = new List<String>(Arguments);
-								} else {
-									Console.WriteLine(String.Join(' ', Settings.ObjectSearchPath));
-								}
-								return;
-							case "PKG":
-							case "PACKAGE":
-								if (Arguments.TryPop(out Mode)) {
-									switch (Mode.ToUpper()) {
-										case "DB":
-										case "DATABASE":
-											break;
-										default:
-											throw new UnknownOperationException();
-									}
-									goto case "PKGDB";
-								} else {
-									throw new UnknownOperationException();
-								}
-							case "PKGDB":
-							case "PACKAGEDB":
-							case "PACKAGEDATABASE":
-								if (Arguments.Count >= 1) {
-									Settings.PackageDatabasePath = String.Join(' ', Arguments);
-								} else {
-									Console.WriteLine(Settings.PackageDatabasePath);
-								}
-								return;
-							case "REPO":
-							case "REPOSITORY":
-								if (Arguments.Count >= 1) {
-									Settings.PackageRepositoryPath = String.Join(' ', Arguments);
-								} else {
-									Console.WriteLine(Settings.PackageRepositoryPath);
-								}
-								return;
-							case "SOURCE":
-							case "SOURCES":
-								if (Arguments.Count >= 1) {
-									Settings.SourceSearchPath = new List<String>(Arguments);
-								} else {
-									Console.WriteLine(String.Join(' ', Settings.SourceSearchPath));
-								}
-								return;
-							default:
-								throw new NotImplementedException();
-						}
-					} else {
-						Settings.Print();
-						return;
-					}
-				case "TYPE":
-				case "TYPES":
-					if (Arguments.TryPop(out Mode)) {
-						switch (Mode.ToUpper()) {
-							case "HELP":
-								Types.FullHelp();
-								return;
-							case "INFO":
-								if (Arguments.TryPop(out Mode)) {
-									Types.Info(Mode);
-									return;
-								} else {
-									throw new MissingOperationException();
-								}
-							case "TABLE":
-								Types.Table();
-								return;
-							default:
-								throw new NotImplementedException();
-						}
-					} else {
-						Types.Each();
-						return;
-					}
-				default:
-					Console.Error.WriteLine("The operation '" + Operation + "' isn't a known operation");
-					Program.Help();
+				} else {
+					Config.Interactive();
 					return;
+				}
+			case "DEP":
+			case "DEPS":
+			case "DEPEND":
+			case "DEPENDS":
+			case "DEPENDENCY":
+			case "DEPENDENCIES":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "ALL":
+					case "PROJECT":
+						Dependencies.Project();
+						return;
+					case "HELP":
+						Dependencies.FullHelp();
+						return;
+					default:
+						Arguments.Push(Mode);
+						throw new NotImplementedException();
+					}
+				} else {
+					Dependencies.Each();
+					return;
+				}
+			case "FILE":
+			case "FILES":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						Files.FullHelp();
+						return;
+					default:
+						Arguments.Push(Mode);
+						Files.Each(Arguments);
+						return;
+					}
+				} else {
+					Files.Each();
+					return;
+				}
+			case "INSTALL":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						Installer.FullHelp();
+						return;
+					default:
+						Arguments.Push(Mode);
+						foreach (String Candidate in Arguments) {
+							Installer.Global(new Package(Candidate));
+						}
+						return;
+					}
+				} else {
+					throw new NotImplementedException();
+				}
+			case "LIST":
+			case "UNITS":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						List.FullHelp();
+						return;
+					case "TABLE":
+						List.Table();
+						return;
+					default:
+						throw new NotImplementedException();
+					}
+				} else {
+					List.Each();
+					return;
+				}
+			case "PKG":
+			case "PACKAGE":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						Packager.FullHelp();
+						return;
+					case "INFO":
+						Packager.Info(Arguments);
+						return;
+					case "VALID":
+					case "VALIDATE":
+						Packager.Validate(Arguments);
+						return;
+					default:
+						throw new NotImplementedException();
+					}
+				} else {
+					Packager.Each();
+					return;
+				}
+			case "SETTING":
+			case "SETTINGS":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						Settings.FullHelp();
+						return;
+					default:
+						throw new NotImplementedException();
+					}
+				} else {
+					Settings.Interactive();
+					return;
+				}
+			case "TYPE":
+			case "TYPES":
+				if (Arguments.TryPop(out Mode)) {
+					switch (Mode.ToUpper()) {
+					case "HELP":
+						Types.FullHelp();
+						return;
+					case "INFO":
+						if (Arguments.TryPop(out Mode)) {
+							Types.Info(Mode);
+							return;
+						} else {
+							throw new MissingOperationException();
+						}
+					case "TABLE":
+						Types.Table();
+						return;
+					default:
+						throw new NotImplementedException();
+					}
+				} else {
+					Types.Each();
+					return;
+				}
+			default:
+				Console.Error.WriteLine("The operation '" + Operation + "' isn't a known operation");
+				Program.Help();
+				return;
 			}
 		}
 
@@ -237,8 +212,10 @@ namespace Cmdline {
 			Config.Help();
 			Dependencies.Help();
 			Files.Help();
+			Installer.Help();
 			List.Help();
 			Packager.Help();
+			Settings.Help();
 			Types.Help();
 		}
 	}

@@ -15,16 +15,6 @@ namespace Cmdline {
 			Console.WriteLine("\t" + "package — Package all found units");
 		}
 
-		internal static void Info(Stack<String> Arguments) {
-			foreach (String Name in Arguments) {
-				try {
-					new Package(Name).WriteInfo();
-				} catch (NotInstallPackageException) {
-					Console.WriteLine("\"" + Name + "\" doesn't appear to be an install package");
-				}
-			}
-		}
-
 		internal static void Each(Boolean IncludeBody = true) {
 			foreach (PackageUnit PackageUnit in new Project().Packages) {
 				try {
@@ -35,5 +25,23 @@ namespace Cmdline {
 			}
 		}
 
+		internal static void Info(Stack<String> Arguments) {
+			foreach (String Name in Arguments) {
+				try {
+					new Package(Name).WriteInfo();
+				} catch (NotInstallPackageException) {
+					Console.WriteLine("\"" + Name + "\" doesn't appear to be an install package");
+				}
+			}
+		}
+
+		internal static void Validate(Stack<String> Arguments) {
+			Package Package;
+			foreach (String Name in Arguments) {
+				Package = new Package(Name);
+				Console.WriteLine(Package.Name + ": ");
+				Package.WriteValidation();
+			}
+		}
 	}
 }
