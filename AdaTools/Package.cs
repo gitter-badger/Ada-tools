@@ -10,45 +10,9 @@ namespace AdaTools {
 	/// <remarks>
 	/// <para>This is only intended to package up Ada packages. Programs should be installed by the system package manager. The intention is that the two tools should work together.</para>
 	/// </remarks>
-	public class Package {
+	public class Package : IDisposable {
 
-		/// <summary>
-		/// Name of the package
-		/// </summary>
-		/// <remarks>
-		/// If packaging Mathematics.Arrays, this name would also be Mathematics.Arrays
-		/// </remarks>
-		public readonly String Name;
-
-		/// <summary>
-		/// Variant of the package
-		/// </summary>
-		/// <remarks>
-		/// If packaging Mathematics.Arrays specific SIMD code for the SSE Instruction Set, this would be SSE
-		/// If packaging Console for Windows, this would be Windows
-		/// </remarks>
-		public readonly String Variant;
-
-		/// <summary>
-		/// Version of the package
-		/// </summary>
-		public readonly Version Version;
-
-		/// <summary>
-		/// Description of the package
-		/// </summary>
-		/// <remarks>
-		/// This should be the same as the comment description or summary on the package itself
-		/// </remarks>
-		public readonly String Description;
-
-		/// <summary>
-		/// Dependencies of the package
-		/// </summary>
-		/// <remarks>
-		/// This is imported from the package unit
-		/// </remarks>
-		public readonly List<String> Dependencies;
+		public readonly PackageInfo Info;
 
 		private ZipArchive archive;
 
@@ -58,7 +22,7 @@ namespace AdaTools {
 		public ZipArchive Archive {
 			get {
 				if (this.archive is null) {
-					this.archive = new ZipArchive(new FileStream(this.Name + ".apkg", FileMode.Open));
+					this.archive = new ZipArchive(new FileStream(this.Info.Name + ".apkg", FileMode.Open));
 				}
 				return this.archive;
 			}
@@ -71,31 +35,31 @@ namespace AdaTools {
 		public void Create(Boolean IncludeBody = true) {
 			// Figure out how to name the archive.
 			String ArchiveName;
-			if (this.Variant is null || this.Variant == "") {
-				ArchiveName = this.Name + ".apkg";
+			if (this.Info.Variant is null || this.Info.Variant == "") {
+				ArchiveName = this.Info.Name + ".apkg";
 			} else {
-				ArchiveName = this.Name + "." + this.Variant + ".apkg";
+				ArchiveName = this.Info.Name + "." + this.Info.Variant + ".apkg";
 			}
 			// Create the actual archive and put everything necessary in it
 			using (FileStream File = new FileStream(ArchiveName, FileMode.Create)) {
 				using (ZipArchive Archive = new ZipArchive(File, ZipArchiveMode.Update)) {
 					try {
-						Archive.CreateEntryFromFile(this.Name + ".ali", this.Name + ".ali");
-						Archive.CreateEntryFromFile(this.Name + ".ads", this.Name + ".ads");
+						Archive.CreateEntryFromFile(this.Info.Name + ".ali", this.Info.Name + ".ali");
+						Archive.CreateEntryFromFile(this.Info.Name + ".ads", this.Info.Name + ".ads");
 						if (IncludeBody) {
-							if (System.IO.File.Exists(this.Name + ".adb")) {
-								Archive.CreateEntryFromFile(this.Name + ".adb", this.Name + ".adb");
+							if (System.IO.File.Exists(this.Info.Name + ".adb")) {
+								Archive.CreateEntryFromFile(this.Info.Name + ".adb", this.Info.Name + ".adb");
 							}
 						}
 						switch (Environment.OSVersion.Platform) {
 						case (PlatformID)1:
 						case (PlatformID)2:
 						case (PlatformID)3:
-							Archive.CreateEntryFromFile(this.Name + ".dll", this.Name + ".dll");
+							Archive.CreateEntryFromFile(this.Info.Name + ".dll", this.Info.Name + ".dll");
 							break;
 						case PlatformID.Unix:
 						default:
-							Archive.CreateEntryFromFile(this.Name + ".so", this.Name + ".so");
+							Archive.CreateEntryFromFile(this.Info.Name + ".so", this.Info.Name + ".so");
 							break;
 						}
 					} catch (FileNotFoundException) {
@@ -118,11 +82,11 @@ namespace AdaTools {
 		/// Write the info of this package out to the console
 		/// </summary>
 		public void WriteInfo() {
-			Console.WriteLine("Name: " + this.Name);
-			Console.WriteLine("Variant: " + this.Variant);
-			Console.WriteLine("Version: " + this.Version);
-			Console.WriteLine("Description: " + this.Description);
-			Console.WriteLine("Dependencies: " + String.Join(", ", this.Dependencies));
+			Console.WriteLine("Name: " + this.Info.Name);
+			Console.WriteLine("Variant: " + this.Info.Variant);
+			Console.WriteLine("Version: " + this.Info.Version);
+			Console.WriteLine("Description: " + this.Info.Description);
+			Console.WriteLine("Dependencies: " + String.Join(", ", this.Info.Dependencies));
 		}
 
 		/// <summary>
@@ -131,11 +95,11 @@ namespace AdaTools {
 		/// <param name="Output">Output Stream to write to</param>
 		public void WriteInfo(Stream Output) {
 			using (StreamWriter Writer = new StreamWriter(Output)) {
-				Writer.WriteLine(this.Name);
-				Writer.WriteLine(this.Variant);
-				Writer.WriteLine(this.Version);
-				Writer.WriteLine(this.Description);
-				Writer.WriteLine(String.Join(',', this.Dependencies));
+				Writer.WriteLine(this.Info.Name);
+				Writer.WriteLine(this.Info.Variant);
+				Writer.WriteLine(this.Info.Version);
+				Writer.WriteLine(this.Info.Description);
+				Writer.WriteLine(String.Join(',', this.Info.Dependencies));
 			}
 		}
 
@@ -144,23 +108,23 @@ namespace AdaTools {
 		/// </summary>
 		public void WriteValidation() {
 			Boolean NoIssues = true;
-			if (this.Archive.GetEntry(this.Name + ".ads") is null) {
+			if (this.Archive.GetEntry(this.Info.Name + ".ads") is null) {
 				Console.WriteLine("Missing Spec");
 				NoIssues = false;
 			}
-			if (this.Archive.GetEntry(this.Name + ".adb") is null) {
+			if (this.Archive.GetEntry(this.Info.Name + ".adb") is null) {
 				// A body is not required, so just report this and move on
 				Console.WriteLine("No Body");
 			}
-			if (this.Archive.GetEntry(this.Name + ".dll") is null && this.Archive.GetEntry(this.Name + ".so") is null) {
+			if (this.Archive.GetEntry(this.Info.Name + ".dll") is null && this.Archive.GetEntry(this.Info.Name + ".so") is null) {
 				Console.WriteLine("Missing Libraries");
 				NoIssues = false;
-			} else if (this.Archive.GetEntry(this.Name + ".dll") is null) {
+			} else if (this.Archive.GetEntry(this.Info.Name + ".dll") is null) {
 				Console.WriteLine("Missing Library (Windows)");
-			} else if (this.Archive.GetEntry(this.Name + ".so") is null) {
+			} else if (this.Archive.GetEntry(this.Info.Name + ".so") is null) {
 				Console.WriteLine("Missing Library (UNIX)");
 			}
-			if (this.Archive.GetEntry(this.Name + ".ali") is null) {
+			if (this.Archive.GetEntry(this.Info.Name + ".ali") is null) {
 				Console.WriteLine("Missing ALI");
 				NoIssues = false;
 			}
@@ -169,18 +133,17 @@ namespace AdaTools {
 			}
 		}
 
-		public override Int32 GetHashCode() => this.Name.GetHashCode() ^ this.Variant.GetHashCode() ^ this.Version.GetHashCode();
+		public override Int32 GetHashCode() => this.Info.Name.GetHashCode() ^ this.Info.Variant.GetHashCode() ^ this.Info.Version.GetHashCode();
+
+		void IDisposable.Dispose() => this.archive.Dispose();
 
 		/// <summary>
 		/// Create an install package from the specified package unit
 		/// </summary>
 		/// <param name="PackageUnit">Unit to package</param>
 		public Package(PackageUnit PackageUnit, String Variant = "") {
-			this.Name = PackageUnit.Name;
-			this.Variant = Variant;
-			this.Version = new Source(PackageUnit.GetSpec()).ParseVersion();
-			this.Description = new Source(PackageUnit.GetSpec()).ParseDescription();
-			this.Dependencies = PackageUnit.Dependencies;
+			Source Source = new Source(PackageUnit.GetSpec());
+			this.Info = new PackageInfo(PackageUnit.Name, Variant, Source.ParseVersion(), Source.ParseDescription(), PackageUnit.Dependencies);
 		}
 
 		/// <summary>
@@ -191,13 +154,7 @@ namespace AdaTools {
 			try {
 				using (FileStream File = new FileStream(FileName, FileMode.Open)) {
 					using (ZipArchive Archive = new ZipArchive(File, ZipArchiveMode.Read)) {
-						using (StreamReader Stream = new StreamReader(Archive.GetEntry("info").Open())) {
-							this.Name = Stream.ReadLine();
-							this.Variant = Stream.ReadLine();
-							this.Version = new Version(Stream.ReadLine());
-							this.Description = Stream.ReadLine();
-							this.Dependencies = new List<String>(Stream.ReadLine().Split(','));
-						}
+						this.Info = new PackageInfo(Archive.GetEntry("info").Open());
 					}
 				}
 			} catch {

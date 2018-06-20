@@ -113,6 +113,9 @@ namespace Cmdline {
 					case "HELP":
 						Installer.FullHelp();
 						return;
+					case "LIST":
+						Installer.ListInstalled();
+						return;
 					default:
 						Arguments.Push(Mode);
 						foreach (String Candidate in Arguments) {
@@ -198,6 +201,13 @@ namespace Cmdline {
 				} else {
 					Types.Each();
 					return;
+				}
+			case "UNINSTALL":
+				if (Arguments.TryPop(out Mode)) {
+					Installer.Uninstall(Mode);
+					return;
+				} else {
+					throw new NotImplementedException();
 				}
 			default:
 				Console.Error.WriteLine("The operation '" + Operation + "' isn't a known operation");

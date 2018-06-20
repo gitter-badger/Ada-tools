@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -50,7 +51,7 @@ namespace AdaTools {
 		/// </summary>
 		public virtual String DependencyArguments {
 			get {
-				String Result = " ";
+				String Result = " -lgnat ";
 				foreach (String Dependency in this.Dependencies) {
 					// Ada standard libraries are included anyways, so don't even bother
 					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
@@ -65,9 +66,7 @@ namespace AdaTools {
 		/// Return the linker argument section for this unit
 		/// </summary>
 		public virtual String LinkerArguments {
-			get {
-				return this.DependencyArguments;
-			}
+			get => this.DependencyArguments;
 		}
 
 		/// <summary>
@@ -86,7 +85,7 @@ namespace AdaTools {
 		/// Whether the unit has a body
 		/// </summary>
 		public abstract Boolean HasBody { get; protected set; }
-		
+
 		/// <summary>
 		/// Whether the unit makes entirely remote calls
 		/// </summary>
@@ -131,7 +130,7 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns>An array of the file names</returns>
 		public abstract String[] GetFiles();
-		
+
 		public Int32 CompareTo(Unit Unit) {
 			if (Unit is null) return 0;
 			if (!this.Dependencies.Contains(Unit.Name) && !Unit.Dependencies.Contains(this.Name)) {
@@ -171,7 +170,6 @@ namespace AdaTools {
 		}
 
 		protected Unit(String Name) : this() {
-			Console.WriteLine("new Unit(" + Name + ")");
 			this.Name = Name;
 		}
 

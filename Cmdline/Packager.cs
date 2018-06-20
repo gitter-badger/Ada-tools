@@ -39,7 +39,7 @@ namespace Cmdline {
 			Package Package;
 			foreach (String Name in Arguments) {
 				Package = new Package(Name);
-				Console.WriteLine(Package.Name + ": ");
+				Console.WriteLine(Package.Info.Name + ": ");
 				Package.WriteValidation();
 			}
 		}
