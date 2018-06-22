@@ -1,25 +1,28 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
 using AdaTools;
 
-namespace Cmdline {
-	static class Installer {
+namespace AdaPkg {
+	static class Install {
 
 		public static void FullHelp() {
-			Console.WriteLine("\t" + "install <package>+ — Install the specified packages globally");
+			Console.WriteLine("install [--global] <package>+ — Install the specified packages globally");
+			Console.WriteLine("  --list — List the installed packages");
 		}
 
 		public static void Help() {
-			Console.WriteLine("\t" + "install <package>+ — Install the specified packages");
+			Console.WriteLine("  install <package>+ — Install the specified packages");
 		}
 
 		/// <summary>
 		/// Install the specified package
 		/// </summary>
 		/// <param name="Package">Package to install</param>
-		public static void Global(Package Package) {
+		public static void GlobalInstall(String Name) {
+			AdaTools.Package Package = new AdaTools.Package(Name);
 			if (!Directory.Exists(Settings.SourceSearchPath[1])) Directory.CreateDirectory(Settings.SourceSearchPath[1]);
 			Package.Archive.GetEntry(Package.Info.Name + ".ads").ExtractToFile(Settings.SourceSearchPath[1] + Path.DirectorySeparatorChar + Package.Info.Name + ".ads", true);
 			File.SetAttributes(Settings.SourceSearchPath[1] + Path.DirectorySeparatorChar + Package.Info.Name + ".ads", FileAttributes.ReadOnly);
@@ -48,6 +51,12 @@ namespace Cmdline {
 			File.SetAttributes(Settings.PackageDatabasePath + Path.DirectorySeparatorChar + Package.Info.Name, FileAttributes.Normal);
 		}
 
+		public static void GlobalInstall(List<String> Names) {
+			foreach (String Name in Names) {
+				GlobalInstall(Name);
+			}
+		}
+
 		/// <summary>
 		/// List all installed packages
 		/// </summary>
@@ -64,41 +73,22 @@ namespace Cmdline {
 			}
 		}
 
-		public static void Uninstall(String Name) {
-			if (!Directory.Exists(Settings.PackageDatabasePath)) return;
-			Boolean IsInstalled = false;
-			foreach (String FileName in Directory.GetFiles(Settings.PackageDatabasePath)) {
-				if (Path.GetFileName(FileName) == Name) {
-					IsInstalled = true;
-					File.SetAttributes(FileName, FileAttributes.Normal);
-					File.Delete(FileName);
+		internal static InstallFlags ParseInstallFlags(List<String> Args) {
+			InstallFlags Result = InstallFlags.Install;
+			foreach (String Arg in Args) {
+				switch (Arg.ToUpper()) {
+				case "--HELP":
+					return InstallFlags.Help;
+				case "--LIST":
+					Result |= InstallFlags.List;
+					break;
+				case "--GLOBAL":
+				default:
+					Result |= InstallFlags.Global;
+					break;
 				}
 			}
-			if (IsInstalled) {
-				foreach (String FileName in Directory.GetFiles(Settings.SourceSearchPath[1])) {
-					if (Path.GetFileName(FileName) == Name + ".ads") {
-						File.SetAttributes(FileName, FileAttributes.Normal);
-						File.Delete(FileName);
-					} else if (Path.GetFileName(FileName) == Name + ".adb") {
-						File.SetAttributes(FileName, FileAttributes.Normal);
-						File.Delete(FileName);
-					}
-				}
-				foreach (String FileName in Directory.GetFiles(Settings.ObjectSearchPath[1])) {
-					if (Path.GetFileName(FileName) == Name + ".ali") {
-						File.SetAttributes(FileName, FileAttributes.Normal);
-						File.Delete(FileName);
-					} else if (Path.GetFileName(FileName) == Name + ".dll") {
-						File.SetAttributes(FileName, FileAttributes.Normal);
-						File.Delete(FileName);
-					} else if (Path.GetFileName(FileName) == Name + ".so") {
-						File.SetAttributes(FileName, FileAttributes.Normal);
-						File.Delete(FileName);
-					}
-				}
-			} else {
-				Console.WriteLine("Not Installed");
-			}
+			return Result;
 		}
 
 	}

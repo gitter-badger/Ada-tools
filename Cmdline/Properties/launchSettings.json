@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Cmdline": {
-      "commandName": "Project",
-      "commandLineArgs": "units"
-    }
-  }
-}

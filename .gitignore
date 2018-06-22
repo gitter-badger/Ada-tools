@@ -1,7 +1,11 @@
 .vs/*
+/AdaPrj/bin
+/AdaPrj/obj
+/AdaPkg/bin
+/AdaPkg/obj
+/AdaTool/bin
+/AdaTool/obj
 /AdaTools/bin
 /AdaTools/obj
 /AdaToolsTests/bin
 /AdaToolsTests/obj
-/Cmdline/bin
-/Cmdline/obj

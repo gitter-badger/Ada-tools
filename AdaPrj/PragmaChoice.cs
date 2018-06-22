@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cmdline {
-	internal struct SettingChoice {
+namespace AdaPrj {
+	internal struct PragmaChoice {
 		internal readonly String Code;
-		internal readonly String Setting;
+		internal readonly String Pragma;
 		internal readonly dynamic Value;
 
-		internal SettingChoice(String Code, String Setting, dynamic Value) {
+		internal PragmaChoice(String Code, String Pragma, dynamic Value) {
 			this.Code = Code;
-			this.Setting = Setting;
+			this.Pragma = Pragma;
 			this.Value = Value;
 		}
 	}

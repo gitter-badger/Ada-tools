@@ -14,12 +14,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdaTools", "AdaTools\AdaToo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdaToolsTests", "AdaToolsTests\AdaToolsTests.csproj", "{E14889A1-147C-40D3-8DC5-4070066A1631}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cmdline", "Cmdline\Cmdline.csproj", "{B6971847-6117-4763-A1DB-6E153DD46817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdaPrj", "AdaPrj\AdaPrj.csproj", "{CCAA8592-FF31-4050-A6F3-608FCB31C189}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdaPkg", "AdaPkg\AdaPkg.csproj", "{73B2F03F-6941-4ACE-A040-872EEE919714}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdaTool", "AdaTool\AdaTool.csproj", "{87C79CC2-799A-4B41-A3E5-C37E3348EAE3}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -33,16 +34,27 @@ Global
 		{E14889A1-147C-40D3-8DC5-4070066A1631}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E14889A1-147C-40D3-8DC5-4070066A1631}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E14889A1-147C-40D3-8DC5-4070066A1631}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6971847-6117-4763-A1DB-6E153DD46817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6971847-6117-4763-A1DB-6E153DD46817}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6971847-6117-4763-A1DB-6E153DD46817}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6971847-6117-4763-A1DB-6E153DD46817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCAA8592-FF31-4050-A6F3-608FCB31C189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCAA8592-FF31-4050-A6F3-608FCB31C189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCAA8592-FF31-4050-A6F3-608FCB31C189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCAA8592-FF31-4050-A6F3-608FCB31C189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73B2F03F-6941-4ACE-A040-872EEE919714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B2F03F-6941-4ACE-A040-872EEE919714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B2F03F-6941-4ACE-A040-872EEE919714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B2F03F-6941-4ACE-A040-872EEE919714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87C79CC2-799A-4B41-A3E5-C37E3348EAE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87C79CC2-799A-4B41-A3E5-C37E3348EAE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87C79CC2-799A-4B41-A3E5-C37E3348EAE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87C79CC2-799A-4B41-A3E5-C37E3348EAE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {87044959-11BF-4C58-AB78-9D32EFF0A695}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

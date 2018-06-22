@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using AdaTools;
 
-namespace Cmdline {
+namespace AdaTool {
 	internal static class Settings {
 
 		internal static void FullHelp() {
-			Console.WriteLine("\t" + "settings — Interactively modify the Ada-tools settings");
+			Console.WriteLine("settings — Interactively modify the Ada-tools settings");
 		}
 
 		internal static void Help() {
-			Console.WriteLine("\t" + "settings — Manage the Ada-tools settings");
+			Console.WriteLine("  settings — Manage the Ada-tools settings");
 		}
 
 		private static void WriteChoices(params Choice[] Choices) {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using AdaTools;
 
-namespace Cmdline {
-	public static class Builder {
+namespace AdaPrj {
+	internal static class Build {
 
 		/// <summary>
 		/// Attempt a simple build, in which no target specific stuff needs to be done
@@ -39,14 +38,6 @@ namespace Cmdline {
 			}
 		}
 
-		internal static void FullHelp() {
-			Console.WriteLine("\t" + "(build|compile|make) — Build all sources within this directory");
-		}
-
-		internal static void Help() {
-			Console.WriteLine("\t" + "(build|compile|make) — Build all sources within this directory");
-		}
-
 		/// <summary>
 		/// Print the build plan for the units, instead of actually building them
 		/// </summary>
@@ -54,6 +45,42 @@ namespace Cmdline {
 			foreach (Unit Unit in new BuildPlan(new Project())) {
 				Console.WriteLine(Unit.Name);
 			}
+		}
+
+		internal static void PlanWithFlags() {
+			foreach (Unit Unit in new BuildPlan(new Project())) {
+				Console.WriteLine(Unit.Name + ": " + Unit.LinkerArguments);
+			}
+		}
+
+		internal static void FullHelp() {
+			Console.WriteLine("build — Build all sources within this directory");
+			Console.WriteLine("  --flags — Print the build flags instead of building");
+			Console.WriteLine("  --plan — Print the build plan instead of building");
+		}
+
+		internal static void Help() {
+			Console.WriteLine("  (build|compile|make) — Build all sources within this directory");
+		}
+
+		internal static BuildFlags ParseBuildFlags(List<String> Args) {
+			BuildFlags Result = BuildFlags.Build;
+			foreach (String Arg in Args) {
+				switch (Arg.ToUpper()) {
+				case "--FLAGS":
+					Result |= BuildFlags.Flags;
+					break;
+				case "--HELP":
+					return BuildFlags.Help;
+				case "--PLAN":
+					Result |= BuildFlags.Plan;
+					break;
+				default:
+					break;
+				}
+				Args.Remove(Arg);
+			}
+			return Result;
 		}
 
 	}
