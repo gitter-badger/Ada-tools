@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -50,33 +51,41 @@ namespace AdaTools {
 
 		internal static String GNATSourcePath {
 			get {
-				Process GnatLS = new Process();
-				GnatLS.StartInfo.FileName = "gnatls";
-				GnatLS.StartInfo.Arguments = "-v";
-				GnatLS.StartInfo.RedirectStandardOutput = true;
-				GnatLS.Start();
-				Match Match;
-				while (!GnatLS.StandardOutput.EndOfStream) {
-					Match = new Regex(@"^.*(gcc|gnat).*adainclude", RegexOptions.IgnoreCase).Match(GnatLS.StandardOutput.ReadLine());
-					if (Match.Value != "") return Match.Value.Trim();
+				try {
+					Process GnatLS = new Process();
+					GnatLS.StartInfo.FileName = "gnatls";
+					GnatLS.StartInfo.Arguments = "-v";
+					GnatLS.StartInfo.RedirectStandardOutput = true;
+					GnatLS.Start();
+					Match Match;
+					while (!GnatLS.StandardOutput.EndOfStream) {
+						Match = new Regex(@"^.*(gcc|gnat).*adainclude", RegexOptions.IgnoreCase).Match(GnatLS.StandardOutput.ReadLine());
+						if (Match.Value != "") return Match.Value.Trim();
+					}
+					return "";
+				} catch (Win32Exception) {
+					throw new MissingGNATProgramException("gnatls");
 				}
-				return "";
 			}
 		}
 
 		internal static String GNATObjectsPath {
 			get {
-				Process GnatLS = new Process();
-				GnatLS.StartInfo.FileName = "gnatls";
-				GnatLS.StartInfo.Arguments = "-v";
-				GnatLS.StartInfo.RedirectStandardOutput = true;
-				GnatLS.Start();
-				Match Match;
-				while (!GnatLS.StandardOutput.EndOfStream) {
-					Match = new Regex(@"^.*(gcc|gnat).*adalib", RegexOptions.IgnoreCase).Match(GnatLS.StandardOutput.ReadLine());
-					if (Match.Value != "") return Match.Value.Trim();
+				try {
+					Process GnatLS = new Process();
+					GnatLS.StartInfo.FileName = "gnatls";
+					GnatLS.StartInfo.Arguments = "-v";
+					GnatLS.StartInfo.RedirectStandardOutput = true;
+					GnatLS.Start();
+					Match Match;
+					while (!GnatLS.StandardOutput.EndOfStream) {
+						Match = new Regex(@"^.*(gcc|gnat).*adalib", RegexOptions.IgnoreCase).Match(GnatLS.StandardOutput.ReadLine());
+						if (Match.Value != "") return Match.Value.Trim();
+					}
+					return "";
+				} catch (Win32Exception) {
+					throw new MissingGNATProgramException("gnatls");
 				}
-				return "";
 			}
 		}
 
