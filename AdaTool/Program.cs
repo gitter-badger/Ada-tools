@@ -26,6 +26,8 @@ namespace AdaTool {
 			} catch (MissingGNATProgramException Exception) {
 				Console.Write("Missing necessary program: ", Color.Red);
 				Console.WriteLine(Exception.Message);
+				Console.Write("See: ");
+				Console.WriteLine("https://en.wikibooks.org/wiki/Ada_Programming/Installing");
 			}
 		}
 
