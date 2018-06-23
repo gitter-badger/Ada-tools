@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using AdaTools;
+using Console = Colorful.Console;
 
 namespace AdaTool {
 	internal static class Settings {
@@ -14,46 +16,30 @@ namespace AdaTool {
 			Console.WriteLine("  settings — Manage the Ada-tools settings");
 		}
 
-		private static void WriteChoices(params Choice[] Choices) {
-			foreach (Choice Choice in Choices) {
-				Console.Write(Choice);
-			}
-			Console.WriteLine();
-		}
-
-		private static void WriteChoices(params SettingChoice[] Choices) {
-			foreach (SettingChoice Choice in Choices) {
-				Console.WriteLine(" [{0,1}] {1,25} := {2} ", Choice.Code, Choice.Setting, Choice.Value);
-			}
-		}
-
 		/// <summary>
 		/// Enter the Settings REPL
 		/// </summary>
 		internal static void Interactive() {
 			String Choice;
-			ListSettings:
-			Settings.WriteChoices(
-				new SettingChoice("1", "Build Packages On Install", BuildPackagesOnInstall),
-				new SettingChoice("2", "Source Search Path", String.Join("  ", SourceSearchPath)),
-				new SettingChoice("3", "Object Search Path", String.Join("  ", ObjectSearchPath)),
-				new SettingChoice("4", "Package Database Path", PackageDatabasePath),
-				new SettingChoice("5", "Package Repository Path", PackageRepositoryPath));
-			Settings.WriteChoices(
-				new Choice("Q", "Quit"));
-			EnterChoice:
-			Console.Write(" Enter Choice: ");
+		ListSettings:
+			new SettingChoice("1", "Build Packages On Install", BuildPackagesOnInstall).WriteLine();
+			new SettingChoice("2", "Source Search Path", String.Join("  ", SourceSearchPath)).WriteLine();
+			new SettingChoice("3", "Object Search Path", String.Join("  ", ObjectSearchPath)).WriteLine();
+			new SettingChoice("4", "Package Database Path", PackageDatabasePath).WriteLine();
+			new SettingChoice("5", "Package Repository Path", PackageRepositoryPath).WriteLine();
+			new Choice("Q", "Quit").WriteLine();
+		EnterChoice:
+			Console.Write(" Enter Choice: ", Color.LimeGreen);
 			Choice = Console.ReadLine().ToUpper();
 			switch (Choice.ToUpper()) {
 			case "Q":
 				return;
 			case "1": // Build Packages On Install
-				Settings.WriteChoices(
-					new Choice("1", "Yes"),
-					new Choice("2", "No"),
-					new Choice("C", "Cancel"));
-				EnterBuildOnInstallChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "Yes").Write();
+				new Choice("2", "No").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterBuildOnInstallChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "C":
@@ -69,11 +55,10 @@ namespace AdaTool {
 				}
 				goto ListSettings;
 			case "2": // Source Search Path
-				Settings.WriteChoices(
-					new Choice("N", "New Paths"),
-					new Choice("C", "Cancel"));
-				EnterSourcePathChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("N", "New Paths").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterSourcePathChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N": // New Paths
@@ -97,11 +82,10 @@ namespace AdaTool {
 				}
 				goto ListSettings;
 			case "3": // Object Search Path
-				Settings.WriteChoices(
-					new Choice("N", "New Paths"),
-					new Choice("C", "Cancel"));
-				EnterObjectPathChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("N", "New Paths").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterObjectPathChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N": // New Paths
@@ -125,11 +109,10 @@ namespace AdaTool {
 				}
 				goto ListSettings;
 			case "4": // Package Database Path
-				Settings.WriteChoices(
-					new Choice("N", "New Path"),
-					new Choice("C", "Cancel"));
-				EnterPkgDBPath:
-				Console.Write(" Enter Choice: ");
+				new Choice("N", "New Path").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterPkgDBPath:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N":
@@ -143,11 +126,10 @@ namespace AdaTool {
 				}
 				goto ListSettings;
 			case "5": // Package Repository Path
-				Settings.WriteChoices(
-					new Choice("N", "New Path"),
-					new Choice("C", "Cancel"));
-				EnterPkgRepoPath:
-				Console.Write(" Enter Choice: ");
+				new Choice("N", "New Path").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterPkgRepoPath:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N":

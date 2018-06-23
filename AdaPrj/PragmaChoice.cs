@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
+using Console = Colorful.Console;
 
 namespace AdaPrj {
 	internal struct PragmaChoice {
-		internal readonly String Code;
-		internal readonly String Pragma;
-		internal readonly dynamic Value;
+		private readonly String Code;
+		private readonly String Pragma;
+		private readonly dynamic Value;
+
+		public void Write() {
+			Console.Write(" [" + this.Code + "] ", Color.Khaki);
+			Console.Write(this.Pragma + " := ");
+			Console.Write((this.Value as String));
+		}
+
+		public void WriteLine() {
+			Write();
+			Console.WriteLine();
+		}
 
 		internal PragmaChoice(String Code, String Pragma, dynamic Value) {
 			this.Code = Code;

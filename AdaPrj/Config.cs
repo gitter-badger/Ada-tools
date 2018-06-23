@@ -1,29 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using AdaTools;
+using Console = Colorful.Console;
 
 namespace AdaPrj {
 	internal static class Config {
 
 		internal static void FullHelp() {
-			Console.WriteLine("\t" + "(config|configure|configuration) — Interactively modify the configuration pragmas");
+			Console.WriteLine("(config|configure|configuration) — Interactively modify the configuration pragmas");
 		}
 
 		internal static void Help() {
-			Console.WriteLine("\t" + "(config|configure|configuration) — Manage the configuration pragmas");
-		}
-
-		private static void WriteChoices(params Choice[] Choices) {
-			foreach (Choice Choice in Choices) {
-				Console.Write(Choice);
-			}
-			Console.WriteLine();
-		}
-
-		private static void WriteChoices(params PragmaChoice[] Choices) {
-			foreach (PragmaChoice Choice in Choices) {
-				Console.WriteLine(" [{0,1}] {1,25} := {2} ", Choice.Code, Choice.Pragma, Choice.Value);
-			}
+			Console.WriteLine("  (config|configure|configuration) — Manage the configuration pragmas");
 		}
 
 		/// <summary>
@@ -32,23 +21,21 @@ namespace AdaPrj {
 		internal static void Interactive() {
 			ConfigurationUnit Configuration = new ConfigurationUnit();
 			String Choice;
-			ListConfig:
-			Config.WriteChoices(
-				new PragmaChoice("1", "Ada Version", Configuration.AdaVersion),
-				new PragmaChoice("2", "Assertion Policy", Configuration.AssertionPolicy),
-				new PragmaChoice("3", "Assume No Invalid Values", Configuration.AssumeNoInvalidValues),
-				new PragmaChoice("4", "Elaboration Checks", Configuration.ElaborationChecks),
-				new PragmaChoice("5", "Extensions Allowed", Configuration.ExtensionsAllowed),
-				new PragmaChoice("6", "Fast Math", Configuration.FastMath),
-				new PragmaChoice("7", "Source File Name", Configuration.SourceFileNames),
-				new PragmaChoice("8", "Wide Character Encoding", Configuration.WideCharacterEncoding));
+		ListConfig:
+			new PragmaChoice("1", "Ada Version", Configuration.AdaVersion).WriteLine();
+			new PragmaChoice("2", "Assertion Policy", Configuration.AssertionPolicy).WriteLine();
+			new PragmaChoice("3", "Assume No Invalid Values", Configuration.AssumeNoInvalidValues).WriteLine();
+			new PragmaChoice("4", "Elaboration Checks", Configuration.ElaborationChecks).WriteLine();
+			new PragmaChoice("5", "Extensions Allowed", Configuration.ExtensionsAllowed).WriteLine();
+			new PragmaChoice("6", "Fast Math", Configuration.FastMath).WriteLine();
+			new PragmaChoice("7", "Source File Name", Configuration.SourceFileNames).WriteLine();
+			new PragmaChoice("8", "Wide Character Encoding", Configuration.WideCharacterEncoding).WriteLine();
 			// No, License was not forgotten. Rather, it is modified through another command.
-			Config.WriteChoices(
-				new Choice("Q", "Quit"),
-				new Choice("S", "Save"),
-				new Choice("SQ", "Save & Quit"));
-			EnterChoice:
-			Console.Write(" Enter Choice: ");
+			new Choice("Q", "Quit").Write();
+			new Choice("S", "Save").Write();
+			new Choice("SQ", "Save & Quit").WriteLine();
+		EnterChoice:
+			Console.Write(" Enter Choice: ", Color.LimeGreen);
 			Choice = Console.ReadLine();
 			switch (Choice.ToUpper()) {
 			case "Q":
@@ -60,14 +47,13 @@ namespace AdaPrj {
 				if (Choice == "SQ") goto case "Q";
 				goto EnterChoice;
 			case "1": // Ada Version
-				Config.WriteChoices(
-					new Choice("1", "Ada1983"),
-					new Choice("2", "Ada1995"),
-					new Choice("3", "Ada2005"),
-					new Choice("4", "Ada2012"),
-					new Choice("C", "Cancel"));
-				EnterAdaChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "Ada1983").Write();
+				new Choice("2", "Ada1995").Write();
+				new Choice("3", "Ada2005").Write();
+				new Choice("4", "Ada2012").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterAdaChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -89,14 +75,13 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "2": // Assertion Policy
-				Config.WriteChoices(
-					new Choice("1", "Check Globally"),
-					new Choice("2", "Disable Globally"),
-					new Choice("3", "Ignore Globally"),
-					new Choice("4", "Specific Policies"),
-					new Choice("C", "Cancel"));
-				EnterAssertionPolicyChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "Check Globally").Write();
+				new Choice("2", "Disable Globally").Write();
+				new Choice("3", "Ignore Globally").Write();
+				new Choice("4", "Specific Policies").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterAssertionPolicyChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -117,7 +102,7 @@ namespace AdaPrj {
 					} else {
 						Policies = new Dictionary<String, PolicyIdentifier>();
 					}
-					ListAssertionMarks:
+				ListAssertionMarks:
 					foreach (KeyValuePair<String, PolicyIdentifier> policy in Policies) {
 						Console.Write(" " + policy.Key + " => ");
 						switch (policy.Value) {
@@ -135,10 +120,9 @@ namespace AdaPrj {
 							break;
 						}
 					}
-					EnterAssertionMarkChoice:
-					Config.WriteChoices(
-						new Choice("V", "View"),
-						new Choice("D", "Done"));
+				EnterAssertionMarkChoice:
+					new Choice("V", "View").Write();
+					new Choice("D", "Done").WriteLine();
 					Console.Write(" Enter Choice or Policy Name: ");
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
@@ -150,14 +134,13 @@ namespace AdaPrj {
 					default:
 						// The choice is actually a Policy Mark, so create a new entry
 						String PolicyMark = Choice;
-						Config.WriteChoices(
-							new Choice("1", "Check"),
-							new Choice("2", "Disable"),
-							new Choice("3", "Ignore"),
-							new Choice("4", "Suppressible"),
-							new Choice("R", "Remove"),
-							new Choice("C", "Cancel"));
-						Console.Write(" Enter Choice: ");
+						new Choice("1", "Check").Write();
+						new Choice("2", "Disable").Write();
+						new Choice("3", "Ignore").Write();
+						new Choice("4", "Suppressible").Write();
+						new Choice("R", "Remove").Write();
+						new Choice("C", "Cancel").WriteLine();
+						Console.Write(" Enter Choice: ", Color.LimeGreen);
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -201,12 +184,11 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "3": // Assume No Invalid Values
-				Config.WriteChoices(
-					new Choice("1", "On"),
-					new Choice("2", "Off"),
-					new Choice("C", "Cancel"));
-				EnterAssumeNoInvalidValuesChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "On").Write();
+				new Choice("2", "Off").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterAssumeNoInvalidValuesChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -222,12 +204,11 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "4": // Elaboration Checks
-				Config.WriteChoices(
-					new Choice("1", "Dynamic"),
-					new Choice("2", "Static"),
-					new Choice("C", "Cancel"));
-				EnterElaborationChecksChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "Dynamic").Write();
+				new Choice("2", "Static").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterElaborationChecksChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -243,12 +224,11 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "5": // Extensions Allowed
-				Config.WriteChoices(
-					new Choice("1", "On"),
-					new Choice("2", "Off"),
-					new Choice("C", "Cancel"));
-				EnterExtensionsAllowedChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "On").Write();
+				new Choice("2", "Off").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterExtensionsAllowedChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -264,12 +244,11 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "6": //Fast Math
-				Config.WriteChoices(
-					new Choice("1", "Proper"),
-					new Choice("2", "Fast"),
-					new Choice("C", "Cancel"));
-				EnterFastMathChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "Proper").Write();
+				new Choice("2", "Fast").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterFastMathChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -285,14 +264,13 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "7": //Source File Name
-				ListSourceFileConfig:
-				Config.WriteChoices(
-					new Choice("1", "Spec File Name"),
-					new Choice("2", "Body File Name"),
-					new Choice("3", "Subunit File Name"),
-					new Choice("D", "Done"));
-				EnterSourceFileNameChoice:
-				Console.Write(" Enter Choice: ");
+			ListSourceFileConfig:
+				new Choice("1", "Spec File Name").Write();
+				new Choice("2", "Body File Name").Write();
+				new Choice("3", "Subunit File Name").Write();
+				new Choice("D", "Done").WriteLine();
+			EnterSourceFileNameChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "D":
@@ -300,13 +278,12 @@ namespace AdaPrj {
 				case "1":
 					if (Configuration.SourceFileNames.SpecFileName is null) Configuration.SourceFileNames.SpecFileName = new SpecFileName();
 					ListSpecFileChoice:
-					Config.WriteChoices(
-						new Choice("1", "Spec File Name"),
-						new Choice("2", "Casing"),
-						new Choice("3", "Dot Replacement"),
-						new Choice("D", "Done"));
-					EnterSpecFileChoice:
-					Console.Write(" Enter Choice: ");
+					new Choice("1", "Spec File Name").Write();
+					new Choice("2", "Casing").Write();
+					new Choice("3", "Dot Replacement").Write();
+					new Choice("D", "Done").WriteLine();
+				EnterSpecFileChoice:
+					Console.Write(" Enter Choice: ", Color.LimeGreen);
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
 					case "D":
@@ -316,13 +293,12 @@ namespace AdaPrj {
 						Configuration.SourceFileNames.SpecFileName.UnitFileName = Console.ReadLine();
 						goto ListSpecFileChoice;
 					case "2":
-						Config.WriteChoices(
-							new Choice("1", "Lowercase"),
-							new Choice("2", "Uppercase"),
-							new Choice("3", "Mixedcase"),
-							new Choice("C", "Cancel"));
-						EnterSpecFileCasing:
-						Console.Write(" Enter Choice: ");
+						new Choice("1", "Lowercase").Write();
+						new Choice("2", "Uppercase").Write();
+						new Choice("3", "Mixedcase").Write();
+						new Choice("C", "Cancel").WriteLine();
+					EnterSpecFileCasing:
+						Console.Write(" Enter Choice: ", Color.LimeGreen);
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -350,13 +326,12 @@ namespace AdaPrj {
 				case "2":
 					if (Configuration.SourceFileNames.BodyFileName is null) Configuration.SourceFileNames.BodyFileName = new BodyFileName();
 					ListBodyFileChoice:
-					Config.WriteChoices(
-						new Choice("1", "Body File Name"),
-						new Choice("2", "Casing"),
-						new Choice("3", "Dot Replacement"),
-						new Choice("D", "Done"));
-					EnterBodyFileChoice:
-					Console.Write(" Enter Choice: ");
+					new Choice("1", "Body File Name").Write();
+					new Choice("2", "Casing").Write();
+					new Choice("3", "Dot Replacement").Write();
+					new Choice("D", "Done").WriteLine();
+				EnterBodyFileChoice:
+					Console.Write(" Enter Choice: ", Color.LimeGreen);
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
 					case "D":
@@ -366,13 +341,12 @@ namespace AdaPrj {
 						Configuration.SourceFileNames.BodyFileName.UnitFileName = Console.ReadLine();
 						goto ListBodyFileChoice;
 					case "2":
-						Config.WriteChoices(
-							new Choice("1", "Lowercase"),
-							new Choice("2", "Uppercase"),
-							new Choice("3", "Mixedcase"),
-							new Choice("C", "Cancel"));
-						EnterBodyFileCasing:
-						Console.Write(" Enter Choice: ");
+						new Choice("1", "Lowercase").Write();
+						new Choice("2", "Uppercase").Write();
+						new Choice("3", "Mixedcase").Write();
+						new Choice("C", "Cancel").WriteLine();
+					EnterBodyFileCasing:
+						Console.Write(" Enter Choice: ", Color.LimeGreen);
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -400,13 +374,12 @@ namespace AdaPrj {
 				case "3":
 					if (Configuration.SourceFileNames.SubunitFileName is null) Configuration.SourceFileNames.SubunitFileName = new SubunitFileName();
 					ListSubunitFileChoice:
-					Config.WriteChoices(
-						new Choice("1", "Subunit File Name"),
-						new Choice("2", "Casing"),
-						new Choice("3", "Dot Replacement"),
-						new Choice("D", "Done"));
-					EnterSubunitFileChoice:
-					Console.Write(" Enter Choice: ");
+					new Choice("1", "Subunit File Name").Write();
+					new Choice("2", "Casing").Write();
+					new Choice("3", "Dot Replacement").Write();
+					new Choice("D", "Done").WriteLine();
+				EnterSubunitFileChoice:
+					Console.Write(" Enter Choice: ", Color.LimeGreen);
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
 					case "D":
@@ -416,13 +389,12 @@ namespace AdaPrj {
 						Configuration.SourceFileNames.SubunitFileName.UnitFileName = Console.ReadLine();
 						goto ListSubunitFileChoice;
 					case "2":
-						Config.WriteChoices(
-							new Choice("1", "Lowercase"),
-							new Choice("2", "Uppercase"),
-							new Choice("3", "Mixedcase"),
-							new Choice("C", "Cancel"));
-						EnterSubunitFileCasing:
-						Console.Write(" Enter Choice: ");
+						new Choice("1", "Lowercase").Write();
+						new Choice("2", "Uppercase").Write();
+						new Choice("3", "Mixedcase").Write();
+						new Choice("C", "Cancel").WriteLine();
+					EnterSubunitFileCasing:
+						Console.Write(" Enter Choice: ", Color.LimeGreen);
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -451,16 +423,15 @@ namespace AdaPrj {
 					goto EnterSourceFileNameChoice;
 				}
 			case "8": //Wide Character Encoding
-				Config.WriteChoices(
-					new Choice("1", "Hex"),
-					new Choice("2", "Upper"),
-					new Choice("3", "Shift_JIS"),
-					new Choice("4", "EUC"),
-					new Choice("5", "UTF-8"),
-					new Choice("6", "Brackets"),
-					new Choice("C", "Cancel"));
-				EnterWideCharacterEncodingChoice:
-				Console.Write(" Enter Choice: ");
+				new Choice("1", "Hex").Write();
+				new Choice("2", "Upper").Write();
+				new Choice("3", "Shift_JIS").Write();
+				new Choice("4", "EUC").Write();
+				new Choice("5", "UTF-8").Write();
+				new Choice("6", "Brackets").Write();
+				new Choice("C", "Cancel").WriteLine();
+			EnterWideCharacterEncodingChoice:
+				Console.Write(" Enter Choice: ", Color.LimeGreen);
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":

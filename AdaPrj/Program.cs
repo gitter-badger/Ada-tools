@@ -101,6 +101,7 @@ namespace AdaPrj {
 			Console.WriteLine(AppDomain.CurrentDomain.FriendlyName);
 			Build.Help();
 			Clean.Help();
+			Config.Help();
 			Types.Help();
 			Units.Help();
 		}

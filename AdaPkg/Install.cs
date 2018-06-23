@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-
 using AdaTools;
+using Console = Colorful.Console;
 
 namespace AdaPkg {
 	static class Install {
@@ -67,9 +68,10 @@ namespace AdaPkg {
 				if (String.IsNullOrEmpty(Package.Variant)) {
 					Console.Write(Package.Name);
 				} else {
-					Console.Write(Package.Name + ":" + Package.Variant);
+					Console.Write(Package.Name + ":");
+					Console.Write(Package.Variant, Color.Khaki);
 				}
-				Console.WriteLine(" [" + Package.Version + "]");
+				Console.WriteLine(" [" + Package.Version + "]", Color.Indigo);
 			}
 		}
 
