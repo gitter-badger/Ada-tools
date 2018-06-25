@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using CommandLine;
+using CommandLine.Text;
 
 namespace AdaPkg {
-	[Flags]
-	internal enum UninstallFlags {
-		Uninstall = 1,
-		Global = 2,
-		Help = 4,
+	internal class Options {
+
 	}
 }

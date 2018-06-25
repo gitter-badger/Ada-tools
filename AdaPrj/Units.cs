@@ -13,15 +13,6 @@ namespace AdaPrj {
 			Console.WriteLine();
 		}
 
-		internal static void Help() {
-			Console.WriteLine("  (unit|units) — Lists the Ada units within the current directory");
-		}
-
-		internal static void FullHelp() {
-			Console.WriteLine("(unit|units) — Lists the Ada units within the current directory");
-			Console.WriteLine("  --table — Lists the Ada units within the current directory as a detailed table");
-		}
-
 		internal static void Table() {
 			Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "Kind", "Pure", "Remote", "Name"));
 			Console.WriteLine(String.Format("{0,4}  {1,4}  {2,6}  {3,4}", "----", "----", "------", "----"));
@@ -63,20 +54,12 @@ namespace AdaPrj {
 			}
 		}
 
-		internal static UnitsFlags ParseUnitsFlags(List<String> Args) {
-			UnitsFlags Result = UnitsFlags.Units;
-			foreach (String Arg in Args) {
-				switch (Arg.ToUpper()) {
-				case "--HELP":
-					return UnitsFlags.Units;
-				case "--TABLE":
-					Result |= UnitsFlags.Table;
-					break;
-				default:
-					break;
-				}
+		internal static void Run(UnitsOptions opts, Span<String> args) {
+			if (opts.Table) {
+				Units.Table();
+			} else {
+				Units.Each();
 			}
-			return Result;
 		}
 
 	}
