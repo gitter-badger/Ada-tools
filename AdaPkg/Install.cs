@@ -77,10 +77,12 @@ namespace AdaPkg {
 
 		internal static InstallFlags ParseInstallFlags(List<String> Args) {
 			InstallFlags Result = InstallFlags.Install;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return InstallFlags.Help;
+					Result |= InstallFlags.Help;
+					break;
 				case "--LIST":
 					Result |= InstallFlags.List;
 					break;
@@ -89,6 +91,12 @@ namespace AdaPkg {
 					Result |= InstallFlags.Global;
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

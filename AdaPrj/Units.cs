@@ -65,16 +65,24 @@ namespace AdaPrj {
 
 		internal static UnitsFlags ParseUnitsFlags(List<String> Args) {
 			UnitsFlags Result = UnitsFlags.Units;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return UnitsFlags.Units;
+					Result |= UnitsFlags.Units;
+					break;
 				case "--TABLE":
 					Result |= UnitsFlags.Table;
 					break;
 				default:
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

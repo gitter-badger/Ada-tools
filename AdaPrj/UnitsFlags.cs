@@ -5,8 +5,8 @@ using System.Text;
 namespace AdaPrj {
 	[Flags]
 	internal enum UnitsFlags {
-		Units = 1,
-		Help = 2,
-		Table = 4,
+		Units = 0,
+		Help = 1,
+		Table = 2,
 	}
 }

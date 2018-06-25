@@ -150,10 +150,12 @@ namespace AdaPrj {
 
 		internal static TypesFlags ParseTypesFlags(List<String> Args) {
 			TypesFlags Result = TypesFlags.Types;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return TypesFlags.Help;
+					Result |= TypesFlags.Help;
+					break;
 				case "--INFO":
 					Result |= TypesFlags.Info;
 					break;
@@ -163,6 +165,12 @@ namespace AdaPrj {
 				default:
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

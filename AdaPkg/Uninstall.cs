@@ -61,15 +61,23 @@ namespace AdaPkg {
 
 		internal static UninstallFlags ParseUninstallFlags(List<String> Args) {
 			UninstallFlags Result = UninstallFlags.Uninstall;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return UninstallFlags.Help;
+					Result |= UninstallFlags.Help;
+					break;
 				case "--GLOBAL":
 				default:
 					Result |= UninstallFlags.Global;
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

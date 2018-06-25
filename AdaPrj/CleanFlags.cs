@@ -5,7 +5,7 @@ using System.Text;
 namespace AdaPrj {
 	[Flags]
 	internal enum CleanFlags {
-		Clean = 1,
-		Help = 2,
+		Clean = 0,
+		Help = 1,
 	}
 }

@@ -7,8 +7,9 @@ namespace AdaPkg {
 	public static class Package {
 
 		internal static void FullHelp() {
-			Console.WriteLine(" package — Package all found units");
-			Console.WriteLine(" --info <Archive>+ — List the package info for the specified archives");
+			Console.WriteLine("package — Package all found units");
+			Console.WriteLine("  --info <Archive>+ — List the package info for the specified archives");
+			Console.WriteLine("  --validate <Archive>+ — Validate the specified package archives");
 		}
 
 		internal static void Help() {
@@ -46,10 +47,12 @@ namespace AdaPkg {
 
 		internal static PackageFlags ParsePackageFlags(List<String> Args) {
 			PackageFlags Result = PackageFlags.Package;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return PackageFlags.Help;
+					Result |= PackageFlags.Help;
+					break;
 				case "--INFO":
 					Result |= PackageFlags.Info;
 					break;
@@ -59,6 +62,12 @@ namespace AdaPkg {
 				default:
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

@@ -21,7 +21,7 @@ namespace AdaPkg {
 					case InstallFlags.List:
 						Install.ListInstalled();
 						break;
-					case InstallFlags.Global | InstallFlags.Install:
+					case InstallFlags.Global:
 					default:
 						Install.GlobalInstall(Args);
 						break;

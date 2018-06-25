@@ -5,7 +5,7 @@ using System.Text;
 namespace AdaPrj {
 	[Flags]
 	public enum ConfigFlags {
-		Config = 1,
-		Help = 2,
+		Config = 0,
+		Help = 1,
 	}
 }

@@ -20,13 +20,21 @@ namespace AdaPrj {
 
 		internal static CleanFlags ParseCleanFlags(List<String> Args) {
 			CleanFlags Result = CleanFlags.Clean;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return CleanFlags.Help;
+					Result |= CleanFlags.Help;
+					break;
 				default:
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

@@ -465,13 +465,21 @@ namespace AdaPrj {
 
 		internal static ConfigFlags ParseConfigFlags(List<String> Args) {
 			ConfigFlags Result = ConfigFlags.Config;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--HELP":
-					return ConfigFlags.Help;
+					Result |= ConfigFlags.Help;
+					break;
 				default:
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
+				Args.Remove(Arg);
 			}
 			return Result;
 		}

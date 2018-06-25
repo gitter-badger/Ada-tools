@@ -65,19 +65,26 @@ namespace AdaPrj {
 
 		internal static BuildFlags ParseBuildFlags(List<String> Args) {
 			BuildFlags Result = BuildFlags.Build;
+			List<String> ToBeRemoved = new List<String>();
 			foreach (String Arg in Args) {
 				switch (Arg.ToUpper()) {
 				case "--FLAGS":
 					Result |= BuildFlags.Flags;
 					break;
 				case "--HELP":
-					return BuildFlags.Help;
+					Result |= BuildFlags.Help;
+					break;
 				case "--PLAN":
 					Result |= BuildFlags.Plan;
 					break;
 				default:
 					break;
 				}
+				if (Arg.StartsWith("--")) {
+					ToBeRemoved.Add(Arg);
+				}
+			}
+			foreach (String Arg in ToBeRemoved) {
 				Args.Remove(Arg);
 			}
 			return Result;

@@ -5,9 +5,9 @@ using System.Text;
 namespace AdaPrj {
 	[Flags]
 	public enum TypesFlags {
-		Types = 1,
-		Help = 2,
-		Info = 4,
-		Table = 8,
+		Types = 0,
+		Help = 1,
+		Info = 2,
+		Table = 4,
 	}
 }

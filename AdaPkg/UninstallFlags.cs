@@ -5,8 +5,8 @@ using System.Text;
 namespace AdaPkg {
 	[Flags]
 	internal enum UninstallFlags {
-		Uninstall = 1,
-		Global = 2,
-		Help = 4,
+		Uninstall = 0,
+		Global = 1,
+		Help = 2,
 	}
 }
