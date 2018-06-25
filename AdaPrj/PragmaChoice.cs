@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
-using Console = Colorful.Console;
 
 namespace AdaPrj {
 	internal struct PragmaChoice {
@@ -11,7 +10,9 @@ namespace AdaPrj {
 		private readonly dynamic Value;
 
 		public void Write() {
-			Console.Write(" [" + this.Code + "] ", Color.Khaki);
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write(" [" + this.Code + "] ");
+			Console.ResetColor();
 			Console.Write(this.Pragma + " := ");
 			Console.Write((this.Value as String));
 		}

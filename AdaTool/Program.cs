@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Console = Colorful.Console;
 using AdaTools;
 
 namespace AdaTool {
@@ -24,7 +22,9 @@ namespace AdaTool {
 					break;
 				}
 			} catch (MissingGNATProgramException Exception) {
-				Console.Write("Missing necessary program: ", Color.Red);
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write("Missing necessary program: ");
+				Console.ResetColor();
 				Console.WriteLine(Exception.Message);
 				Console.Write("See: ");
 				Console.WriteLine("https://en.wikibooks.org/wiki/Ada_Programming/Installing");
@@ -32,8 +32,8 @@ namespace AdaTool {
 		}
 
 		public static void Help() {
-			Console.WriteAscii("AdaTools", Color.Green);
-			Console.WriteLine("\tCopyright 2018 - Entomy");
+			Console.WriteLine("AdaTools");
+			Console.WriteLine("Copyright 2018 - Entomy");
 			Console.WriteLine();
 			Console.WriteLine(AppDomain.CurrentDomain.FriendlyName);
 			Settings.Help();

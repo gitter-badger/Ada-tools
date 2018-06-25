@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 using AdaTools;
-using Console = Colorful.Console;
 
 namespace AdaTool {
 	internal static class Settings {
@@ -29,7 +27,9 @@ namespace AdaTool {
 			new SettingChoice("5", "Package Repository Path", PackageRepositoryPath).WriteLine();
 			new Choice("Q", "Quit").WriteLine();
 			EnterChoice:
-			Console.Write(" Enter Choice: ", Color.LimeGreen);
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.Write(" Enter Choice: ");
+			Console.ResetColor();
 			Choice = Console.ReadLine().ToUpper();
 			switch (Choice.ToUpper()) {
 			case "Q":
@@ -39,7 +39,9 @@ namespace AdaTool {
 				new Choice("2", "No").Write();
 				new Choice("C", "Cancel").WriteLine();
 				EnterBuildOnInstallChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "C":
@@ -58,7 +60,9 @@ namespace AdaTool {
 				new Choice("N", "New Paths").Write();
 				new Choice("C", "Cancel").WriteLine();
 				EnterSourcePathChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N": // New Paths
@@ -68,7 +72,9 @@ namespace AdaTool {
 					Console.WriteLine(" Enter \"done\" on a line to finish");
 					String Path;
 					while (true) {
+						Console.ForegroundColor = ConsoleColor.DarkYellow;
 						Console.Write(" > ");
+						Console.ResetColor();
 						Path = Console.ReadLine();
 						if (Path.ToUpper() == "DONE") break;
 						Paths.Add(Path);
@@ -85,7 +91,9 @@ namespace AdaTool {
 				new Choice("N", "New Paths").Write();
 				new Choice("C", "Cancel").WriteLine();
 				EnterObjectPathChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N": // New Paths
@@ -95,7 +103,9 @@ namespace AdaTool {
 					Console.WriteLine(" Enter \"done\" on a line to finish");
 					String Path;
 					while (true) {
+						Console.ForegroundColor = ConsoleColor.DarkYellow;
 						Console.Write(" > ");
+						Console.ResetColor();
 						Path = Console.ReadLine();
 						if (Path.ToUpper() == "DONE") break;
 						Paths.Add(Path);
@@ -112,7 +122,9 @@ namespace AdaTool {
 				new Choice("N", "New Path").Write();
 				new Choice("C", "Cancel").WriteLine();
 				EnterPkgDBPath:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N":
@@ -129,7 +141,9 @@ namespace AdaTool {
 				new Choice("N", "New Path").Write();
 				new Choice("C", "Cancel").WriteLine();
 				EnterPkgRepoPath:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine();
 				switch (Choice.ToUpper()) {
 				case "N":

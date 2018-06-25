@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
-using Console = Colorful.Console;
 
 namespace AdaPrj {
 	internal struct Choice {
@@ -10,7 +8,9 @@ namespace AdaPrj {
 		private readonly String Name;
 
 		public void Write() {
-			Console.Write(" [" + this.Code + "] ", Color.Khaki);
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write(" [" + this.Code + "] ");
+			Console.ResetColor();
 			Console.Write(this.Name);
 		}
 

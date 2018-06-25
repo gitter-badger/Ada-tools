@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using AdaTools;
-using Console = Colorful.Console;
 
 namespace AdaPrj {
 	internal static class Config {
@@ -21,7 +19,7 @@ namespace AdaPrj {
 		internal static void Interactive() {
 			ConfigurationUnit Configuration = new ConfigurationUnit();
 			String Choice;
-		ListConfig:
+			ListConfig:
 			new PragmaChoice("1", "Ada Version", Configuration.AdaVersion).WriteLine();
 			new PragmaChoice("2", "Assertion Policy", Configuration.AssertionPolicy).WriteLine();
 			new PragmaChoice("3", "Assume No Invalid Values", Configuration.AssumeNoInvalidValues).WriteLine();
@@ -34,8 +32,10 @@ namespace AdaPrj {
 			new Choice("Q", "Quit").Write();
 			new Choice("S", "Save").Write();
 			new Choice("SQ", "Save & Quit").WriteLine();
-		EnterChoice:
-			Console.Write(" Enter Choice: ", Color.LimeGreen);
+			EnterChoice:
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.Write(" Enter Choice: ");
+			Console.ResetColor();
 			Choice = Console.ReadLine();
 			switch (Choice.ToUpper()) {
 			case "Q":
@@ -52,8 +52,10 @@ namespace AdaPrj {
 				new Choice("3", "Ada2005").Write();
 				new Choice("4", "Ada2012").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterAdaChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterAdaChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -80,8 +82,10 @@ namespace AdaPrj {
 				new Choice("3", "Ignore Globally").Write();
 				new Choice("4", "Specific Policies").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterAssertionPolicyChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterAssertionPolicyChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -102,7 +106,7 @@ namespace AdaPrj {
 					} else {
 						Policies = new Dictionary<String, PolicyIdentifier>();
 					}
-				ListAssertionMarks:
+					ListAssertionMarks:
 					foreach (KeyValuePair<String, PolicyIdentifier> policy in Policies) {
 						Console.Write(" " + policy.Key + " => ");
 						switch (policy.Value) {
@@ -120,7 +124,7 @@ namespace AdaPrj {
 							break;
 						}
 					}
-				EnterAssertionMarkChoice:
+					EnterAssertionMarkChoice:
 					new Choice("V", "View").Write();
 					new Choice("D", "Done").WriteLine();
 					Console.Write(" Enter Choice or Policy Name: ");
@@ -140,7 +144,9 @@ namespace AdaPrj {
 						new Choice("4", "Suppressible").Write();
 						new Choice("R", "Remove").Write();
 						new Choice("C", "Cancel").WriteLine();
-						Console.Write(" Enter Choice: ", Color.LimeGreen);
+						Console.ForegroundColor = ConsoleColor.Green;
+						Console.Write(" Enter Choice: ");
+						Console.ResetColor();
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -187,8 +193,10 @@ namespace AdaPrj {
 				new Choice("1", "On").Write();
 				new Choice("2", "Off").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterAssumeNoInvalidValuesChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterAssumeNoInvalidValuesChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -207,8 +215,10 @@ namespace AdaPrj {
 				new Choice("1", "Dynamic").Write();
 				new Choice("2", "Static").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterElaborationChecksChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterElaborationChecksChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -227,8 +237,10 @@ namespace AdaPrj {
 				new Choice("1", "On").Write();
 				new Choice("2", "Off").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterExtensionsAllowedChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterExtensionsAllowedChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -247,8 +259,10 @@ namespace AdaPrj {
 				new Choice("1", "Proper").Write();
 				new Choice("2", "Fast").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterFastMathChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterFastMathChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":
@@ -264,13 +278,15 @@ namespace AdaPrj {
 				}
 				goto ListConfig;
 			case "7": //Source File Name
-			ListSourceFileConfig:
+				ListSourceFileConfig:
 				new Choice("1", "Spec File Name").Write();
 				new Choice("2", "Body File Name").Write();
 				new Choice("3", "Subunit File Name").Write();
 				new Choice("D", "Done").WriteLine();
-			EnterSourceFileNameChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterSourceFileNameChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "D":
@@ -282,8 +298,10 @@ namespace AdaPrj {
 					new Choice("2", "Casing").Write();
 					new Choice("3", "Dot Replacement").Write();
 					new Choice("D", "Done").WriteLine();
-				EnterSpecFileChoice:
-					Console.Write(" Enter Choice: ", Color.LimeGreen);
+					EnterSpecFileChoice:
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.Write(" Enter Choice: ");
+					Console.ResetColor();
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
 					case "D":
@@ -297,8 +315,10 @@ namespace AdaPrj {
 						new Choice("2", "Uppercase").Write();
 						new Choice("3", "Mixedcase").Write();
 						new Choice("C", "Cancel").WriteLine();
-					EnterSpecFileCasing:
-						Console.Write(" Enter Choice: ", Color.LimeGreen);
+						EnterSpecFileCasing:
+						Console.ForegroundColor = ConsoleColor.Green;
+						Console.Write(" Enter Choice: ");
+						Console.ResetColor();
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -330,8 +350,10 @@ namespace AdaPrj {
 					new Choice("2", "Casing").Write();
 					new Choice("3", "Dot Replacement").Write();
 					new Choice("D", "Done").WriteLine();
-				EnterBodyFileChoice:
-					Console.Write(" Enter Choice: ", Color.LimeGreen);
+					EnterBodyFileChoice:
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.Write(" Enter Choice: ");
+					Console.ResetColor();
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
 					case "D":
@@ -345,8 +367,10 @@ namespace AdaPrj {
 						new Choice("2", "Uppercase").Write();
 						new Choice("3", "Mixedcase").Write();
 						new Choice("C", "Cancel").WriteLine();
-					EnterBodyFileCasing:
-						Console.Write(" Enter Choice: ", Color.LimeGreen);
+						EnterBodyFileCasing:
+						Console.ForegroundColor = ConsoleColor.Green;
+						Console.Write(" Enter Choice: ");
+						Console.ResetColor();
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -378,8 +402,10 @@ namespace AdaPrj {
 					new Choice("2", "Casing").Write();
 					new Choice("3", "Dot Replacement").Write();
 					new Choice("D", "Done").WriteLine();
-				EnterSubunitFileChoice:
-					Console.Write(" Enter Choice: ", Color.LimeGreen);
+					EnterSubunitFileChoice:
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.Write(" Enter Choice: ");
+					Console.ResetColor();
 					Choice = Console.ReadLine().ToUpper();
 					switch (Choice) {
 					case "D":
@@ -393,8 +419,10 @@ namespace AdaPrj {
 						new Choice("2", "Uppercase").Write();
 						new Choice("3", "Mixedcase").Write();
 						new Choice("C", "Cancel").WriteLine();
-					EnterSubunitFileCasing:
-						Console.Write(" Enter Choice: ", Color.LimeGreen);
+						EnterSubunitFileCasing:
+						Console.ForegroundColor = ConsoleColor.Green;
+						Console.Write(" Enter Choice: ");
+						Console.ResetColor();
 						Choice = Console.ReadLine().ToUpper();
 						switch (Choice) {
 						case "C":
@@ -430,8 +458,10 @@ namespace AdaPrj {
 				new Choice("5", "UTF-8").Write();
 				new Choice("6", "Brackets").Write();
 				new Choice("C", "Cancel").WriteLine();
-			EnterWideCharacterEncodingChoice:
-				Console.Write(" Enter Choice: ", Color.LimeGreen);
+				EnterWideCharacterEncodingChoice:
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.Write(" Enter Choice: ");
+				Console.ResetColor();
 				Choice = Console.ReadLine().ToUpper();
 				switch (Choice) {
 				case "C":

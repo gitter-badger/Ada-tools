@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using AdaTools;
-using Console = Colorful.Console;
 
 namespace AdaPkg {
 	static class Install {
