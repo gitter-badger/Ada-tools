@@ -496,6 +496,7 @@ namespace AdaTools {
 			// This is correctly in multiline mode, as Ada comments only exist over single lines
 			Candidate = this.Match(@"--@description.*$", RegexOptions.IgnoreCase | RegexOptions.Multiline)
 			?? "--@description  "; // This last part ensures the parse does not fail, but rather, simply finds an empty description.
+			Console.WriteLine("Candidate: " + Candidate);
 			String[] Split = Candidate.Split();
 			return String.Join(' ', Split.Skip(1).Take(Split.Length - 1));
 		}

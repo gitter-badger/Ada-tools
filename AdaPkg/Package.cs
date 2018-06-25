@@ -4,9 +4,18 @@ using System.Text;
 using AdaTools;
 
 namespace AdaPkg {
-	internal static class Package {
+	public static class Package {
 
-		private static void Each(Boolean IncludeBody = true) {
+		internal static void FullHelp() {
+			Console.WriteLine(" package — Package all found units");
+			Console.WriteLine(" --info <Archive>+ — List the package info for the specified archives");
+		}
+
+		internal static void Help() {
+			Console.WriteLine("  package — Package all found units");
+		}
+
+		internal static void Each(Boolean IncludeBody = true) {
 			foreach (PackageUnit PackageUnit in new Project().Packages) {
 				try {
 					new AdaTools.Package(PackageUnit).Create(IncludeBody);
@@ -16,8 +25,7 @@ namespace AdaPkg {
 			}
 		}
 
-		private static void Info(Span<String> Arguments) {
-			Console.WriteLine("Package.Info()");
+		internal static void Info(List<String> Arguments) {
 			foreach (String Name in Arguments) {
 				try {
 					new AdaTools.Package(Name).WriteInfo();
@@ -27,7 +35,7 @@ namespace AdaPkg {
 			}
 		}
 
-		private static void Validate(Span<String> Arguments) {
+		internal static void Validate(List<String> Arguments) {
 			AdaTools.Package Package;
 			foreach (String Name in Arguments) {
 				Package = new AdaTools.Package(Name);
@@ -36,12 +44,23 @@ namespace AdaPkg {
 			}
 		}
 
-		internal static void Run(PackageOptions opts, String[] args) {
-			if (opts.Info) {
-				Package.Info(args);
-			} else if (opts.Validate) {
-				Package.Validate(args);
+		internal static PackageFlags ParsePackageFlags(List<String> Args) {
+			PackageFlags Result = PackageFlags.Package;
+			foreach (String Arg in Args) {
+				switch (Arg.ToUpper()) {
+				case "--HELP":
+					return PackageFlags.Help;
+				case "--INFO":
+					Result |= PackageFlags.Info;
+					break;
+				case "--VALIDATE":
+					Result |= PackageFlags.Validate;
+					break;
+				default:
+					break;
+				}
 			}
+			return Result;
 		}
 
 	}

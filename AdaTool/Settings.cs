@@ -8,6 +8,14 @@ using Console = Colorful.Console;
 namespace AdaTool {
 	internal static class Settings {
 
+		internal static void FullHelp() {
+			Console.WriteLine("settings — Interactively modify the Ada-tools settings");
+		}
+
+		internal static void Help() {
+			Console.WriteLine("  settings — Manage the Ada-tools settings");
+		}
+
 		/// <summary>
 		/// Enter the Settings REPL
 		/// </summary>
@@ -60,7 +68,7 @@ namespace AdaTool {
 					Console.WriteLine(" Enter \"done\" on a line to finish");
 					String Path;
 					while (true) {
-						Console.Write(" > ", Color.Khaki);
+						Console.Write(" > ");
 						Path = Console.ReadLine();
 						if (Path.ToUpper() == "DONE") break;
 						Paths.Add(Path);
@@ -87,7 +95,7 @@ namespace AdaTool {
 					Console.WriteLine(" Enter \"done\" on a line to finish");
 					String Path;
 					while (true) {
-						Console.Write(" > ", Color.Khaki);
+						Console.Write(" > ");
 						Path = Console.ReadLine();
 						if (Path.ToUpper() == "DONE") break;
 						Paths.Add(Path);
@@ -137,10 +145,6 @@ namespace AdaTool {
 			default:
 				goto EnterChoice;
 			}
-		}
-
-		public static void Run(SettingsOptions opts) {
-			Settings.Interactive();
 		}
 
 		#region Wrappings

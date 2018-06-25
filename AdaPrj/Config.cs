@@ -7,6 +7,14 @@ using Console = Colorful.Console;
 namespace AdaPrj {
 	internal static class Config {
 
+		internal static void FullHelp() {
+			Console.WriteLine("(config|configure|configuration) — Interactively modify the configuration pragmas");
+		}
+
+		internal static void Help() {
+			Console.WriteLine("  (config|configure|configuration) — Manage the configuration pragmas");
+		}
+
 		/// <summary>
 		/// Enter the Config REPL
 		/// </summary>
@@ -455,8 +463,17 @@ namespace AdaPrj {
 			}
 		}
 
-		internal static void Run(ConfigOptions opts, Span<String> args) {
-			Config.Interactive();
+		internal static ConfigFlags ParseConfigFlags(List<String> Args) {
+			ConfigFlags Result = ConfigFlags.Config;
+			foreach (String Arg in Args) {
+				switch (Arg.ToUpper()) {
+				case "--HELP":
+					return ConfigFlags.Help;
+				default:
+					break;
+				}
+			}
+			return Result;
 		}
 
 	}

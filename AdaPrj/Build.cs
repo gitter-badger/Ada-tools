@@ -53,16 +53,34 @@ namespace AdaPrj {
 			}
 		}
 
-		internal static void Run(BuildOptions opts, Span<String> args) {
-			if (opts.Flags && opts.Plan) {
-				Build.PlanWithFlags();
-			} else if (opts.Flags) {
-				Build.Flags();
-			} else if (opts.Plan) {
-				Build.Plan();
-			} else {
-				Build.Simple();
+		internal static void FullHelp() {
+			Console.WriteLine("build — Build all sources within this directory");
+			Console.WriteLine("  --flags — Print the build flags instead of building");
+			Console.WriteLine("  --plan — Print the build plan instead of building");
+		}
+
+		internal static void Help() {
+			Console.WriteLine("  (build|compile|make) — Build all sources within this directory");
+		}
+
+		internal static BuildFlags ParseBuildFlags(List<String> Args) {
+			BuildFlags Result = BuildFlags.Build;
+			foreach (String Arg in Args) {
+				switch (Arg.ToUpper()) {
+				case "--FLAGS":
+					Result |= BuildFlags.Flags;
+					break;
+				case "--HELP":
+					return BuildFlags.Help;
+				case "--PLAN":
+					Result |= BuildFlags.Plan;
+					break;
+				default:
+					break;
+				}
+				Args.Remove(Arg);
 			}
+			return Result;
 		}
 
 	}

@@ -35,16 +35,15 @@ namespace AdaPrj {
 			Unit = null;
 		}
 
-		public static void Info(IEnumerable<String> TypeNames) {
+		public static void Info(String TypeName) {
 			AdaTools.Type Type;
 			Unit Unit;
-			foreach (String TypeName in TypeNames) {
-				Find(TypeName, out Type, out Unit);
-				if (Type is null) {
-					Console.WriteLine("Couldn't find the type");
-					return;
-				} else {
-					switch (Unit) {
+			Find(TypeName, out Type, out Unit);
+			if (Type is null) {
+				Console.WriteLine("Couldn't find the type");
+				return;
+			} else {
+				switch (Unit) {
 					case PackageUnit PackageUnit:
 						Console.WriteLine("In Package: " + PackageUnit.Name);
 						break;
@@ -54,8 +53,8 @@ namespace AdaPrj {
 					default:
 						Console.WriteLine("In Unit: " + Unit.Name);
 						break;
-					}
-					switch (Type) {
+				}
+				switch (Type) {
 					case AccessType AccessType:
 						Console.WriteLine("Access to: " + AccessType.Accesses.Name);
 						break;
@@ -97,8 +96,13 @@ namespace AdaPrj {
 						break;
 					default:
 						throw new Exception();
-					}
 				}
+			}
+		}
+
+		public static void Info(List<String> TypeNames) {
+			foreach (String TypeName in TypeNames) {
+				Info(TypeName);
 			}
 		}
 
@@ -134,14 +138,33 @@ namespace AdaPrj {
 			}
 		}
 
-		internal static void Run(TypesOptions opts, Span<String> args) {
-			if (!(opts.Info is null)) {
-				Types.Info(opts.Info);
-			} else if (opts.Table) {
-				Types.Table();
-			} else {
-				Types.Each();
+		public static void FullHelp() {
+			Console.WriteLine("(type|types) — Get the types within this project");
+			Console.WriteLine("  --info <type>+ — Get the info on the specified types");
+			Console.WriteLine("  --table — Present the types within this project as a structured table");
+		}
+
+		public static void Help() {
+			Console.WriteLine("  (type|types) — Get the types within this project");
+		}
+
+		internal static TypesFlags ParseTypesFlags(List<String> Args) {
+			TypesFlags Result = TypesFlags.Types;
+			foreach (String Arg in Args) {
+				switch (Arg.ToUpper()) {
+				case "--HELP":
+					return TypesFlags.Help;
+				case "--INFO":
+					Result |= TypesFlags.Info;
+					break;
+				case "--TABLE":
+					Result |= TypesFlags.Table;
+					break;
+				default:
+					break;
+				}
 			}
+			return Result;
 		}
 
 	}
