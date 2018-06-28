@@ -122,6 +122,7 @@ namespace AdaTools {
 				}
 				#endregion
 				#region AssertionPolicy
+				// If there is a global policy set, write it
 				if (this.AssertionPolicy.GlobalPolicy != null) {
 					switch (this.AssertionPolicy.GlobalPolicy) {
 						case PolicyIdentifier.Check:
@@ -136,13 +137,15 @@ namespace AdaTools {
 						default:
 							break;
 					}
+				// Otherwise write out all the individual policies
 				} else {
-					// This code isn't likely very well optimized. C# makes this more difficult than it should be for rather stupid reasons, so instead this easy to comprehend but inefficient code exists.
-					Config.WriteLine("pragma Assertion_Policy(");
-					KeyValuePair<String, PolicyIdentifier> lastPolicy = this.AssertionPolicy.Policies.Last();
-					foreach (KeyValuePair<String, PolicyIdentifier> policy in this.AssertionPolicy.Policies) {
-						Config.Write("\t" + policy.Key + " => ");
-						switch (policy.Value) {
+					if (this.AssertionPolicy.Policies.Count > 0) {
+						// This code isn't likely very well optimized. C# makes this more difficult than it should be for rather stupid reasons, so instead this easy to comprehend but inefficient code exists.
+						Config.WriteLine("pragma Assertion_Policy(");
+						KeyValuePair<String, PolicyIdentifier> lastPolicy = this.AssertionPolicy.Policies.Last();
+						foreach (KeyValuePair<String, PolicyIdentifier> policy in this.AssertionPolicy.Policies) {
+							Config.Write("\t" + policy.Key + " => ");
+							switch (policy.Value) {
 							case PolicyIdentifier.Check:
 								if (!policy.Equals(lastPolicy)) {
 									Config.WriteLine("Check,");
@@ -171,9 +174,10 @@ namespace AdaTools {
 									Config.WriteLine("Suppressible");
 								}
 								break;
+							}
 						}
+						Config.WriteLine(");");
 					}
-					Config.WriteLine(");");
 				}
 				#endregion
 				#region AssumeNoInvalidValues

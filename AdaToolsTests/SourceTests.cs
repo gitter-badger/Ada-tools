@@ -73,6 +73,7 @@ namespace AdaToolsTests {
 			Assert.AreEqual(SourceType.Package, new Source("Both.ads").ParseSourceType());
 			Assert.AreEqual(SourceType.Package, new Source("Both.adb").ParseSourceType());
 			Assert.AreEqual(SourceType.Program, new Source("Proc.adb").ParseSourceType());
+			Assert.AreEqual(SourceType.Separate, new Source("Get_Number.adb").ParseSourceType());
 		}
 
 		[TestMethod]

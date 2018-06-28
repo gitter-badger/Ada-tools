@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AdaPrj": {
+      "commandName": "Project",
+      "commandLineArgs": "config"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+V "GNAT Lib v7"
+A -fPIC
+A -mconsole
+A -mtune=generic
+P ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U krunchpackage%s	krunchpa.ads		97f09c5e NE OO PK
+
+D krunchpa.ads		20180625204302 97f09c5e krunchpackage%s
+D system.ads		20180425083240 32a08138 system%s
+D gnat.adc		20180627142038 00000000
+X 1 krunchpa.ads
+1K10*KrunchPackage 4l5 4e18
+

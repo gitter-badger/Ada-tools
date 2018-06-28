@@ -10,8 +10,6 @@ namespace AdaTools {
 	/// <para>As only subroutines are seperatable, this inherits from SubroutineUnit and modifies the necessary parts</para>
 	/// </remarks>
 	public sealed class SeparateUnit : SubroutineUnit {
-		
-
 
 		public SeparateUnit(String Name) : base(Name) {
 

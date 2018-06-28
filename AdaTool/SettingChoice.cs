@@ -14,7 +14,9 @@ namespace AdaTool {
 			Console.Write(" [" + this.Code + "] ");
 			Console.ResetColor();
 			Console.Write(this.Setting + " := ");
+			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.Write(this.Value);
+			Console.ResetColor();
 		}
 
 		public void WriteLine() {

@@ -683,12 +683,12 @@ namespace AdaTools {
 		/// </remarks>
 		/// <returns>The type of source</returns>
 		public SourceType ParseSourceType() {
-			String Candidate = this.Match(@"\b(package|function|procedure)\s+(\w|\.|_)+\b");
+			String Candidate = this.Match(@"\b(separate\s*\((\\.|[^)])*\)\s*)?(package|function|procedure)\s+(\w|\.|_)+\b");
 			// If no match was found, it's not an Ada source file
 			if (String.IsNullOrEmpty(Candidate)) throw new NotAdaSourceException();
 			if (new Regex(@"\bpackage\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				return SourceType.Package;
-			} else if (new Regex(@"\bseparate\s*\((\\.|[^)])*\)\s*(function|procedure)\s+(\w|\.|_)+\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
+			} else if (new Regex(@"\bseparate\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				return SourceType.Separate;
 			} else if (new Regex(@"\b(function|procedure)\b", RegexOptions.IgnoreCase).IsMatch(Candidate)) {
 				// We need to do some trickery to guess which this is

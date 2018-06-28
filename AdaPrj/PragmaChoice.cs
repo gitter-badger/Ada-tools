@@ -14,7 +14,9 @@ namespace AdaPrj {
 			Console.Write(" [" + this.Code + "] ");
 			Console.ResetColor();
 			Console.Write(this.Pragma + " := ");
-			Console.Write((this.Value as String));
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.Write(this.Value?.ToString() ?? "");
+			Console.ResetColor();
 		}
 
 		public void WriteLine() {
