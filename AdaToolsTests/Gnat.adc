@@ -1,17 +1,7 @@
 pragma Ada_2012;
 pragma Assertion_Policy(Check);
+pragma Assume_No_Invalid_Values(Off);
 pragma Elaboration_Checks(Static);
 pragma Extensions_Allowed(On);
-pragma Source_File_Name(
-	Spec_File_Name => "*.ads",
-	Casing => Mixedcase,
-	Dot_Replacement => ".");
-pragma Source_File_Name(
-	Body_File_Name => "*.adb",
-	Casing => Mixedcase,
-	Dot_Replacement => ".");
-pragma Source_File_Name(
-	Subunit_File_Name => "*.adb",
-	Casing => Mixedcase,
-	Dot_Replacement => ".");
+pragma Fast_Math;
 pragma Wide_Character_Encoding(UTF8);

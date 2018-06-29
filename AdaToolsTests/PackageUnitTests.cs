@@ -47,16 +47,6 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
-		public void DependencyArguments() {
-			Assert.AreEqual(" -lBody -lSpec ", new PackageUnit("Both").DependencyArguments);
-		}
-
-		[TestMethod]
-		public void LinkerArguments() {
-			Assert.AreEqual(" -lBody -lSpec ", new PackageUnit("Both").LinkerArguments);
-		}
-
-		[TestMethod]
 		public void OutputArguments() {
 			if (Environment.OSVersion.Platform <= (PlatformID)3) {
 				Assert.AreEqual(" -o Both.dll ", new PackageUnit("Both").OutputArguments);

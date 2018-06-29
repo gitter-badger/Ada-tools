@@ -173,5 +173,21 @@ namespace AdaTools {
 			}
 		}
 
+		/// <summary>
+		/// Perform everything necessary before compilation
+		/// </summary>
+		/// <param name="Unit">Unit to prepare</param>
+		public static void Precompile(Unit Unit) {
+
+		}
+
+		/// <summary>
+		/// Perform everything necessary after compilation
+		/// </summary>
+		/// <param name="Unit">Unit to finish</param>
+		public static void Postcompile(Unit Unit) {
+
+		}
+
 	}
 }

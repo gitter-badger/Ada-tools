@@ -27,11 +27,6 @@ namespace AdaToolsTests {
 		}
 
 		[TestMethod]
-		public void LinkerArguments() {
-			Assert.AreEqual(" -lIntr ", new ProgramUnit("Proc").LinkerArguments);
-		}
-
-		[TestMethod]
 		public void Dependencies() {
 			ProgramUnit Program = new ProgramUnit("Proc");
 			Assert.AreEqual("Intr", String.Join(',', Program.Dependencies));

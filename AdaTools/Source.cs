@@ -454,7 +454,8 @@ namespace AdaTools {
 		/// </summary>
 		/// <returns></returns>
 		public AssumeNoInvalidValues? ParseAssumeNoInvalidValues() {
-			String Config = this.Match(@"\bpragma\s+Assume_No_Invalid_Values\(.*\);");
+			String Config = this.Match(@"\bpragma\s+Assume_No_Invalid_Values\((\\.|[^)])*\);");
+			Console.WriteLine("Candidate: " + Config);
 			if (Config is null) return null;
 			if (new Regex(@"\bon\b", DefaultRegexOptions).IsMatch(Config)) {
 				return AssumeNoInvalidValues.On;
