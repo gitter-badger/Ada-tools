@@ -51,7 +51,7 @@ namespace AdaTools {
 		/// </summary>
 		public virtual String DependencyArguments {
 			get {
-				String Result = " ";
+				String Result = " -L" + Settings.GNATObjectsPath + " -l" + Compiler.GNATLibrary + " ";
 				foreach (String Dependency in this.Dependencies) {
 					// Ada standard libraries are included anyways, so don't even bother
 					if (new Regex(@"^(ada|interfaces|system)\b", RegexOptions.IgnoreCase).IsMatch(Dependency)) continue;
