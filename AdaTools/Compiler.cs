@@ -131,6 +131,25 @@ namespace AdaTools {
 			}
 		}
 
+		public static String GNARLLibrary {
+			get {
+				if (File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-2018.dll") || File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-2018.so")) {
+					return "gnarl-2018";
+				} else if (File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-2017.dll") || File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-2017.so")) {
+					return "gnarl-2017";
+				} else if (File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-2016.dll") || File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-2016.so")) {
+					return "gnarl-2016";
+				} else if (File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-8.dll") || File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-8.so")) {
+					return "gnarl-8";
+				} else if (File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-7.dll") || File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-7.so")) {
+					return "gnarl-7";
+				} else if (File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-6.dll") || File.Exists(Settings.GNATObjectsPath + Path.DirectorySeparatorChar + "libgnarl-6.so")) {
+					return "gnarl-6";
+				}
+				return "gnarl";
+			}
+		}
+
 		/// <summary>
 		/// Call gnatkrunch to "krunch" the <paramref name="Name"/> to <paramref name="Length"/>
 		/// </summary>
