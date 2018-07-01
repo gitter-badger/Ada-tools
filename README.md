@@ -1,4 +1,7 @@
 # Ada-tools
+
+[![Join the chat at https://gitter.im/Ada-tools/Lobby](https://badges.gitter.im/Ada-tools/Lobby.svg)](https://gitter.im/Ada-tools/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Collection of tooling for Ada projects
 
 This tooling was developed on top of [.NET Core](https://dotnet.github.io/) for ease of development. It may be ported to Ada later, but this is not a priority.
